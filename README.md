@@ -1,2 +1,2 @@
 # CS3-Capstone
-Git repository of the C19Game (Name to be determined) 
+Git repository of the Covid - One 9 Town Simulator
