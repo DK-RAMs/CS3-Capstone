@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags: []
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: Background
+    uniqueID: 3359498463
+    locked: 0
+  - name: Platform
+    uniqueID: 687079159
+    locked: 0
+  - name: Buildings
+    uniqueID: 585391219
+    locked: 0
+  - name: Player
+    uniqueID: 2599945619
+    locked: 0
+  - name: Viruses
+    uniqueID: 2797044155
+    locked: 0
+  - name: Buttons
+    uniqueID: 3080971849
+    locked: 0
