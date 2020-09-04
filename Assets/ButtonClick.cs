@@ -6,8 +6,6 @@ using UnityEngine.UI;
 
 public class ButtonClick : MonoBehaviour
 {
-    public GameObject newsB;
-
 
     public void OpenNoticeboard() {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
