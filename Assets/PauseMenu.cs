@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
     public static bool GameIsPaused = false;
+    public static bool GameQuit = false;
     public GameObject pauseMenuUI;
     // Update is called once per frame
     void Update()
@@ -39,6 +41,8 @@ public class PauseMenu : MonoBehaviour
 
     public void Quit(){
         Debug.Log("Quitting game...");
+        GameQuit = true;
+        // Save state stuff happens here. Need to wait for all the relevant data to be written and *maybe* compressed? (Could use huffman compression :thinking:)
         Application.Quit();
     }
 }
