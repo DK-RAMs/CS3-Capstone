@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq.Expressions;
 using UnityEngine;
 using System.Threading.Tasks;
+using Debug = UnityEngine.Debug;
 using Random = System.Random;
 
 namespace CitizenLibrary {
@@ -16,10 +17,13 @@ namespace CitizenLibrary {
 
         string id, name;
         int age, startWork, endWork, xPos, yPos, homeX, homeY;
-        double happiness, riskofInfection, deltaHappiness;
-        private bool infected, wearingMask, rebel;
+        double happiness, riskofDeath, deltaHappiness;
+        private bool infected, wearingMask, rebel, hospitalized, dead;
 
-        Collection<Citizen> familyMembers; // I don't think this is that important for now
+        public Building workLocation;
+
+        public Building citizenHome;
+        
         public enum Occupation { Unemployed = 0, Student = 1, Employed = 2, Retired = 3 };
         enum HealthRisk { Diabetic, Respiratory, Cardial };
 
@@ -31,7 +35,7 @@ namespace CitizenLibrary {
 
         private CitizenTask favoriteTask;
 
-        private Occupation citizenOccupation;
+        private Occupation citizenOccupation = Occupation.Employed;
         private CitizenTask currentTask;
         private Collection<HealthRisk> healthRisks;
 
@@ -40,7 +44,7 @@ namespace CitizenLibrary {
         #region Constructors
         
         
-        public Citizen(string id, string name, int age, bool infected, bool wearingMask, bool rebel, int xPos, int yPos, int homeX, int homeY){
+        public Citizen(string id, string name, double happiness, int age, bool infected, bool wearingMask, bool rebel, int xPos, int yPos, int homeX, int homeY, bool hospitalized, bool dead){
             this.id = id;
             this.name = name;
             this.age = age;
@@ -50,40 +54,37 @@ namespace CitizenLibrary {
             this.yPos = yPos;
             this.homeX = homeX;
             this.homeY = homeY;
+            this.happiness = happiness;
+            this.hospitalized = hospitalized;
+            this.dead = dead;
+        }
+
+        public Citizen(string id)
+        {
+            this.id = id;
+            happiness = 50;
         }
         #endregion
 
         #region Initialization Methods
-        public bool addFamilyMember(Citizen citizen)
-        {
-            foreach(Citizen familyMember in familyMembers)
-            {
-                if (familyMember.Equals(citizen))
-                {
-                    return false;
-                }
-            }
-            familyMembers.Add(citizen);
-            return true;
-        }
-
         public void generateCitizenRisk(bool diabetic, bool respiratory, bool cardial, double modifier)
         {
-            riskofInfection = Town.BaseCitisenRisk;
+            healthRisks = new Collection<HealthRisk>();
+            riskofDeath = town.BaseCitisenRisk;
             if (diabetic)
             {
                 healthRisks.Add(HealthRisk.Diabetic);
-                riskofInfection += 10*modifier;
+                riskofDeath += 10*modifier;
             }
             if (respiratory)
             {
                 healthRisks.Add(HealthRisk.Respiratory);
-                riskofInfection += 15*modifier;
+                riskofDeath += 15*modifier;
             }
             if (cardial)
             {
                 healthRisks.Add(HealthRisk.Cardial);
-                riskofInfection += 5 * modifier;
+                riskofDeath += 5 * modifier;
             }
         }
 
@@ -94,52 +95,71 @@ namespace CitizenLibrary {
 
         public static void initializeRandomizer()
         {
-            
+            random = new Random();
         }
 
-        public void initializeCitizen()
+        public void InitializeCitizen()
         {
             happinessUpdateTimer = Stopwatch.StartNew();
         }
         #endregion
 
         #region Citizen Updating Methods
-        public void update()
+        public void Update()
         {
-            
-            //if()
-            
-            // 1.) If a citizen is a rebel, they won't wear their mask
-
-            // 2.) If a citizen is a rebel, they won't listen to law implemetations (i.e not social distance, just enter the store and affect other citizens' happiness
-
-            
-
-            if (currentTask.Completed)
+            if (!hospitalized) // Checks if citizen is hospitalized (i.e. in hospital)
             {
-                generateTask();
-            }
+                updateTask();
 
-            if (happinessUpdateTimer.ElapsedMilliseconds >= town.UpdateTickRate) // Update tick rate is longer than a second. (Maybe 1 hour in game is 1 second)
+                if (currentTask.Completed)
+                {
+                    while (true)
+                    {
+                        generateTask();
+                        if (currentTask.Available)
+                        {
+                            break;
+                        }
+                        deltaHappiness -= 2; // The citizen's happiness takes a hit if they aren't able to complete a specific task
+                    }
+                }
+
+                if (happinessUpdateTimer.ElapsedMilliseconds >= Town.UpdateTickRate
+                ) // Update tick rate is longer than a second. (Maybe 1 hour in game is 1 second)
+                {
+                    Debug.Log(currentTask.Completed);
+                    happinessUpdateTimer.Stop();
+                    if (happiness >= 100 || happiness <= 0)
+                    {
+                        deltaHappiness = 0;
+                    }
+
+                    double noDelta = 0;
+                    if (deltaHappiness != noDelta)
+                    {
+                        happiness +=
+                            deltaHappiness; // Adds the total change to the citizen's happiness to citizen's current happiness
+                    }
+
+                    deltaHappiness =
+                        town.BaseDetalHappiness; // Resets citizen delta happiness after processing all changes
+                    generateRebelFactor();
+                    happinessUpdateTimer.Reset();
+                    happinessUpdateTimer.Stop();
+                    happinessUpdateTimer.Start();
+                }
+            }
+            else
             {
-                happinessUpdateTimer.Stop();
-                
-                if (happiness >= 100 || happiness <= 0)
+                if (Town.Time % 3 == 0)
                 {
-                    deltaHappiness = 0;
+                    int deathRoll = rollDice();
+                    if (deathRoll <= riskofDeath)
+                    {
+                        dead = true;
+                    }
                 }
-                deltaHappiness += currentTask.calculateTaskHappiness(1);
-                if (deltaHappiness != 0)
-                {
-                    happiness += deltaHappiness; // Adds the total change to the citizen's happiness to citizen's current happiness
-                }
-                deltaHappiness = Town.BaseDetalHappiness; // Resets citizen delta happiness after processing all changes
-                generateRebelFactor();
-                happinessUpdateTimer.Reset();
-                happinessUpdateTimer.Stop();
-                happinessUpdateTimer.Start();
             }
-
         }
 
         private void generateRebelFactor()
@@ -173,13 +193,22 @@ namespace CitizenLibrary {
         private void updateTask()
         {
             currentTask.update(this, town);
+            if (currentTask.Completed){
+                while (true)
+                {
+                    generateTask();
+                    if (currentTask.Available)
+                    {
+                        break;
+                    }
+                    deltaHappiness -= 2; // The citizen's happiness takes a hit if they aren't able to complete a specific task
+                }
+            }
         }
         public void generateTask()
         {
-            while (!currentTask.Available)
-            {
-                currentTask = new CitizenTask(random, citizenOccupation); // REMEMBER TO MAKE THE CITIZENTASK CLASS!!! NBNBNBNBNB
-            }
+            currentTask.generateNewTask(random, this);
+            Debug.Log("Citizen " + id + " decided to " + currentTask.TaskName + ". Task will be completed at " + currentTask.EndTime);
         }
 
         private int rollDice()
@@ -190,6 +219,19 @@ namespace CitizenLibrary {
         #endregion
         
         #region Getters & Setters
+
+        public bool Hospitalized => hospitalized;
+
+        public bool Dead => dead;
+        public static Town Town
+        {
+            get => town;
+        }
+        
+        public Occupation CitizenOccupation
+        {
+            get => citizenOccupation;
+        }
 
         public bool Infected
         {
@@ -203,11 +245,24 @@ namespace CitizenLibrary {
             }
         }
 
+        public string ID
+        {
+            get
+            {
+                return id;
+            }
+        }
+
         public bool Rebel
         {
             get => rebel;
         }
-        
+
+        public double Happiness
+        {
+            get => happiness;
+        }
+
         #endregion
         
         #region Property Methods

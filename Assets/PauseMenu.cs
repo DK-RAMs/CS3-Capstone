@@ -21,11 +21,11 @@ public class PauseMenu : MonoBehaviour
             }
         }
     }
-
+    
     public void Pause(){
+        GameIsPaused = true;
         pauseMenuUI.SetActive(true);
         Time.timeScale = 0f;
-        GameIsPaused = true;
     }
 
     public void Resume(){
@@ -42,6 +42,10 @@ public class PauseMenu : MonoBehaviour
     public void Quit(){
         Debug.Log("Quitting game...");
         GameQuit = true;
+        for (int i = 0; i < 4; i++)
+        {
+            Town.Threads[i].Join();
+        }
         // Save state stuff happens here. Need to wait for all the relevant data to be written and *maybe* compressed? (Could use huffman compression :thinking:)
         Application.Quit();
     }

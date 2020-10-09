@@ -5,14 +5,14 @@ using UnityEngine.UI;
 
 public class happinessBar : MonoBehaviour
 {
-    public Slider slider;
+    public static Slider slider;
 
-    public void setMaxHappy(int happy){
+    public static void setMaxHappy(int happy){
         slider.maxValue = happy;
         slider.value = happy;
     }
 
-    public void setHealth(int happy){
+    public static void setHealth(int happy){
         slider.value = happy;
     }
 }
