@@ -16,22 +16,21 @@ namespace CitizenLibrary {
     {
 
         string id, name;
-        int age, startWork, endWork, xPos, yPos, homeX, homeY;
-        double happiness, riskofDeath, deltaHappiness;
-        private bool infected, wearingMask, rebel, hospitalized, dead;
+        int age, startWork, endWork;
+        private double happiness, riskofDeath, deltaHappiness;
+        private bool rebel, hospitalized, dead, infected, wearingMask;
 
         public Building workLocation;
-
         public Building citizenHome;
         
         public enum Occupation { Unemployed = 0, Student = 1, Employed = 2, Retired = 3 };
-        enum HealthRisk { Diabetic, Respiratory, Cardial };
+        public enum HealthRisk { Diabetic, Respiratory, Cardial, Old };
 
         private Stopwatch happinessUpdateTimer;
 
         private static Random random;
 
-        public static double beginRebelVal, stopRebelVal, baseChance;
+        public static double beginRebelVal, stopRebelVal, baseChance, favoriteModifier;
 
         private CitizenTask favoriteTask;
 
@@ -44,25 +43,25 @@ namespace CitizenLibrary {
         #region Constructors
         
         
-        public Citizen(string id, string name, double happiness, int age, bool infected, bool wearingMask, bool rebel, int xPos, int yPos, int homeX, int homeY, bool hospitalized, bool dead){
+        public Citizen(string id, string name, double happiness, int age, bool infected, bool wearingMask, bool rebel, bool hospitalized, bool dead){
             this.id = id;
             this.name = name;
             this.age = age;
             this.infected = infected;
             this.rebel = rebel;
-            this.xPos = xPos;
-            this.yPos = yPos;
-            this.homeX = homeX;
-            this.homeY = homeY;
             this.happiness = happiness;
             this.hospitalized = hospitalized;
             this.dead = dead;
+            this.wearingMask = wearingMask;
         }
 
         public Citizen(string id)
         {
             this.id = id;
             happiness = 50;
+            name = "Mark";
+            age = random.Next(18, 45);
+            
         }
         #endregion
 
@@ -85,6 +84,12 @@ namespace CitizenLibrary {
             {
                 healthRisks.Add(HealthRisk.Cardial);
                 riskofDeath += 5 * modifier;
+            }
+
+            if (age > 45)
+            {
+                healthRisks.Add(HealthRisk.Old);
+                riskofDeath += 10 * modifier;
             }
         }
 
@@ -110,10 +115,11 @@ namespace CitizenLibrary {
             if (!hospitalized) // Checks if citizen is hospitalized (i.e. in hospital)
             {
                 updateTask();
-
+                
                 if (currentTask.Completed)
                 {
-                    while (true)
+                    deltaHappiness += currentTask.calculateTaskHappiness(random, rebel, 1);
+                    while (true) // Citizen tries to generate a new task.
                     {
                         generateTask();
                         if (currentTask.Available)
@@ -124,32 +130,27 @@ namespace CitizenLibrary {
                     }
                 }
 
-                if (happinessUpdateTimer.ElapsedMilliseconds >= Town.UpdateTickRate
-                ) // Update tick rate is longer than a second. (Maybe 1 hour in game is 1 second)
-                {
+                if (happinessUpdateTimer.ElapsedMilliseconds >= Town.UpdateTickRate) // Update tick rate is longer than a second. (Maybe 1 hour in game is 1 second)
+                { // Unnecessary check here
                     Debug.Log(currentTask.Completed);
-                    happinessUpdateTimer.Stop();
-                    if (happiness >= 100 || happiness <= 0)
-                    {
-                        deltaHappiness = 0;
-                    }
 
-                    double noDelta = 0;
-                    if (deltaHappiness != noDelta)
-                    {
-                        happiness +=
-                            deltaHappiness; // Adds the total change to the citizen's happiness to citizen's current happiness
-                    }
+                    happiness += deltaHappiness; // Adds the total change to the citizen's happiness to citizen's current happiness
 
-                    deltaHappiness =
-                        town.BaseDetalHappiness; // Resets citizen delta happiness after processing all changes
+                    if (happiness > 100)
+                    {
+                        happiness = 100;
+                    }
+                    else if (happiness < 0)
+                    {
+                        happiness = 0;
+                    }
+                    deltaHappiness = town.BaseDetalHappiness; // Resets citizen delta happiness after processing all changes
                     generateRebelFactor();
                     happinessUpdateTimer.Reset();
-                    happinessUpdateTimer.Stop();
                     happinessUpdateTimer.Start();
                 }
             }
-            else
+            else 
             {
                 if (Town.Time % 3 == 0)
                 {
@@ -157,6 +158,15 @@ namespace CitizenLibrary {
                     if (deathRoll <= riskofDeath)
                     {
                         dead = true;
+                    }
+
+                    if (!dead)
+                    {
+                        int recoveryRoll = rollDice();
+                        if (recoveryRoll <= 35)
+                        {
+                            infected = false;
+                        }
                     }
                 }
             }
@@ -172,7 +182,7 @@ namespace CitizenLibrary {
                     int chance = Convert.ToInt16(baseChance + happiness - stopRebelVal); // As a citizen's happiness increases, the chance of them staying a rebel decreases (stopRebelVal is specified at the beginning of the game.) This roll occurs 
                     if (roll <= chance)
                     {
-                        this.rebel = false;
+                        rebel = false;
                     }
                 }
             }
@@ -184,7 +194,7 @@ namespace CitizenLibrary {
                     int chance = Convert.ToInt16(baseChance + beginRebelVal - happiness); // As a citizen's happiness decreases, the chance of them rebelling increases.
                     if (roll <= chance)
                     {
-                        this.rebel = true; // Citizen becomes a rebel after being upset for awhile
+                        rebel = true; // Citizen becomes a rebel after being upset for awhile
                     }
                 }
             }
@@ -193,7 +203,16 @@ namespace CitizenLibrary {
         private void updateTask()
         {
             currentTask.update(this, town);
-            if (currentTask.Completed){
+            if (currentTask.Completed)
+            {
+                if (currentTask.Equals(favoriteTask))
+                {
+                    deltaHappiness += currentTask.calculateTaskHappiness(random, rebel, favoriteModifier);
+                }
+                else
+                {
+                    deltaHappiness += currentTask.calculateTaskHappiness(random, rebel, 1);
+                }
                 while (true)
                 {
                     generateTask();
@@ -220,6 +239,7 @@ namespace CitizenLibrary {
         
         #region Getters & Setters
 
+        public bool WearingMask => wearingMask;
         public bool Hospitalized => hospitalized;
 
         public bool Dead => dead;
@@ -267,9 +287,19 @@ namespace CitizenLibrary {
         
         #region Property Methods
 
-        public bool Equals(Citizen citizen)
+        public override bool Equals(object obj)
         {
-            return this.id == citizen.id;
+            if (obj == null)
+            {
+                return false;
+            }
+            if (typeof(Citizen).IsInstanceOfType(obj))
+            {
+                Citizen c = (Citizen) obj;
+                return c.id.Equals(id);
+            }
+
+            return false;
         }
         #endregion
 

@@ -7,27 +7,30 @@ using System.Threading;
 using CitizenLibrary;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
+using Random = System.Random;
 
 public class Town
 {
     public static int townNum;
     private string id, mayor;
-    private volatile int day, time;
+    private volatile int day, time, totalInfected;
     private static long updateTickRate, dayLength; // For now, the length of a day will be 1 minute (60 seconds). The updateTickRate will be
-    private Collection<Building> buildings, bars;
-    private Collection<Supermarket> shops;
-    private Collection<Hospital> hospitals;
+    private HashSet<Building> recreational, residential;
+    private HashSet<Supermarket> essentials;
+    private HashSet<Hospital> emergency;
     private Dictionary<int, bool> policyImplementation;
     private HashSet<Policy> allPolicies, availablePolicies;
     private CitizenWorkerThread[] workerThreads;
     public static Thread[] Threads;
     private double baseDetalHappiness, baseCitisenRisk, baseMortalityRate, baseRecoveryRate, averageHappiness, averageHealth;
-    private double money, deltaMoney;
+    private double money, deltaMoney, favoriteModifier;
     private Collection<Policy> policies;
-    private Stopwatch timer;
+    private static Stopwatch timer;
     public static volatile bool townReady;
     
-
+    public enum GameVersion {Debug = 0, Release = 1}
+        
+    
 
     public Town(string id, int day, int time, long dayLength, long updateTickRate, double baseDetalHappiness, double baseCitisenRisk, double baseMortalityRate, double baseRecoveryRate)
     {
@@ -41,14 +44,18 @@ public class Town
         this.baseMortalityRate = baseMortalityRate;
         this.baseRecoveryRate = baseRecoveryRate;
         policyImplementation = new Dictionary<int, bool>();
+        recreational = new HashSet<Building>();
+        essentials = new HashSet<Supermarket>();
+        emergency = new HashSet<Hospital>();
     }
 
-    public Town(double baseDetalHappiness, double baseCitisenRisk) // Town default constructor
+    public Town(string mayor, double baseDetalHappiness, double baseCitisenRisk) // Town default constructor
     {
+        this.mayor = mayor;
         this.baseDetalHappiness = baseDetalHappiness;
-        this.id = mayor + "Town " + townNum;
-        this.day = 1;
-        this.time = 6;
+        id = mayor + "Town " + townNum;
+        day = 1;
+        time = 6;
         this.baseCitisenRisk = baseCitisenRisk;
         baseMortalityRate = 5;
         
@@ -62,15 +69,10 @@ public class Town
         townReady = false;
         timer = Stopwatch.StartNew();
         timer.Reset();
-        for (int i = 0; i < 2; i++) // Test citizens added to CitizenWorkerThread class
-        {
-            CitizenWorkerThread.citizens.Add(new Citizen(i.ToString()));
-            CitizenWorkerThread.citizens[i].loadPreviousTask(1, 6, 13, 0);
-            CitizenWorkerThread.citizens[i].InitializeCitizen();
-        }
+        initializeCitizens(GameVersion.Debug);
+        loadBuildings("buildingSaveLocation");
         
         Citizen.town = this; // Sets the citizen town to this
-        // Number of Citizen Worker Threads
         
         workerThreads = new CitizenWorkerThread[4];
         Threads = new Thread[4];
@@ -82,30 +84,48 @@ public class Town
             Threads[i] = new Thread(new ThreadStart(workerThreads[i].update));
             //Threads[i].Start(); 
         }
-        timer.Start();
+        
+        // Need to add multithreading for buildings
+        
         townReady = true;
+        timer.Start();
     }
     
     public void Update()
     {
-        for (int i = 0; i < CitizenWorkerThread.citizens.Count; i++) // CitizenWorkerThread has a static collection of Citizens. This is a single threaded implementation
+        if (PauseMenu.GameIsPaused)
         {
-            CitizenWorkerThread.citizens[i].Update();
+            timer.Stop();
+            while (PauseMenu.GameIsPaused)
+            {
+                
+            }
+            timer.Start();
+        }
+
+        if (timer.ElapsedMilliseconds >= updateTickRate / 4) // Every 30 minutes, a spread check is made bu buildings
+        {
+            Collection<Building> b = getBuildings();
+            foreach (Building building in b)
+            {
+                building.Update();
+            }
         }
         if (timer.ElapsedMilliseconds >= updateTickRate)
         {
-            foreach (Building b in buildings)
-            {
-                b.Update(); // Updates the building. If there are citizens that are infected
-            }
-            int totalRebels = 0;
             timer.Reset();
             incrementTime();
+            for (int i = 0; i < CitizenWorkerThread.citizens.Count; i++) // CitizenWorkerThread has a static collection of Citizens. This is a single threaded implementation
+            {
+                CitizenWorkerThread.citizens[i].Update();
+            }
+            int totalRebels = 0;
             double happinessavg = 0;
             for(int i = 0; i < 4; i++)
             {
                 happinessavg += workerThreads[i].AverageHappiness();
                 totalRebels += workerThreads[i].NumRebels;
+                totalInfected += workerThreads[i].NumInfected;
             }
             happinessavg /= 4;
             happinessBar.setHealth(Convert.ToInt16(Math.Floor(happinessavg)));
@@ -126,35 +146,94 @@ public class Town
         Debug.Log("Time is now " + time);
     }
     
+    #region Initialization Methods
+
+    private void initializeCitizens(GameVersion version)
+    {
+        switch (version)
+        {
+            case GameVersion.Debug: 
+                for (int i = 0; i < 2; i++) // Test citizens added to CitizenWorkerThread class
+                {
+                    CitizenWorkerThread.citizens.Add(new Citizen(i.ToString()));
+                    CitizenWorkerThread.citizens[i].loadPreviousTask(1, 6, 13, 0);
+                    CitizenWorkerThread.citizens[i].InitializeCitizen();
+                }
+                break;
+            case GameVersion.Release:
+                
+                break;
+        }
+    }
+    private void loadBuildings(string fileName)
+    {
+        Random r = new Random();
+        for (int i = 0; i < 10; i++)
+        {
+            int buildingGenerator = r.Next(0, 3);
+            string buildingID = "building" + 0;
+            //Recreational = 0,
+            //Supermarket = 1,
+            //Emergency = 2,
+            //Residential = 3
+            
+            if (buildingGenerator == 0) // 
+            {
+                recreational.Add(new Building(buildingID, 2, 5, 100, 0, 0));
+            }
+            else if (buildingGenerator == 1)
+            {
+                essentials.Add(new Supermarket(buildingID, 2, 5, 100, 0, 20));
+            }
+            else if (buildingGenerator == 2)
+            {
+                emergency.Add(new Hospital(buildingID, 2, 5, 100, 0, 30, false));
+            }
+            else if (buildingGenerator == 3)
+            {
+                residential.Add(new Building(buildingID, 2, 5, 200, 0, 3));
+            }
+        }
+    }
+
+    private Collection<Building> getBuildings()
+    {
+        Collection<Building> buildings = new Collection<Building>();
+        foreach (Hospital h in emergency)
+        {
+            buildings.Add(h);
+        }
+
+        foreach (Supermarket s in essentials)
+        {
+            buildings.Add(s);
+        }
+
+        foreach (Building b in recreational)
+        {
+            buildings.Add(b);
+        }
+
+        foreach (Building b in residential)
+        {
+            buildings.Add(b);
+        }
+        return buildings;
+    }
+    #endregion
+    
     #region Setters & Getters
     public static long UpdateTickRate
     {
         get => updateTickRate;
-        set => Town.updateTickRate = value;
+        set => updateTickRate = value;
     }
+
+    public static Stopwatch Timer => timer;
 
     public int Time
     {
         get => time;
-    }
-    
-    private void loadBuildings(Collection<Building> buildings){
-        foreach(Building building in buildings)
-        {
-            switch (building.getBuildingType)
-            {
-                case Building.BuildingType.Emergency:
-                    
-                    break;
-                case Building.BuildingType.Recreational:
-                    break;
-                case Building.BuildingType.Supermarket:
-                    break;
-                default:
-                    break;
-                    
-            }
-        }
     }
 
     public int Day
@@ -177,11 +256,11 @@ public class Town
         baseDetalHappiness += factor;
     }
 
-    public Collection<Supermarket> Shops => shops;
+    public HashSet<Supermarket> Essentials => essentials;
 
-    public Collection<Hospital> Hospitals => hospitals;
+    public HashSet<Hospital> Emergency => emergency;
 
-    public Collection<Building> Bars => bars;
+    public HashSet<Building> Recreational => recreational;
 
     #endregion
 }

@@ -14,6 +14,7 @@ namespace CitizenLibrary
             CitizenTask.taskKeys.Add(2, ("Work", true));
             CitizenTask.taskKeys.Add(3, ("go shopping", true));
             CitizenTask.taskKeys.Add(4, ("Stay at home", true));
+            CitizenTask.taskKeys.Add(5, ("Self Quarantine", true));
             Citizen.initializeRandomizer();
             town = new Town("yay", 0, 8, 60000, 60000 / 24, 1, 15, 5, 20);
             town.Start();

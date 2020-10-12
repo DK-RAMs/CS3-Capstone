@@ -14,6 +14,7 @@ namespace CitizenLibrary
     {
         string taskName;
         private static double MAXBASEHAPPINESSGAIN = 2;
+        private double happinessModifier;
         private int taskID;
         public static Dictionary<int, (string, bool)> taskKeys = new Dictionary<int, (string, bool)>();
         bool completed;
@@ -46,19 +47,19 @@ namespace CitizenLibrary
         #endregion
         
         #region Task Selection methods
-        public double calculateTaskHappiness(Random random, bool rebel) // Happiness Modifier is applied in the case where a citizen completes their "favorite task"
+        public double calculateTaskHappiness(Random random, bool rebel, double modifier) // Happiness Modifier is applied in the case where a citizen completes their "favorite task"
         {
             double rebelFactor = 1;
             if (rebel)
             {
                 rebelFactor = 1.15;
             }
-            return 1+random.NextDouble()*MAXBASEHAPPINESSGAIN*rebelFactor;
+            return 1+random.NextDouble()*MAXBASEHAPPINESSGAIN*rebelFactor + modifier;
         }
 
         public void generateNewTask(Random random, Citizen citizen)
         {
-            switch (citizen.CitizenOccupation) // Will do this later maube
+            switch (citizen.CitizenOccupation) // Will do this later maybe
             {
                 case Citizen.Occupation.Employed:
                     break;
@@ -80,19 +81,28 @@ namespace CitizenLibrary
                 case 0:
                     if (available)
                     {
-                        bool entered = false;
-                        while (!entered)
+                        HashSet<Building> bars = Citizen.Town.Recreational;
+                        int attempts = 0;
+                        while (true)
                         {
-                            Collection<Building> bars = Citizen.Town.Bars;
-                            int attempts = 0;
+                            attempts++;
                             int selection = random.Next(0, bars.Count - 1);
+                            // NB!!! Collection was changed to HashSet (easier to access individual buildings if the data is stored in a hashset
+                            
+                            /*
                             if (bars[selection].enterBuilding(citizen))
                             {
-                                taskLocation = bars[selection];
+                                taskLocation = bars[selection]; // Change hash table accessors
+                                endTime = startTime + random.Next(1, 3);
+                                break;
+                            }*/
+                            
+                            if (attempts == 10)
+                            {
+                                Debug.Log("Citizen wasn't able to go to the bar. They went home feeling upset");
+                                happinessModifier = random.Next(1, 5)*-1;
                             }
-                            endTime = startTime + random.Next(1, 3);
                         }
-
                         break;
                     }
                     else
@@ -130,6 +140,8 @@ namespace CitizenLibrary
             {
                 Debug.Log("Citizen " + citizen.ID + " has completed their task");
                 completed = true;
+                taskLocation.exitBuilding(citizen);
+                
             }
         }
         

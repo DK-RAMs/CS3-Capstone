@@ -15,11 +15,10 @@ namespace CitizenLibrary
     public class CitizenWorkerThread
     {
         public static Collection<Citizen> citizens = new Collection<Citizen>();
-        private int lo, hi;
+        private int lo, hi, numRebels, numInfected;
         private bool happinessUpdated;
         private double averageHappiness;
         private Stopwatch updateTick;
-        private int numRebels;
         private static Town town;
 
         public CitizenWorkerThread(int lo, int hi, bool happinessUpdated)
@@ -27,6 +26,8 @@ namespace CitizenLibrary
             this.lo = lo;
             this.hi = hi;
             this.happinessUpdated = happinessUpdated;
+            numRebels = 0;
+            numInfected = 0;
         }
 
         public static Town Town
@@ -67,7 +68,7 @@ namespace CitizenLibrary
                         citizens[i].Update();
                     }
 
-                    if (Town.Time == 0 && !happinessUpdated)
+                    if (town.Time == 0 && !happinessUpdated)
                     {
                         averageHappiness = 0;
                         happinessUpdated = true;
@@ -82,7 +83,7 @@ namespace CitizenLibrary
                         Interlocked.Exchange(ref this.averageHappiness, averageHappiness /= (hi - lo));
                     }
 
-                    if (Town.Time == 1 && happinessUpdated)
+                    if (town.Time == 1 && happinessUpdated)
                     {
                         Debug.Log("Happiness updated");
                         happinessUpdated = false;
@@ -104,6 +105,8 @@ namespace CitizenLibrary
         }
 
         public int NumRebels => numRebels;
+
+        public int NumInfected => numInfected;
 
         #endregion
     }
