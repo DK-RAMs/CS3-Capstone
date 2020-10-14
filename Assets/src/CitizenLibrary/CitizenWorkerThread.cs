@@ -68,7 +68,7 @@ namespace src.CitizenLibrary
                         citizens[i].Update();
                     }
 
-                    if (town.Time == 0 && !happinessUpdated)
+                    if (Citizen.town.Time == 0 && !happinessUpdated)
                     {
                         averageHappiness = 0;
                         happinessUpdated = true;
@@ -83,7 +83,7 @@ namespace src.CitizenLibrary
                         Interlocked.Exchange(ref this.averageHappiness, averageHappiness /= (hi - lo));
                     }
 
-                    if (town.Time == 1 && happinessUpdated)
+                    if (Citizen.town.Time == 1 && happinessUpdated)
                     {
                         Debug.Log("Happiness updated");
                         happinessUpdated = false;

@@ -10,6 +10,7 @@ namespace src.SaveLoadLibrary
         private double money, deltaMoney, baseDeltaHappiness, favoriteMaidifier;
         private long elapsedTime;
         private bool[] policyImplementations;
+        private string[] buildingIDs;
         public TownData(Town t)
         {
             id = t.ID;
@@ -27,6 +28,39 @@ namespace src.SaveLoadLibrary
             {
                 policyImplementations[i] = t.PolicyImplementation[i];
             }
+
+            for (int i = 0; i < t.Buildings.Count; i++)
+            {
+                
+            }
         }
+        
+        #region getters & setters
+
+        public string ID => id;
+
+        public string Mayor => mayor;
+
+        public int Day => day;
+
+        public int Time => time;
+
+        public int TotalInfected => totalInfected;
+
+        public double Money => money;
+        public double DeltaMoney => deltaMoney;
+
+        public double BaseDeltaHappiness => baseDeltaHappiness;
+
+        public double FavoriteMaidifier => favoriteMaidifier;
+
+        public long ElapsedTime => elapsedTime;
+
+        public bool[] PolicyImplementations => policyImplementations;
+
+        public string[] BuildingIDs => buildingIDs;
+        
+
+        #endregion
     }
 }

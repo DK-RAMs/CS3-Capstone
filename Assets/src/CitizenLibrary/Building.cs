@@ -1,7 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading;
+using UnityEditor;
+using UnityEngine;
+using Random = System.Random;
 
 namespace src.CitizenLibrary
 {
@@ -13,7 +15,6 @@ namespace src.CitizenLibrary
         protected Collection<Upgrade> availableUpgrades;
         protected Collection<Upgrade> buildingUpgrades;
         protected double happinessContribution, exposureFactor;
-        protected int x, y;
         protected int maxOccupants, numOccupants;
         protected SemaphoreSlim entranceLock;
         protected bool open, containsInfected;
@@ -21,7 +22,7 @@ namespace src.CitizenLibrary
 
         public enum BuildingType
         {
-            Recreational = 0,
+            Recreational = 0, // Each building UI object will have a building
             Supermarket = 1,
             Emergency = 2,
             Residential = 3
@@ -80,6 +81,8 @@ namespace src.CitizenLibrary
         {
             get => buildingType;
         }
+
+        public string ID => id;
         #endregion
         
         #region Citizen Management Methods
@@ -139,16 +142,19 @@ namespace src.CitizenLibrary
 
         public override bool Equals(object obj)
         {
-            if (obj == null)
+            if (obj == null || !(obj is Building))
             {
                 return false;
             }
-            if(typeof(Building).IsInstanceOfType(obj))
-            {
-                Building b = (Building) obj;
-                return b.id.Equals(this.id);
-            }
-            return false;
+            Building b = (Building) obj;
+            return b.id.Equals(id);
+        }
+
+        public override int GetHashCode()
+        {
+            int hash = 11;
+            int hashID = hash * 17 + ID.GetHashCode();
+            return hashID;
         }
 
         #endregion

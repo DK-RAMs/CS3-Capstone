@@ -133,7 +133,7 @@ namespace src.CitizenLibrary {
                 {
                     if (town.Time == 6)
                     {
-                        if (!rebel && (town.PolicyImplementation[1] || rollDice() <= 65))
+                        if (!rebel && (town.PolicyImplementation[1] || rollDice() <= happiness))
                         {
                             wearingMask = true;
                         }
@@ -240,7 +240,6 @@ namespace src.CitizenLibrary {
                     happiness += currentTask.calculateTaskHappiness(random, rebel, 1);
                 }
                 currentTask = new CitizenTask(random, this);
-                Debug.Log("Citizen " + id + " decided to " + currentTask.TaskName + ". They expect to complete the task on Day "+ currentTask.EndDay + " at " + currentTask.EndTime);
             }
         }
         
@@ -250,6 +249,25 @@ namespace src.CitizenLibrary {
         }
 
         #endregion
+        
+        #region Event Methods
+
+        public void rollHealthEvent(int chance)
+        {
+            int infectRoll = rollDice();
+            if (infectRoll <= chance)
+            {
+                infected = true;
+            }
+        }
+
+        public void applyHappiness(double happiness)
+        {
+            
+        }
+        
+        #endregion
+        
         
         #region Getters & Setters
 
@@ -305,18 +323,21 @@ namespace src.CitizenLibrary {
 
         public override bool Equals(object obj)
         {
-            if (obj == null)
+            if (obj == null || !(obj is Citizen))
             {
                 return false;
             }
-            if (typeof(Citizen).IsInstanceOfType(obj))
-            {
-                Citizen c = (Citizen) obj;
-                return c.id.Equals(id);
-            }
-
-            return false;
+            Citizen c = (Citizen) obj;
+            return c.id.Equals(id);
         }
+
+        public override int GetHashCode()
+        {
+            int hash = 11;
+            int hashID = hash * 17 + ID.GetHashCode();
+            return hashID;
+        }
+
         #endregion
 
     }

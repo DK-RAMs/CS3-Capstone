@@ -46,12 +46,12 @@ namespace src.CitizenLibrary
         private Stopwatch timer;
         public static volatile bool townReady;
         private int numCitizens;
-
+        // public static Newspaper newspaper;
         public enum GameVersion
         {
             Debug = 0,
             ReleaseNew = 1,
-            ReleaseLoad
+            ReleaseLoad = 2
         }
         
         #endregion
@@ -99,7 +99,7 @@ namespace src.CitizenLibrary
 
         public Town(TownData T)
         {
-            
+            id = T.ID;
             policyImplementation = new Dictionary<int, bool>();
             essentials = new Collection<Supermarket>();
             recreational = new Collection<Building>();
@@ -121,7 +121,8 @@ namespace src.CitizenLibrary
 
             workerThreads = new CitizenWorkerThread[4];
             Threads = new Thread[4];
-            int divider = CitizenWorkerThread.citizens.Count / 4; /*
+            int divider = CitizenWorkerThread.citizens.Count / 4; 
+            /*
             for (int i = 0; i < 4; i++) // Multithreaded implementation. Just be sure to comment out the Start() method to test it. But also note that the threads don't terminate unless the unity environment itself is terminated, or the player actively quits the game.
             {
                 workerThreads[i] = new CitizenWorkerThread(divider * i, divider * (i + 1), false);
@@ -134,6 +135,7 @@ namespace src.CitizenLibrary
             */
             timer.Start();
             townReady = true;
+            
             Debug.Log(GetHashCode());
         }
 
@@ -268,6 +270,38 @@ namespace src.CitizenLibrary
                     break;
             }
         }
+
+        public void applyDecisionEvent(double deltaHappiness, double deltaHealth, double deltaMoney)
+        {
+            for (int i = 0; i < CitizenWorkerThread.citizens.Count; i++)
+            {
+                CitizenWorkerThread.citizens[i].applyHappiness(deltaHappiness);
+            }
+            Random r = new Random();
+            int numAffected = r.Next(15, 25);
+            for (int i = 0; i < numAffected; i++)
+            {
+                int citizenPos = r.Next(CitizenWorkerThread.citizens.Count - 1);
+                
+                
+            }
+            money += deltaMoney;
+        }
+
+        public void addCitizenHappiness(double happiness)
+        {
+            
+        }
+
+        public void applyQuizEvent(double deltaHappiness, double deltaHealth, double deltaMoney)
+        {
+            
+        }
+
+        public void applyStateEvent(double deltaHappiness, double deltaHealth, double deltaMoney)
+        {
+            
+        }
         #endregion
 
         #region Setters & Getters
@@ -352,6 +386,8 @@ namespace src.CitizenLibrary
         public Collection<Hospital> Emergency => emergency;
 
         public Collection<Building> Recreational => recreational;
+
+        public HashSet<Building> Buildings => buildings;
 
         #endregion
     }

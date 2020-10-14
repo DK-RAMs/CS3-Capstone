@@ -17,7 +17,7 @@ namespace src.CitizenLibrary
         private int taskID;
         public static Dictionary<int, (string, bool)> taskKeys = new Dictionary<int, (string, bool)>(); // 2nd Key in dictionary is the availability of the task
         bool completed;
-        private bool available, firstsuccess;
+        private bool firstsuccess;
         int startTime, endTime, startDay, endDay;
         private Building taskLocation;
         
@@ -30,10 +30,8 @@ namespace src.CitizenLibrary
                 Console.WriteLine("ERROR! Task #" + taskID + " is not defined");
             }
             taskName = taskKeys[taskID].Item1;
-            available = taskKeys[taskID].Item2;
             this.startTime = startTime;
             this.endTime = endTime;
-            available = true;
             if (completed == 0)
             {
                 this.completed = false;
@@ -57,7 +55,7 @@ namespace src.CitizenLibrary
             {
                 if (taskID == 4)
                 {
-                    return 0.75;
+                    return 1;
                 }
                 double rebelFactor = 1;
                 if (rebel)
@@ -246,13 +244,11 @@ namespace src.CitizenLibrary
         {
             if (endTime >= town.Time && endDay >= town.Day)
             {
-                Debug.Log("Citizen " + citizen.ID + " has completed their task");
                 completed = true;
                 taskLocation.exitBuilding(citizen);
             }
             else if (citizen.Hospitalized)
             {
-                Debug.Log("Citizen collapsed and was taken to the hospital");
                 admitToHospital(random, citizen);
             }
         }
@@ -264,10 +260,7 @@ namespace src.CitizenLibrary
         public bool Completed
         {
             get => completed;
-            set => completed = value;
         }
-
-        public bool Available => available;
 
         public string TaskName
         {
@@ -278,6 +271,21 @@ namespace src.CitizenLibrary
         public int EndTime => endTime;
 
         public int EndDay => endDay;
+
+        #endregion
+        
+        #region Property Methods
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null || !typeof(CitizenTask).IsInstanceOfType(obj))
+            {
+                return false;
+            }
+
+            CitizenTask t = (CitizenTask) obj;
+            return taskID.Equals(t.taskID) && taskLocation.Equals(t.taskLocation);
+        }
 
         #endregion
     }
