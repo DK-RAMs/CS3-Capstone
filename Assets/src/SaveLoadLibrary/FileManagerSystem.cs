@@ -56,6 +56,11 @@ namespace src.SaveLoadLibrary
             return null;
 
         }
+
+        public static void SaveCitizens(Town town, Collection<Citizen> citizens)
+        {
+            
+        }
         
     }
 }
