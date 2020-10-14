@@ -16,7 +16,7 @@ namespace src.CitizenLibrary
         void Start()
         {
             currentHealth = maxHealth;
-            HealthBar.setMaxHealth(maxHealth);
+            healthBar.setMaxHealth(maxHealth);
         }
 
         // Update is called once per frame
@@ -31,7 +31,7 @@ namespace src.CitizenLibrary
         void takeDamage(int damage)
         {
             currentHealth -= damage;
-            HealthBar.setHealth(currentHealth);
+            healthBar.setHealth(currentHealth);
         }
     }
 }

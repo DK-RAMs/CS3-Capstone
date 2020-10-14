@@ -29,7 +29,7 @@ namespace src.CitizenLibrary
 
         private BuildingType buildingType;
 
-
+        #region Constructors
         public Building(string id, double happinessContribution, double exposureFactor, int maxOccupants, int numOccupants, int buildingType)
         {
             this.id = id;
@@ -42,7 +42,8 @@ namespace src.CitizenLibrary
             occupants = new HashSet<Citizen>();
             random = new Random();
         }
-
+        
+        #endregion
         public void Update()
         {
             if (containsInfected)
@@ -84,6 +85,10 @@ namespace src.CitizenLibrary
         #region Citizen Management Methods
         public virtual bool enterBuilding(Citizen citizen)
         {
+            if (citizen.citizenHome.Equals(this))
+            {
+                occupants.Add(citizen);
+            }
             if (open)
             {
                 entranceLock.Wait(); // Lock acquired to 

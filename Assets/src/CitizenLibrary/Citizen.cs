@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq.Expressions;
 using UnityEngine;
 using System.Threading.Tasks;
+using src.SaveLoadLibrary;
 using Debug = UnityEngine.Debug;
 using Random = System.Random;
 
@@ -26,7 +27,6 @@ namespace src.CitizenLibrary {
         public enum Occupation { Unemployed = 0, Student = 1, Employed = 2, Retired = 3 };
         public enum HealthRisk { Diabetic, Respiratory, Cardial, Old };
 
-        private Stopwatch happinessUpdateTimer;
 
         private static Random random;
 
@@ -38,12 +38,19 @@ namespace src.CitizenLibrary {
         private CitizenTask currentTask;
         private Collection<HealthRisk> healthRisks;
 
+        private static Collection<string> names;
+
+        public static readonly string IDPREFIX = "citizen";
+        public static int citizenNum = 0;
+
         public static Town town;
 
         #region Constructors
         
         
-        public Citizen(string id, string name, double happiness, int age, bool infected, bool wearingMask, bool rebel, bool hospitalized, bool dead){
+        public Citizen(string id, string name, double happiness, int age, bool infected, bool wearingMask, bool rebel, bool hospitalized, bool dead)
+        {
+            citizenNum++;
             this.id = id;
             this.name = name;
             this.age = age;
@@ -53,34 +60,41 @@ namespace src.CitizenLibrary {
             this.hospitalized = hospitalized;
             this.dead = dead;
             this.wearingMask = wearingMask;
+            favoriteTask = new CitizenTask(1, 6, 12, 0);
         }
 
-        public Citizen(string id)
+        public Citizen(CitizenData c)
         {
-            this.id = id;
+            
             happiness = 50;
             name = "Mark";
             age = random.Next(18, 45);
             
         }
+        public Citizen()
+        {
+            id = IDPREFIX + citizenNum;
+            name = "Mark";
+            age = random.Next(18, 65);
+        }
         #endregion
 
         #region Initialization Methods
-        public void generateCitizenRisk(bool diabetic, bool respiratory, bool cardial, double modifier)
+        public void generateCitizenRisk(int diabetic, int respiratory, int cardial, double modifier)
         {
             healthRisks = new Collection<HealthRisk>();
             riskofDeath = town.BaseCitisenRisk;
-            if (diabetic)
+            if (diabetic == 1)
             {
                 healthRisks.Add(HealthRisk.Diabetic);
                 riskofDeath += 10*modifier;
             }
-            if (respiratory)
+            if (respiratory == 1)
             {
                 healthRisks.Add(HealthRisk.Respiratory);
                 riskofDeath += 15*modifier;
             }
-            if (cardial)
+            if (cardial == 1)
             {
                 healthRisks.Add(HealthRisk.Cardial);
                 riskofDeath += 5 * modifier;
@@ -93,6 +107,12 @@ namespace src.CitizenLibrary {
             }
         }
 
+        public static void initializeNames()
+        {
+            names = new Collection<string>();
+            
+        }
+
         public void loadPreviousTask(int taskID, int startTime, int endTime, int completed)
         {
             currentTask = new CitizenTask(taskID, startTime, endTime, completed);
@@ -102,71 +122,77 @@ namespace src.CitizenLibrary {
         {
             random = new Random();
         }
-
-        public void InitializeCitizen()
-        {
-            happinessUpdateTimer = Stopwatch.StartNew();
-        }
         #endregion
 
         #region Citizen Updating Methods
         public void Update()
         {
-            if (!hospitalized) // Checks if citizen is hospitalized (i.e. in hospital)
+            if (town.Timer.ElapsedMilliseconds >= Town.UpdateTickRate)
             {
-                updateTask();
-                
-                if (currentTask.Completed)
+                if (!hospitalized) // Checks if citizen is hospitalized (i.e. in hospital)
                 {
-                    deltaHappiness += currentTask.calculateTaskHappiness(random, rebel, 1);
-                    while (true) // Citizen tries to generate a new task.
+                    if (town.Time == 6)
                     {
-                        generateTask();
-                        if (currentTask.Available)
+                        if (!rebel && (town.PolicyImplementation[1] || rollDice() <= 65))
                         {
-                            break;
+                            wearingMask = true;
                         }
-                        deltaHappiness -= 2; // The citizen's happiness takes a hit if they aren't able to complete a specific task
+                        else
+                        {
+                            wearingMask = false;
+                        }
+                        if (infected)
+                        {
+                            int hospitalizeRoll = rollDice();
+                            if (hospitalizeRoll <= (riskofDeath+15))
+                            {
+                                hospitalized = true;
+                            }
+                            else if (currentTask.EndTime >= Town.Time && currentTask.EndDay >= Town.Day) // Citizen is cured once they managed to get through 15 days of not 
+                            {
+                                infected = false;
+                            }
+                        }
+                    }
+                    updateTask();
+
+                    if (town.Timer.ElapsedMilliseconds >= Town.UpdateTickRate) // Update tick rate is longer than a second. (Maybe 1 hour in game is 1 second) // This is not required since tasks
+                    {
+                        // Unnecessary check here
+                        happiness +=
+                            deltaHappiness; // Adds the total change to the citizen's happiness to citizen's current happiness
+
+                        if (happiness > 100)
+                        {
+                            happiness = 100;
+                        }
+                        else if (happiness < 0)
+                        {
+                            happiness = 0;
+                        }
+
+                        deltaHappiness = 0; // Resets citizen delta happiness after processing all changes
+                        generateRebelFactor();
                     }
                 }
-
-                if (happinessUpdateTimer.ElapsedMilliseconds >= Town.UpdateTickRate) // Update tick rate is longer than a second. (Maybe 1 hour in game is 1 second)
-                { // Unnecessary check here
-                    Debug.Log(currentTask.Completed);
-
-                    happiness += deltaHappiness; // Adds the total change to the citizen's happiness to citizen's current happiness
-
-                    if (happiness > 100)
-                    {
-                        happiness = 100;
-                    }
-                    else if (happiness < 0)
-                    {
-                        happiness = 0;
-                    }
-                    deltaHappiness = town.BaseDetalHappiness; // Resets citizen delta happiness after processing all changes
-                    generateRebelFactor();
-                    happinessUpdateTimer.Reset();
-                    happinessUpdateTimer.Start();
-                }
-            }
-            else 
-            {
-                if (Town.Time % 3 == 0)
+                else
                 {
-                    int deathRoll = rollDice();
-                    if (deathRoll <= riskofDeath)
+                    if (Town.Time % 12 == 0)
                     {
-                        dead = true;
+                        int deathRoll = rollDice();
+                        if (deathRoll <= riskofDeath)
+                        {
+                            dead = true;
+                        }
                     }
 
-                    if (!dead)
+                    if (Town.Time >= currentTask.EndTime && Town.Day >= currentTask.EndDay)
                     {
-                        int recoveryRoll = rollDice();
-                        if (recoveryRoll <= 35)
-                        {
-                            infected = false;
-                        }
+                        infected = false;
+                        hospitalized = false;
+                        riskofDeath--;
+                        rebel = false;
+                        happiness = 85;
                     }
                 }
             }
@@ -202,34 +228,22 @@ namespace src.CitizenLibrary {
 
         private void updateTask()
         {
-            currentTask.update(this, town);
+            currentTask.update(random, this, town);
             if (currentTask.Completed)
             {
                 if (currentTask.Equals(favoriteTask))
                 {
-                    deltaHappiness += currentTask.calculateTaskHappiness(random, rebel, favoriteModifier);
+                    happiness += currentTask.calculateTaskHappiness(random, rebel, favoriteModifier);
                 }
                 else
                 {
-                    deltaHappiness += currentTask.calculateTaskHappiness(random, rebel, 1);
+                    happiness += currentTask.calculateTaskHappiness(random, rebel, 1);
                 }
-                while (true)
-                {
-                    generateTask();
-                    if (currentTask.Available)
-                    {
-                        break;
-                    }
-                    deltaHappiness -= 2; // The citizen's happiness takes a hit if they aren't able to complete a specific task
-                }
+                currentTask = new CitizenTask(random, this);
+                Debug.Log("Citizen " + id + " decided to " + currentTask.TaskName + ". They expect to complete the task on Day "+ currentTask.EndDay + " at " + currentTask.EndTime);
             }
         }
-        public void generateTask()
-        {
-            currentTask.generateNewTask(random, this);
-            Debug.Log("Citizen " + id + " decided to " + currentTask.TaskName + ". Task will be completed at " + currentTask.EndTime);
-        }
-
+        
         private int rollDice()
         {
             return random.Next(1, 100);
@@ -241,6 +255,8 @@ namespace src.CitizenLibrary {
 
         public bool WearingMask => wearingMask;
         public bool Hospitalized => hospitalized;
+
+        public double RiskofDeath => riskofDeath;
 
         public bool Dead => dead;
         public static Town Town

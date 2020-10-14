@@ -7,15 +7,20 @@ namespace src.UILibrary
 {
     public class happinessBar : MonoBehaviour
     {
-        public static Slider slider;
+        public Slider slider;
 
-        public static void setMaxHappy(int happy)
+        public void Start()
+        {
+            slider = GetComponent<Slider>();
+        }
+
+        public void setMaxHappy(int happy)
         {
             slider.maxValue = happy;
             slider.value = happy;
         }
 
-        public static void setHealth(int happy)
+        public void setHealth(int happy)
         {
             slider.value = happy;
         }

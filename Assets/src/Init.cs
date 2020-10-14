@@ -4,7 +4,6 @@ using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
 using src.CitizenLibrary;
-using src.SaveLoadLibrary;
 
 namespace src
 {
@@ -12,7 +11,7 @@ namespace src
     {
 
         public Town town;
-        public string townID;
+        public static string townID;
         public void Start() // Linked to a Scene. Starts everything
         {
             CitizenTask.taskKeys.Add(0, ("Go Drinking", true));
@@ -25,8 +24,8 @@ namespace src
             Citizen.initializeRandomizer();
             town = new Town("yay", "Matimba", 0, 8, 60000, 60000 / 24, 1, 15, 5, 20);
             town.Start();
-            TownData T = SaveSystem.LoadTown(townID);
-            town = new Town(T);
+            Debug.Log(Town.townReady);
+            // town = FileManagerSystem.LoadTown(townID);
         }
 
         public void Update()

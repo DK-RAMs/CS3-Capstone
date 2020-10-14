@@ -4,23 +4,21 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Threading;
-using CitizenLibrary;
-using SaveLoadLibrary;
+using src.SaveLoadLibrary;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 using Random = System.Random;
-using SaveSystem = src.SaveLoadLibrary.SaveSystem;
-using TownData = src.SaveLoadLibrary.TownData;
 using src.UILibrary;
 
 namespace src.CitizenLibrary
 {
-    #region constructors
     public class Town
     {
+        #region Class Properties
         public static int townNum = 1;
         private string id, mayor;
         private volatile int day, time, totalInfected;
+        private static int NUM_TESTCITIZENS = 1;
 
         private static long
             updateTickRate,
@@ -31,6 +29,7 @@ namespace src.CitizenLibrary
         private Collection<Supermarket> essentials;
         private Collection<Hospital> emergency;
         private Dictionary<int, bool> policyImplementation;
+        private bool[] policyImplemented;
         private HashSet<Policy> allPolicies, availablePolicies;
         private CitizenWorkerThread[] workerThreads;
         public static Thread[] Threads;
@@ -46,15 +45,18 @@ namespace src.CitizenLibrary
         private Collection<Policy> policies;
         private Stopwatch timer;
         public static volatile bool townReady;
+        private int numCitizens;
 
         public enum GameVersion
         {
             Debug = 0,
-            Release = 1
+            ReleaseNew = 1,
+            ReleaseLoad
         }
+        
+        #endregion
 
-
-
+        #region Constructors
         public Town(string id, string mayor, int day, int time, long dayLength, long updateTickRate,
             double baseDetalHappiness, double baseCitisenRisk, double baseMortalityRate, double baseRecoveryRate)
         {
@@ -73,20 +75,26 @@ namespace src.CitizenLibrary
             recreational = new Collection<Building>();
             essentials = new Collection<Supermarket>();
             emergency = new Collection<Hospital>();
+            residential = new Collection<Building>();
+            timer = new Stopwatch();
             townNum++;
+            money = 250;
+            totalInfected = 0;
+            favoriteModifier = 1.2;
+            deltaMoney = 1;
         }
 
-        public Town(string mayor, double baseDetalHappiness, double baseCitisenRisk) // Town default constructor
+        public Town(string mayor, double baseDetalHappiness, double baseCitisenRisk, double money) // Town default constructor
         {
             this.mayor = mayor;
             this.baseDetalHappiness = baseDetalHappiness;
+            this.money = money;
             id = mayor + "Town " + townNum;
             day = 1;
             time = 6;
             this.baseCitisenRisk = baseCitisenRisk;
             baseMortalityRate = 5;
             townNum++;
-
         }
 
         public Town(TownData T)
@@ -99,26 +107,22 @@ namespace src.CitizenLibrary
             emergency = new Collection<Hospital>();
         }
         #endregion
+        
+        #region Game State Methods
         public void Start()
         {
-            HealthBar.setMaxHealth(100);
-            happinessBar.setMaxHappy(100);
             Debug.Log("Initializing town...");
             townReady = false;
-            timer = Stopwatch.StartNew();
             timer.Reset();
             initializeCitizens(GameVersion.Debug);
-            loadBuildings("buildingSaveLocation");
+            loadBuildings(GameVersion.Debug);
 
             Citizen.town = this; // Sets the citizen town to this
 
             workerThreads = new CitizenWorkerThread[4];
             Threads = new Thread[4];
-            int divider = CitizenWorkerThread.citizens.Count / 4;
-            for
-            (int i = 0;
-                i < 4;
-                i++) // Multithreaded implementation. Just be sure to comment out the Start() method to test it. But also note that the threads don't terminate unless the unity environment itself is terminated, or the player actively quits the game.
+            int divider = CitizenWorkerThread.citizens.Count / 4; /*
+            for (int i = 0; i < 4; i++) // Multithreaded implementation. Just be sure to comment out the Start() method to test it. But also note that the threads don't terminate unless the unity environment itself is terminated, or the player actively quits the game.
             {
                 workerThreads[i] = new CitizenWorkerThread(divider * i, divider * (i + 1), false);
                 Debug.Log("Creating Citizen Thread " + i);
@@ -127,9 +131,10 @@ namespace src.CitizenLibrary
             }
 
             // Need to add multithreading for buildings
-
-            townReady = true;
+            */
             timer.Start();
+            townReady = true;
+            Debug.Log(GetHashCode());
         }
 
         public void Update()
@@ -144,10 +149,9 @@ namespace src.CitizenLibrary
 
                 timer.Start();
             }
-
-            if (timer.ElapsedMilliseconds >= updateTickRate / 4
-            ) // Every 30 minutes, a spread check is made bu buildings
+            if (timer.ElapsedMilliseconds >= updateTickRate / 4) // Every 30 minutes, a spread check is made bu buildings
             {
+                /*
                 foreach (Building b in recreational)
                 {
                     b.Update();
@@ -156,22 +160,23 @@ namespace src.CitizenLibrary
                 foreach (Supermarket s in essentials)
                 {
                     s.Update();
-                }
+                }*/
             }
 
             if (timer.ElapsedMilliseconds >= updateTickRate)
             {
                 timer.Reset();
+                Stopwatch s = Stopwatch.StartNew();
+                double happinessavg = 0;
                 incrementTime();
-                for (int i = 0;
-                    i < CitizenWorkerThread.citizens.Count;
-                    i++) // CitizenWorkerThread has a static collection of Citizens. This is a single threaded implementation
+                for (int i = 0; i < CitizenWorkerThread.citizens.Count; i++) // CitizenWorkerThread has a static collection of Citizens. This is a single threaded implementation
                 {
                     CitizenWorkerThread.citizens[i].Update();
+                    happinessavg += CitizenWorkerThread.citizens[i].Happiness;
                 }
-
+                happinessavg /= CitizenWorkerThread.citizens.Count;
+                /*
                 int totalRebels = 0;
-                double happinessavg = 0;
                 for (int i = 0; i < 4; i++)
                 {
                     happinessavg += workerThreads[i].AverageHappiness();
@@ -180,10 +185,11 @@ namespace src.CitizenLibrary
                 }
 
                 happinessavg /= 4;
-                happinessBar.setHealth(Convert.ToInt16(Math.Floor(happinessavg)));
+                */
+                
                 Debug.Log(happinessavg);
                 timer.Start();
-
+                Debug.Log("Updated all citizens. Time Taken: " + s.ElapsedMilliseconds);
             }
         }
 
@@ -198,7 +204,8 @@ namespace src.CitizenLibrary
 
             Debug.Log("Time is now " + time);
         }
-
+        #endregion
+        
         #region Initialization Methods
 
         private void initializeCitizens(GameVersion version)
@@ -206,93 +213,80 @@ namespace src.CitizenLibrary
             switch (version)
             {
                 case GameVersion.Debug:
-                    for (int i = 0; i < 2; i++) // Test citizens added to CitizenWorkerThread class
+                    Stopwatch s = Stopwatch.StartNew();
+                    for (int i = 0; i < NUM_TESTCITIZENS; i++) // Test citizens added to CitizenWorkerThread class
                     {
-                        CitizenWorkerThread.citizens.Add(new Citizen(i.ToString()));
+                        CitizenWorkerThread.citizens.Add(new Citizen());
                         CitizenWorkerThread.citizens[i].loadPreviousTask(1, 6, 13, 0);
-                        CitizenWorkerThread.citizens[i].InitializeCitizen();
                     }
-
+                    s.Stop();
+                    Debug.Log("Citizens have been generated. Time taken: " + s.ElapsedMilliseconds);
                     break;
-                case GameVersion.Release:
-
+                case GameVersion.ReleaseNew:
+                    Collection<Citizen> citizens = FileManagerSystem.LoadCitizens(this);
+                    
+                    break;
+                case GameVersion.ReleaseLoad:
                     break;
             }
         }
 
-        private void loadBuildings(string fileName)
+        private void loadBuildings(GameVersion version)
         {
-            Random r = new Random();
-            for (int i = 0; i < 10; i++)
+            switch (version)
             {
-                int buildingGenerator = r.Next(0, 3);
-                string buildingID = "building" + 0;
-                //Recreational = 0,
-                //Supermarket = 1,
-                //Emergency = 2,
-                //Residential = 3
-                if (buildingGenerator == 0) // 
-                {
-                    Building b = new Building(buildingID, 2, 5, 100, 0, 0);
-                    recreational.Add(b);
-                    buildings.Add(b);
-                }
-                else if (buildingGenerator == 1)
-                {
-                    Supermarket s = new Supermarket(buildingID, 2, 5, 100, 0, 20);
-                    essentials.Add(s);
-                    buildings.Add(s);
-                }
-                else if (buildingGenerator == 2)
-                {
-                    Hospital h = new Hospital(buildingID, 2, 5, 100, 0, 30, false);
-                    emergency.Add(h);
-                    buildings.Add(h);
-                }
-                else if (buildingGenerator == 3)
-                {
-                    Building b = new Building(buildingID, 2, 5, 200, 0, 3);
-                    residential.Add(b);
-                }
+                case GameVersion.ReleaseLoad:
+                    
+                    break;
+                case GameVersion.Debug:
+                    Random r = new Random();
+                    for (int i = 0; i < 10; i++)
+                    {
+                        int buildingGenerator = r.Next(0, 3);
+                        string buildingID = "building" + 0;
+                        if (buildingGenerator == 0)
+                        {
+                            Building b = new Building(buildingID, 2, 5, 100, 0, 0);
+                            recreational.Add(b);
+                        }
+                        else if (buildingGenerator == 1)
+                        {
+                            Supermarket s = new Supermarket(buildingID, 2, 5, 100, 0, 20);
+                            essentials.Add(s);
+                        }
+                        else if (buildingGenerator == 2)
+                        {
+                            Hospital h = new Hospital(buildingID, 2, 5, 100, 0, 30, false);
+                            emergency.Add(h);
+                        }
+                        else if (buildingGenerator == 3)
+                        {
+                            Building b = new Building(buildingID, 2, 5, 200, 0, 3);
+                            residential.Add(b);
+                        }
+                    }
+                    break;
             }
         }
-
-        private Collection<Building> getBuildings()
-        {
-            Collection<Building> buildings = new Collection<Building>();
-            foreach (Hospital h in emergency)
-            {
-                buildings.Add(h);
-            }
-
-            foreach (Supermarket s in essentials)
-            {
-                buildings.Add(s);
-            }
-
-            foreach (Building b in recreational)
-            {
-                buildings.Add(b);
-            }
-
-            foreach (Building b in residential)
-            {
-                buildings.Add(b);
-            }
-
-            return buildings;
-        }
-
         #endregion
 
         #region Setters & Getters
-
+        
         public string ID => id;
+
+        public string Mayor => mayor;
+
+        public int TotalInfected => totalInfected;
+
+        public double Money => money;
+
+        public double DeltaMoney => deltaMoney;
+
+        public double FavoriteModifier => favoriteModifier;
 
         public static long UpdateTickRate
         {
             get => updateTickRate;
-            set => updateTickRate = value;
         }
 
         public Stopwatch Timer => timer;
@@ -320,6 +314,32 @@ namespace src.CitizenLibrary
         public void updateDeltaHappiness(double factor)
         {
             baseDetalHappiness += factor;
+        }
+        
+        private Collection<Building> getBuildings()
+        {
+            Collection<Building> buildings = new Collection<Building>();
+            foreach (Hospital h in emergency)
+            {
+                buildings.Add(h);
+            }
+
+            foreach (Supermarket s in essentials)
+            {
+                buildings.Add(s);
+            }
+
+            foreach (Building b in recreational)
+            {
+                buildings.Add(b);
+            }
+
+            foreach (Building b in residential)
+            {
+                buildings.Add(b);
+            }
+
+            return buildings;
         }
 
         public Dictionary<int, bool> PolicyImplementation
