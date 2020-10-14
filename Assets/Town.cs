@@ -26,8 +26,7 @@ public class Town
     private Collection<Policy> policies;
     private Stopwatch timer;
     public static volatile bool townReady;
-    
-
+    //public static Newspaper newspaper; // newspaper object so can update it here every x days ect., public so it can be accessed from UpdateNewsText class - Z
 
     public Town(string id, int day, int time, long dayLength, long updateTickRate, double baseDetalHappiness, double baseCitisenRisk, double baseMortalityRate, double baseRecoveryRate)
     {
@@ -83,6 +82,9 @@ public class Town
             //Threads[i].Start(); 
         }
         timer.Start();
+        //Newspaper = new Newspaper(); // - initialise a new newspaper object to be used throughout the program, I think this is probably a good place to put it - Z
+        Newspaper.readArticles();
+        //newspaper.incrementID(); // testing to see if it shows more than the first article - Z
         townReady = true;
     }
     
