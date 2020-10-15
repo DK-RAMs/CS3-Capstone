@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace src.NewspaperLibrary
 {
-    [CreateAssetMenu(fileName = "new State Event", menuName = "Newspaper/Events/State Event")]
+    [CreateAssetMenu(fileName = "new Quiz Event", menuName = "Newspaper/Events/Quiz Event")]
     public class QuizEvent : NewspaperEvent
     {
         public string[] answers;

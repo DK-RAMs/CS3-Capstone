@@ -12,7 +12,7 @@ using src.UILibrary;
 
 namespace src.CitizenLibrary
 {
-    public class Town
+    public class Town 
     {
         #region Class Properties
         public static int townNum = 1;
@@ -271,7 +271,7 @@ namespace src.CitizenLibrary
             }
         }
 
-        public void applyDecisionEvent(double deltaHappiness, double deltaHealth, double deltaMoney)
+        public void applyDecisionEvent(int deltaHappiness, int deltaHealth, int deltaMoney)
         {
             for (int i = 0; i < CitizenWorkerThread.citizens.Count; i++)
             {
@@ -282,25 +282,31 @@ namespace src.CitizenLibrary
             for (int i = 0; i < numAffected; i++)
             {
                 int citizenPos = r.Next(CitizenWorkerThread.citizens.Count - 1);
-                
+                CitizenWorkerThread.citizens[i].rollHealthEvent(deltaHealth);
                 
             }
             money += deltaMoney;
         }
-
-        public void addCitizenHappiness(double happiness)
-        {
-            
-        }
-
+        
         public void applyQuizEvent(double deltaHappiness, double deltaHealth, double deltaMoney)
         {
             
         }
 
-        public void applyStateEvent(double deltaHappiness, double deltaHealth, double deltaMoney)
+        public void applyStateEvent(double deltaHappiness, double deltaHealth, double deltaMoney, int id)
         {
-            
+            if (id == 69)
+            {
+                resetTown();
+            }
+        }
+
+        public void resetTown()
+        {
+            foreach (Citizen c in CitizenWorkerThread.citizens)
+            {
+                c.reset();
+            }
         }
         #endregion
 

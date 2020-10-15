@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63b059d973e1487cae426bf62a84ecef, type: 3}
+  m_Name: FuneralEvent
+  m_EditorClassIdentifier: 
+  mainText: How do you respond?
+  decisions:
+  - '"Let them host the funeral. This is a trying time and people are going through
+    a lot. Giving people the chance to mourn their loved ones especially during these
+    trying times is important\n(+20 happiness, a number of citizens run a high chance
+    of contracting COVID-19)"'
+  - '"The funeral can be arranged, but we have to ensure that people are being kept
+    safe most importantly and hosting a public funeral is not the way to do it \n(+6
+    happiness, -R50000 and citizens run a very low chance in contracting the disease)"'
+  - '"No funeral shall be held. It''s important that our citizens are kept safe more
+    than anything. (-15 happiness)"'
+  deltaHappiness: 1400000006000000f1ffffff
+  deltaHealth: 3c0000000f00000000000000
+  deltaMoney: 00000000b03cffff00000000

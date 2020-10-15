@@ -8,9 +8,9 @@ namespace src.NewspaperLibrary
     public class DecisionEvent : NewspaperEvent
     {
         public string[] decisions;
-        public double[] deltaHappiness;
-        public double[] deltaHealth;
-        public double[] deltaMoney;
+        public int[] deltaHappiness;
+        public int[] deltaHealth;
+        public int[] deltaMoney;
         
         public DecisionEvent(string mainText) : base(mainText)
         {

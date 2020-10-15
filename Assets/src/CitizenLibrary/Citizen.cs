@@ -263,7 +263,17 @@ namespace src.CitizenLibrary {
 
         public void applyHappiness(double happiness)
         {
-            
+            this.happiness += happiness;
+            if (this.happiness > 100)
+            {
+                this.happiness = 100;
+            }
+        }
+
+        public void reset()
+        {
+            rebel = false;
+            happiness = 55;
         }
         
         #endregion

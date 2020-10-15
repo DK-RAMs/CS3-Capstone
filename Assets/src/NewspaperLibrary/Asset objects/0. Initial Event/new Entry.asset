@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ee6c552c47794fa8b52db3c25869abef, type: 3}
-  m_Name: FuneralEntry
+  m_Name: new Entry
   m_EditorClassIdentifier: 
   id: 0
   content: 

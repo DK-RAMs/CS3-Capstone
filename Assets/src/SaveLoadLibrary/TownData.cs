@@ -1,6 +1,6 @@
 using src.CitizenLibrary;
 
-namespace src.SaveLoadLibrary
+namespace src.SaveLoadLibrary // Work on this
 {
     [System.Serializable]
     public class TownData
@@ -29,9 +29,12 @@ namespace src.SaveLoadLibrary
                 policyImplementations[i] = t.PolicyImplementation[i];
             }
 
-            for (int i = 0; i < t.Buildings.Count; i++)
+            buildingIDs = new string[t.Buildings.Count];
+            int counter = 0;
+            foreach (Building b in t.Buildings)
             {
-                
+                buildingIDs[counter] = b.ID;
+                counter++;
             }
         }
         
