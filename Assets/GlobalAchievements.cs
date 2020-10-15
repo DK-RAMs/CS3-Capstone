@@ -22,20 +22,26 @@ public class GlobalAchievements : MonoBehaviour
     public int ac1Code;
 
     // Achievement 2 specific
-    //public GameObject acImage;
     public static int ac2Count;
     public int ac2Trigger = 1;
     public int ac2Code;
 
     // Achievement 3 specific
-    //public GameObject acImage;
     public static int ac3Count;
     public int ac3Trigger = 1;
     public int ac3Code;
 
+    // Achievement 4 specific
+    public static int ac4Count;
+
+    // Achievement 5 specific
+    public static int ac5Count;
+
     // Update is called once per frame
     void Update()
     {
+        // checks if achievement has already been triggered
+        // if not triggered, checks if conditions to trigger have been met
         ac1Code = PlayerPrefs.GetInt("ac1");
         if (ac1Count == ac1Trigger && ac1Code != 1)
 		{
@@ -57,6 +63,7 @@ public class GlobalAchievements : MonoBehaviour
 
     IEnumerator Trigger1ac()
 	{
+        // displays achievement 1
         acActive = true;
         ac1Code = 1;
         PlayerPrefs.SetInt("ac1", ac1Code);
@@ -73,6 +80,7 @@ public class GlobalAchievements : MonoBehaviour
 
     IEnumerator Trigger2ac()
     {
+        // displays achievement 2
         acActive = true;
         ac2Code = 1;
         PlayerPrefs.SetInt("ac2", ac2Code);
@@ -89,6 +97,7 @@ public class GlobalAchievements : MonoBehaviour
 
     IEnumerator Trigger3ac()
     {
+        // displays achievement 3
         acActive = true;
         ac3Code = 1;
         PlayerPrefs.SetInt("ac3", ac3Code);
@@ -103,6 +112,7 @@ public class GlobalAchievements : MonoBehaviour
         resetUI();
     }
 
+    // resets the UI after the achievement has been displayed
     void resetUI()
 	{
         acNote.SetActive(false);
