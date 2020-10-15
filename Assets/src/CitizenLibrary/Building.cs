@@ -51,12 +51,14 @@ namespace src.CitizenLibrary
         {
             if (containsInfected)
             {
+                HashSetAccessLock.Wait();
                 int spreadDisease = random.Next(0, 100);
                 if (spreadDisease <= exposureFactor) // If spread disease
                 {
-                    int infect = random.Next(occupants.Count);
-                    occupants.ElementAt(infect).rollHealthEvent(100); 
+                    int infect = random.Next(occupants.Count-1);
+                    occupants.ElementAt(infect).rollHealthEvent(100);
                 }
+                HashSetAccessLock.Release();
             }
         }
         
@@ -93,14 +95,18 @@ namespace src.CitizenLibrary
         {
             if (citizen.citizenHome.Equals(this))
             {
+                HashSetAccessLock.Wait();
                 occupants.Add(citizen);
+                HashSetAccessLock.Release();
             }
             if (open)
             {
                 entranceLock.Wait(); // Lock acquired to 
                 if (numOccupants < maxOccupants) // Checks if the citizen can actually enter the building
                 {
+                    HashSetAccessLock.Wait();
                     occupants.Add(citizen);
+                    HashSetAccessLock.Release();
                     if (!citizen.WearingMask)
                     {
                         numWithNoMask++;
@@ -113,7 +119,9 @@ namespace src.CitizenLibrary
 
                 if (citizen.Rebel && numOccupants >= maxOccupants)
                 {
+                    HashSetAccessLock.Wait();
                     occupants.Add(citizen);
+                    HashSetAccessLock.Release();
                     exposureFactor += 1;
                     entranceLock.Release();
                     return true;
@@ -126,6 +134,7 @@ namespace src.CitizenLibrary
         public virtual void exitBuilding(Citizen citizen)
         {
             entranceLock.Wait();
+            HashSetAccessLock.Wait();
             occupants.Remove(citizen);
             if (numOccupants > maxOccupants)
             {
