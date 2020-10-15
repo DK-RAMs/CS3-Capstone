@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1019751080239",
+    "firebase_url": "https://covidonenine-app.firebaseio.com",
+    "project_id": "covidonenine-app",
+    "storage_bucket": "covidonenine-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1019751080239:android:0959c16be628f5b58001da",
+        "android_client_info": {
+          "package_name": "com.DefaultCompany.CovidOneNine"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1019751080239-4bsffmrgm8julk7180tklcahrjshiquf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBpfsLUyrw7lVgvGk6bczq2iwAzxFxZjmg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1019751080239-4bsffmrgm8julk7180tklcahrjshiquf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
