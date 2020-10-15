@@ -22,13 +22,13 @@ namespace src.CitizenLibrary {
         private bool rebel, hospitalized, dead, infected, wearingMask;
 
         public Building workLocation;
-        public Building citizenHome;
+        public Building homeLocation;
         
         public enum Occupation { Unemployed = 0, Student = 1, Employed = 2, Retired = 3 };
         public enum HealthRisk { Diabetic, Respiratory, Cardial, Old };
 
 
-        private static Random random;
+        private static Random random = new Random();
 
         public static double beginRebelVal, stopRebelVal, baseChance, favoriteModifier;
 
@@ -76,6 +76,14 @@ namespace src.CitizenLibrary {
             id = IDPREFIX + citizenNum;
             name = "Mark";
             age = random.Next(18, 65);
+            citizenNum++;
+            infected = false;
+            rebel = false;
+            happiness = 50;
+            hospitalized = false;
+            dead = false;
+            wearingMask = false;
+            favoriteTask = new CitizenTask(random, this, true);
         }
         #endregion
 
@@ -239,7 +247,7 @@ namespace src.CitizenLibrary {
                 {
                     happiness += currentTask.calculateTaskHappiness(random, rebel, 1);
                 }
-                currentTask = new CitizenTask(random, this);
+                currentTask = new CitizenTask(random, this, false); // Generates a new task that isn't a favorite
             }
         }
         

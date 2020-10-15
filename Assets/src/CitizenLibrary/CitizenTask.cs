@@ -42,9 +42,16 @@ namespace src.CitizenLibrary
 
         }
 
-        public CitizenTask(Random random, Citizen citizen)
+        public CitizenTask(Random random, Citizen citizen, bool favorite)
         {
-            generateNewTask(random, citizen);
+            if (favorite)
+            {
+                generateFavoriteTask(random, citizen);
+            }
+            else
+            {
+                generateNewTask(random, citizen);
+            }
         }
         #endregion
         
@@ -75,7 +82,7 @@ namespace src.CitizenLibrary
             taskName = taskKeys[taskID].Item1;
             endTime = startTime + random.Next(1, 3);
             endDay = startDay + (endTime / 24);
-            taskLocation = citizen.citizenHome;
+            taskLocation = citizen.homeLocation;
         }
 
         private void generateNewTask(Random random, Citizen citizen)
@@ -91,7 +98,7 @@ namespace src.CitizenLibrary
                     taskName = taskKeys[taskID].Item1;
                     endTime = startTime + 2;
                     endDay = startDay + random.Next(12, 14);
-                    taskLocation = citizen.citizenHome;
+                    taskLocation = citizen.homeLocation;
                     return;
                 }
             }
@@ -141,7 +148,7 @@ namespace src.CitizenLibrary
         private void generateSleepTask(Random random, Citizen citizen)
         {
             endTime = startTime + random.Next(6, 8);
-            taskLocation = citizen.citizenHome;
+            taskLocation = citizen.homeLocation;
         }
         
         private void generateRecreationalTask(Random random, Citizen citizen)
@@ -170,10 +177,10 @@ namespace src.CitizenLibrary
             endTime = startTime + 8;
             endDay = startDay + endTime / 24;
             endTime %= 24;
-            if (citizen.workLocation.Equals(citizen.citizenHome))
+            if (citizen.workLocation.Equals(citizen.homeLocation))
             {
-                citizen.citizenHome.enterBuilding(citizen);
-                taskLocation = citizen.citizenHome;
+                citizen.homeLocation.enterBuilding(citizen);
+                taskLocation = citizen.homeLocation;
                 return;
             }
             if (citizen.workLocation.enterBuilding(citizen))
@@ -210,7 +217,37 @@ namespace src.CitizenLibrary
             endTime = startTime + random.Next(1, 3);
             endDay = startDay + endTime / 24;
             endTime %= 24;
-            taskLocation = citizen.citizenHome;
+            taskLocation = citizen.homeLocation;
+        }
+
+        public void generateFavoriteTask(Random random, Citizen citizen)
+        {
+            taskID = random.Next(0, taskKeys.Count - 3);
+            switch (taskID)
+            {
+                case 0:
+                    taskLocation = Citizen.town.Recreational[random.Next(Citizen.Town.Recreational.Count - 1)];
+                    break;
+                case 1:
+                    taskLocation = citizen.homeLocation;
+                    break;
+                case 2:
+                    taskLocation = citizen.workLocation;
+                    break;
+                case 3:
+                    taskLocation = Citizen.town.Essentials[random.Next(Citizen.Town.Essentials.Count - 1)];
+                    break;
+                case 4:
+                    taskLocation = Citizen.town.Residential[random.Next(Citizen.town.Residential.Count - 1)];
+                    break;
+                case 5:
+                    taskLocation = citizen.homeLocation;
+                    break;
+                default:
+                    taskID = 1;
+                    taskLocation = citizen.homeLocation;
+                    break;
+            }
         }
 
         private void admitToHospital(Random random, Citizen citizen)

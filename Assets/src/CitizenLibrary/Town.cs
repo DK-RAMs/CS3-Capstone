@@ -9,6 +9,7 @@ using UnityEngine;
 using Debug = UnityEngine.Debug;
 using Random = System.Random;
 using src.UILibrary;
+using UnityEditor;
 
 namespace src.CitizenLibrary
 {
@@ -18,7 +19,7 @@ namespace src.CitizenLibrary
         public static int townNum = 1;
         private string id, mayor;
         private volatile int day, time, totalInfected;
-        private static int NUM_TESTCITIZENS = 1;
+        private static int NUM_TESTCITIZENS = 200;
 
         private static long
             updateTickRate,
@@ -189,7 +190,6 @@ namespace src.CitizenLibrary
                 happinessavg /= 4;
                 */
                 
-                Debug.Log(happinessavg);
                 timer.Start();
                 Debug.Log("Updated all citizens. Time Taken: " + s.ElapsedMilliseconds);
             }
@@ -242,6 +242,15 @@ namespace src.CitizenLibrary
                     break;
                 case GameVersion.Debug:
                     Random r = new Random();
+                        
+                    Building b1 = new Building("firstRes", 0, 25, 200, 0, 3);
+                    Hospital h1 = new Hospital("firstHos", 0, 25, 100, 0, 30, false);
+                    Supermarket s1 = new Supermarket("firstSupwe", 0, 25, 100, 0, 20);
+                    Building b2 = new Building("firstRec", 0, 25, 100, 0, 0);
+                    Residential.Add(b1);
+                    Emergency.Add(h1);
+                    Essentials.Add(s1);
+                    Buildings.Add(b2);
                     for (int i = 0; i < 10; i++)
                     {
                         int buildingGenerator = r.Next(0, 3);
@@ -394,6 +403,8 @@ namespace src.CitizenLibrary
         public Collection<Building> Recreational => recreational;
 
         public HashSet<Building> Buildings => buildings;
+
+        public Collection<Building> Residential => residential;
 
         #endregion
     }

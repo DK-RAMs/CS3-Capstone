@@ -17,7 +17,7 @@ namespace src.CitizenLibrary
         protected Collection<Upgrade> buildingUpgrades;
         protected double happinessContribution, exposureFactor;
         protected int maxOccupants, numOccupants;
-        protected SemaphoreSlim entranceLock, HashSetAccessLock;
+        protected SemaphoreSlim entranceLock, occupantAccessLock;
         protected bool open, containsInfected;
         protected Random random;
 
@@ -41,7 +41,7 @@ namespace src.CitizenLibrary
             this.numOccupants = numOccupants;
             setBuildingType(buildingType);
             entranceLock = new SemaphoreSlim(1);
-            HashSetAccessLock = new SemaphoreSlim(1);
+            occupantAccessLock = new SemaphoreSlim(1);
             occupants = new HashSet<Citizen>();
             random = new Random();
         }
@@ -51,14 +51,14 @@ namespace src.CitizenLibrary
         {
             if (containsInfected)
             {
-                HashSetAccessLock.Wait();
+                occupantAccessLock.Wait();
                 int spreadDisease = random.Next(0, 100);
                 if (spreadDisease <= exposureFactor) // If spread disease
                 {
                     int infect = random.Next(occupants.Count-1);
                     occupants.ElementAt(infect).rollHealthEvent(100);
                 }
-                HashSetAccessLock.Release();
+                occupantAccessLock.Release();
             }
         }
         
@@ -93,20 +93,20 @@ namespace src.CitizenLibrary
         #region Citizen Management Methods
         public virtual bool enterBuilding(Citizen citizen)
         {
-            if (citizen.citizenHome.Equals(this))
+            if (citizen.homeLocation.Equals(this))
             {
-                HashSetAccessLock.Wait();
+                occupantAccessLock.Wait();
                 occupants.Add(citizen);
-                HashSetAccessLock.Release();
+                occupantAccessLock.Release();
             }
             if (open)
             {
                 entranceLock.Wait(); // Lock acquired to 
                 if (numOccupants < maxOccupants) // Checks if the citizen can actually enter the building
                 {
-                    HashSetAccessLock.Wait();
+                    occupantAccessLock.Wait();
                     occupants.Add(citizen);
-                    HashSetAccessLock.Release();
+                    occupantAccessLock.Release();
                     if (!citizen.WearingMask)
                     {
                         numWithNoMask++;
@@ -119,9 +119,9 @@ namespace src.CitizenLibrary
 
                 if (citizen.Rebel && numOccupants >= maxOccupants)
                 {
-                    HashSetAccessLock.Wait();
+                    occupantAccessLock.Wait();
                     occupants.Add(citizen);
-                    HashSetAccessLock.Release();
+                    occupantAccessLock.Release();
                     exposureFactor += 1;
                     entranceLock.Release();
                     return true;
@@ -131,10 +131,10 @@ namespace src.CitizenLibrary
             return false;
         }
 
-        public virtual void exitBuilding(Citizen citizen)
+        public virtual bool exitBuilding(Citizen citizen)
         {
             entranceLock.Wait();
-            HashSetAccessLock.Wait();
+            occupantAccessLock.Wait();
             occupants.Remove(citizen);
             if (numOccupants > maxOccupants)
             {
@@ -146,6 +146,7 @@ namespace src.CitizenLibrary
             }
             numOccupants--;
             entranceLock.Release();
+            return true;
         }
 
         #endregion
