@@ -1,14 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 namespace src.UILibrary
 {
     public class ButtonClick : MonoBehaviour
     {
-
         public void OpenNoticeboard()
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
@@ -18,7 +14,5 @@ namespace src.UILibrary
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 2);
         }
-
-
     }
 }

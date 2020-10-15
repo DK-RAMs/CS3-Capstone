@@ -1,66 +1,49 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Threading;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
-using src.CitizenLibrary;
 
 namespace src.UILibrary
 {
     public class PauseMenu : MonoBehaviour
     {
-        public static bool GameIsPaused = false;
-        public static bool GameQuit = false;
+        public static bool GameIsPaused; // game is currently not paused
 
         public GameObject pauseMenuUI;
 
         // Update is called once per frame
-        void Update()
+        private void Update()
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 if (GameIsPaused)
-                {
-                    Resume();
-                }
+                    Resume(); // resume while game is not paused
                 else
-                {
-                    Pause();
-                }
+                    Pause(); // call pause when game is paused
             }
         }
 
+        // pause game
         public void Pause()
         {
             GameIsPaused = true;
             pauseMenuUI.SetActive(true);
             Time.timeScale = 0f;
+            Navigation.isClicked = true;
         }
 
+        // resume game
         public void Resume()
         {
             pauseMenuUI.SetActive(false);
             Time.timeScale = 1f;
+            Navigation.isClicked = false;
             GameIsPaused = false;
         }
 
+        // load main menu
         public void LoadMenu()
         {
             Time.timeScale = 1f;
-            SceneManager.LoadScene("main");
-        }
-
-        public void Quit()
-        {
-            Debug.Log("Quitting game...");
-            GameQuit = true;
-            for (int i = 0; i < 4; i++)
-            {
-                Town.Threads[i].Join();
-            }
-
-            // Save state stuff happens here. Need to wait for all the relevant data to be written and *maybe* compressed? (Could use huffman compression :thinking:)
-            Application.Quit();
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
         }
     }
 }
