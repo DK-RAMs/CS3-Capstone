@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading;
 using UnityEditor;
 using UnityEngine;
@@ -16,7 +17,7 @@ namespace src.CitizenLibrary
         protected Collection<Upgrade> buildingUpgrades;
         protected double happinessContribution, exposureFactor;
         protected int maxOccupants, numOccupants;
-        protected SemaphoreSlim entranceLock;
+        protected SemaphoreSlim entranceLock, HashSetAccessLock;
         protected bool open, containsInfected;
         protected Random random;
 
@@ -40,6 +41,7 @@ namespace src.CitizenLibrary
             this.numOccupants = numOccupants;
             setBuildingType(buildingType);
             entranceLock = new SemaphoreSlim(1);
+            HashSetAccessLock = new SemaphoreSlim(1);
             occupants = new HashSet<Citizen>();
             random = new Random();
         }
@@ -50,9 +52,10 @@ namespace src.CitizenLibrary
             if (containsInfected)
             {
                 int spreadDisease = random.Next(0, 100);
-                if (spreadDisease <= exposureFactor)
+                if (spreadDisease <= exposureFactor) // If spread disease
                 {
-                    
+                    int infect = random.Next(occupants.Count);
+                    occupants.ElementAt(infect).rollHealthEvent(100); 
                 }
             }
         }
