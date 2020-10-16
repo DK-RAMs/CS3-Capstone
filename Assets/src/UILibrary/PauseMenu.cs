@@ -7,6 +7,8 @@ namespace src.UILibrary
     {
         public static bool GameIsPaused; // game is currently not paused
 
+        public static bool GameQuit = false;
+
         public GameObject pauseMenuUI;
 
         // Update is called once per frame

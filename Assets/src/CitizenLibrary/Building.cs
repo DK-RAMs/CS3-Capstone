@@ -1,9 +1,10 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using UnityEditor;
-using UnityEngine;
+using Debug = UnityEngine.Debug;
 using Random = System.Random;
 
 namespace src.CitizenLibrary
@@ -12,7 +13,7 @@ namespace src.CitizenLibrary
     {
         protected HashSet<Citizen> occupants; // Usually, the number of occupants will be initialized to zero
         protected string id;
-        protected int numWithNoMask;
+        protected int numWithNoMask, numInfected;
         protected Collection<Upgrade> availableUpgrades;
         protected Collection<Upgrade> buildingUpgrades;
         protected double happinessContribution, exposureFactor;
@@ -20,6 +21,8 @@ namespace src.CitizenLibrary
         protected SemaphoreSlim entranceLock, occupantAccessLock;
         protected bool open, containsInfected;
         protected Random random;
+        public static Stopwatch buildingTimer = new Stopwatch();
+        public static int buildingUpdateTimer = 2500 / 4;
 
         public enum BuildingType
         {
@@ -44,6 +47,7 @@ namespace src.CitizenLibrary
             occupantAccessLock = new SemaphoreSlim(1);
             occupants = new HashSet<Citizen>();
             random = new Random();
+            numInfected = 0;
         }
         
         #endregion
@@ -55,6 +59,8 @@ namespace src.CitizenLibrary
                 int spreadDisease = random.Next(0, 100);
                 if (spreadDisease <= exposureFactor) // If spread disease
                 {
+                    numInfected++;
+                    Debug.Log("Managed to infect someone");
                     int infect = random.Next(occupants.Count-1);
                     occupants.ElementAt(infect).rollHealthEvent(100);
                 }
@@ -98,6 +104,12 @@ namespace src.CitizenLibrary
                 occupantAccessLock.Wait();
                 occupants.Add(citizen);
                 occupantAccessLock.Release();
+                if (citizen.Infected)
+                {
+                    Debug.Log("Building contains infected individual");
+                    numInfected++;
+                    containsInfected = true;
+                }
             }
             if (open)
             {
@@ -116,6 +128,12 @@ namespace src.CitizenLibrary
                     entranceLock.Release();
                     return true;
                 }
+                if (citizen.Infected)
+                {
+                    Debug.Log("Building contains infected individual");
+                    numInfected++;
+                    containsInfected = true;
+                }
 
                 if (citizen.Rebel && numOccupants >= maxOccupants)
                 {
@@ -123,31 +141,48 @@ namespace src.CitizenLibrary
                     occupants.Add(citizen);
                     occupantAccessLock.Release();
                     exposureFactor += 1;
+                    if (!citizen.WearingMask)
+                    {
+                        numWithNoMask++;
+                        exposureFactor += 1;
+                    }
                     entranceLock.Release();
                     return true;
                 }
             }
-
             return false;
         }
-
+        
         public virtual bool exitBuilding(Citizen citizen)
         {
             entranceLock.Wait();
             occupantAccessLock.Wait();
             occupants.Remove(citizen);
-            if (numOccupants > maxOccupants)
+            if (numOccupants >= maxOccupants)
             {
-                if (!citizen.WearingMask)
+                exposureFactor--;
+            }
+            if (!citizen.WearingMask)
+            {
+                exposureFactor -= 1;
+                numWithNoMask--;
+            }
+            if (citizen.Infected)
+            {
+                numInfected--;
+                Debug.Log("Infected citizen left the building");
+                if (numInfected <= 0)
                 {
-                    exposureFactor -= 1;
-                    numWithNoMask--;
+                    containsInfected = false;
+                    numInfected = 0;
                 }
             }
             numOccupants--;
+            occupantAccessLock.Release();
             entranceLock.Release();
             return true;
         }
+
 
         #endregion
         

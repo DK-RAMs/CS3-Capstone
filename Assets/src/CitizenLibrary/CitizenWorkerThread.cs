@@ -15,7 +15,7 @@ namespace src.CitizenLibrary
     public class CitizenWorkerThread
     {
         public static Collection<Citizen> citizens = new Collection<Citizen>();
-        private int lo, hi, numRebels, numInfected;
+        private int lo, hi, numRebels, numInfected, time;
         private bool happinessUpdated;
         private double averageHappiness;
         private Stopwatch updateTick;
@@ -47,50 +47,54 @@ namespace src.CitizenLibrary
 
             while (true)
             {
-                for (int i = lo; i < hi; i++)
+                if (time != town.Time)
                 {
-                    while (PauseMenu.GameIsPaused)
+                    for (int i = lo; i < hi; i++)
                     {
-                        if (PauseMenu.GameQuit) // Game Quit somewhere dude
+                        while (PauseMenu.GameIsPaused)
                         {
+                            if (PauseMenu.GameQuit) // Game Quit somewhere dude
+                            {
+                                break;
+                            }
+
+                        }
+
+                        if (PauseMenu.GameQuit)
+                        {
+                            Thread.Sleep(new Random().Next(500, 3000));
                             break;
                         }
 
-                    }
-
-                    if (PauseMenu.GameQuit)
-                    {
-                        Thread.Sleep(new Random().Next(500, 3000));
-                        break;
-                    }
-                    if (!citizens[i].Dead)
-                    {
-                        citizens[i].Update();
-                    }
-
-                    if (Citizen.town.Time == 0 && !happinessUpdated)
-                    {
-                        averageHappiness = 0;
-                        happinessUpdated = true;
-                        for (int j = lo; j < hi; j++)
+                        if (!citizens[i].Dead)
                         {
-                            if (!citizens[i].Dead)
-                            {
-                                averageHappiness += citizens[i].Happiness;
-                            }
+                            citizens[i].Update();
                         }
 
-                        Interlocked.Exchange(ref this.averageHappiness, averageHappiness /= (hi - lo));
-                    }
+                        if (Citizen.town.Time == 0 && !happinessUpdated)
+                        {
+                            averageHappiness = 0;
+                            happinessUpdated = true;
+                            for (int j = lo; j < hi; j++)
+                            {
+                                if (!citizens[i].Dead)
+                                {
+                                    averageHappiness += citizens[i].Happiness;
+                                }
+                            }
 
-                    if (Citizen.town.Time == 1 && happinessUpdated)
-                    {
-                        Debug.Log("Happiness updated");
-                        happinessUpdated = false;
+                            Interlocked.Exchange(ref this.averageHappiness, averageHappiness /= (hi - lo));
+                        }
+
+                        if (Citizen.town.Time == 1 && happinessUpdated)
+                        {
+                            Debug.Log("Happiness updated");
+                            happinessUpdated = false;
+                        }
                     }
                 }
+                time = Town.Time;
             }
-
         }
 
         #endregion

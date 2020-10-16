@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 using src.UILibrary;
 
@@ -12,9 +13,17 @@ namespace src.CitizenLibrary
 
         public HealthBar healthBar;
 
+        public Town town;
+
         // Start is called before the first frame update
         void Start()
         {
+            while (Citizen.town == null)
+            {
+                
+            }
+
+            town = Citizen.town;
             currentHealth = maxHealth;
             healthBar.setMaxHealth(maxHealth);
         }
@@ -22,16 +31,11 @@ namespace src.CitizenLibrary
         // Update is called once per frame
         void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Town.happinessUpdated)
             {
-                takeDamage(20);
+                healthBar.setHealth((int)town.AverageHappiness);
             }
         }
-
-        void takeDamage(int damage)
-        {
-            currentHealth -= damage;
-            healthBar.setHealth(currentHealth);
-        }
+        
     }
 }

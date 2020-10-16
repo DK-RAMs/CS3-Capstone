@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Timers;
 using System.IO;
+using System.Linq;
 using System.Linq.Expressions;
 using UnityEngine;
 using System.Threading.Tasks;
@@ -60,7 +61,7 @@ namespace src.CitizenLibrary {
             this.hospitalized = hospitalized;
             this.dead = dead;
             this.wearingMask = wearingMask;
-            favoriteTask = new CitizenTask(1, 6, 12, 0);
+            
         }
 
         public Citizen(CitizenData c)
@@ -83,6 +84,8 @@ namespace src.CitizenLibrary {
             hospitalized = false;
             dead = false;
             wearingMask = false;
+            homeLocation = town.Recreational[random.Next(town.Recreational.Count-1)];
+            workLocation = town.Buildings.ElementAt(random.Next(town.Buildings.Count - 1));
             favoriteTask = new CitizenTask(random, this, true);
         }
         #endregion
@@ -121,9 +124,15 @@ namespace src.CitizenLibrary {
             
         }
 
-        public void loadPreviousTask(int taskID, int startTime, int endTime, int completed)
+        public void loadPreviousTask(int taskID, int startTime, int endTime, int startDay, int endDay, int completed, Building building)
         {
-            currentTask = new CitizenTask(taskID, startTime, endTime, completed);
+            
+            currentTask = new CitizenTask(taskID, startTime, endTime, startDay, endDay, completed, building);
+        }
+
+        public void initiateTask()
+        {
+            currentTask.taskLocation.enterBuilding(this);
         }
 
         public static void initializeRandomizer()
@@ -135,76 +144,74 @@ namespace src.CitizenLibrary {
         #region Citizen Updating Methods
         public void Update()
         {
-            if (town.Timer.ElapsedMilliseconds >= Town.UpdateTickRate)
+            if (!hospitalized) // Checks if citizen is hospitalized (i.e. in hospital)
             {
-                if (!hospitalized) // Checks if citizen is hospitalized (i.e. in hospital)
+                if (town.Time == 6)
                 {
-                    if (town.Time == 6)
+                    if (!rebel && town.PolicyImplementation[1]) // PolicyImplementation[1] - Citizens must wear face masks at all times
                     {
-                        if (!rebel && (town.PolicyImplementation[1] || rollDice() <= happiness))
-                        {
-                            wearingMask = true;
-                        }
-                        else
-                        {
-                            wearingMask = false;
-                        }
-                        if (infected)
-                        {
-                            int hospitalizeRoll = rollDice();
-                            if (hospitalizeRoll <= (riskofDeath+15))
-                            {
-                                hospitalized = true;
-                            }
-                            else if (currentTask.EndTime >= Town.Time && currentTask.EndDay >= Town.Day) // Citizen is cured once they managed to get through 15 days of not 
-                            {
-                                infected = false;
-                            }
-                        }
+                        wearingMask = true;
                     }
-                    updateTask();
-
-                    if (town.Timer.ElapsedMilliseconds >= Town.UpdateTickRate) // Update tick rate is longer than a second. (Maybe 1 hour in game is 1 second) // This is not required since tasks
+                    else
                     {
-                        // Unnecessary check here
-                        happiness +=
-                            deltaHappiness; // Adds the total change to the citizen's happiness to citizen's current happiness
-
-                        if (happiness > 100)
+                        wearingMask = false;
+                    }
+                    if (infected)
+                    {
+                        int hospitalizeRoll = rollDice();
+                        if (hospitalizeRoll <= (riskofDeath+15))
                         {
-                            happiness = 100;
+                            Debug.Log("Citizen with id" + id + " has collapsed and has been sent to the hospital");
+                            hospitalized = true;
                         }
-                        else if (happiness < 0)
+                        else if (currentTask.TaskID == 6 && currentTask.EndTime >= Town.Time && currentTask.EndDay >= Town.Day) // Citizen is cured once they managed to get through 15 days of self quarantine
                         {
-                            happiness = 0;
+                            infected = false;
                         }
-
-                        deltaHappiness = 0; // Resets citizen delta happiness after processing all changes
-                        generateRebelFactor();
                     }
                 }
-                else
+                updateTask(); // Task must update here. The hospitalization roll needs to be committed before update (since citizen is hospitalized IN the method)
+                if (town.Timer.ElapsedMilliseconds >= Town.UpdateTickRate) // Update tick rate is longer than a second. (Maybe 1 hour in game is 1 second) // This is not required since tasks
                 {
-                    if (Town.Time % 12 == 0)
+                    // Unnecessary check here
+                    happiness +=
+                        deltaHappiness; // Adds the total change to the citizen's happiness to citizen's current happiness
+
+                    if (happiness > 100)
                     {
-                        int deathRoll = rollDice();
-                        if (deathRoll <= riskofDeath)
-                        {
-                            dead = true;
-                        }
+                        happiness = 100;
+                    }
+                    else if (happiness < 0)
+                    {
+                        happiness = 0;
                     }
 
-                    if (Town.Time >= currentTask.EndTime && Town.Day >= currentTask.EndDay)
+                    deltaHappiness = 0; // Resets citizen delta happiness after processing all changes
+                    generateRebelFactor();
+                }
+            }
+            else
+            {
+                if (Town.Time % 12 == 0)
+                {
+                    int deathRoll = rollDice();
+                    if (deathRoll <= riskofDeath)
                     {
-                        infected = false;
-                        hospitalized = false;
-                        riskofDeath--;
-                        rebel = false;
-                        happiness = 85;
+                        dead = true;
                     }
+                }
+
+                if (Town.Time >= currentTask.EndTime && Town.Day >= currentTask.EndDay)
+                {
+                    infected = false;
+                    hospitalized = false;
+                    riskofDeath--;
+                    rebel = false;
+                    happiness = 85;
                 }
             }
         }
+        
 
         private void generateRebelFactor()
         {
@@ -236,7 +243,7 @@ namespace src.CitizenLibrary {
 
         private void updateTask()
         {
-            currentTask.update(random, this, town);
+            currentTask.Update(random, this, town);
             if (currentTask.Completed)
             {
                 if (currentTask.Equals(favoriteTask))

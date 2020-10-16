@@ -28,6 +28,7 @@ namespace src.UILibrary
         private void Start()
         {
             currentHealth = maxHealth;
+            healthBar = gameObject.AddComponent<HealthBar>();
             healthBar.setMaxHealth(maxHealth);
             revenue.text = "R 500000";
             waitCounter = waitTime;
@@ -45,24 +46,6 @@ namespace src.UILibrary
             //check the implemented policy and its rate of infection
             if (waitCounter < 0)
             {
-                switch (PolicyUI.level)
-                {
-                    case 1:
-                        takeDamage(3);
-                        break;
-                    case 2:
-                        takeDamage(2);
-                        break;
-                    case 3:
-                        takeDamage(1);
-                        break;
-                    case 4:
-                        takeDamage(1);
-                        break;
-                    case 5:
-                        takeDamage(1);
-                        break;
-                }
 
                 waitCounter = waitTime;
             }

@@ -19,6 +19,11 @@ namespace src.CitizenLibrary
             citizensInBed.Add(citizen);
         }
 
+        public void checkOutPatient(Citizen citizen)
+        {
+            citizensInBed.Remove(citizen);
+        }
+
         public int NumBeds => numBeds;
 
         public bool Overloaded => overloaded;

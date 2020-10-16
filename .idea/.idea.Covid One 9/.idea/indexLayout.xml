@@ -16,10 +16,10 @@
     <explicitExcludes>
       <Path>.git</Path>
       <Path>.idea</Path>
-      <Path>Animation</Path>
       <Path>Library</Path>
       <Path>Logs</Path>
       <Path>Scenes</Path>
+      <Path>Temp</Path>
       <Path>Zevi-Branch-Capstone.app</Path>
       <Path>obj</Path>
     </explicitExcludes>

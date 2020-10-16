@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using src.CitizenLibrary;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace src.UILibrary
@@ -8,7 +9,8 @@ namespace src.UILibrary
         public Image fill;
         public Gradient gradient;
         public Slider slider;
-
+        public Town town;
+        
         // sets maximum player health
         public void setMaxHealth(int health)
         {

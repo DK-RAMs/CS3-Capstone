@@ -24,6 +24,7 @@ namespace src
             CitizenTask.taskKeys.Add(7, ("Recover in hospital", true));
             Citizen.initializeRandomizer();
             town = new Town("yay", "Matimba", 0, 8, 60000, 60000 / 24, 1, 15, 5, 20);
+            town.addGamePolicies(7);
             town.Start();
             Debug.Log(Town.townReady);
             // town = FileManagerSystem.LoadTown(townID);

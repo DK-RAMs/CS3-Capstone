@@ -14,21 +14,23 @@ namespace src.CitizenLibrary
         string taskName;
         private static double MAXBASEHAPPINESSGAIN = 2;
         private double happinessModifier;
-        private int taskID;
+        public int TaskID { get; private set; }
         public static Dictionary<int, (string, bool)> taskKeys = new Dictionary<int, (string, bool)>(); // 2nd Key in dictionary is the availability of the task
         bool completed;
         private bool firstsuccess;
         int startTime, endTime, startDay, endDay;
-        private Building taskLocation;
+        public Building taskLocation;
         
         #region Constructors
-        public CitizenTask(int taskID, int startTime, int endTime, int completed)
+        public CitizenTask(int taskID, int startTime, int endTime, int startDay, int endDay, int completed, Building taskLocation)
         {
             (string, bool) task;
             if (!taskKeys.TryGetValue(taskID, out task))
             {
                 Console.WriteLine("ERROR! Task #" + taskID + " is not defined");
             }
+            this.startDay = startDay;
+            this.endDay = endDay;
             taskName = taskKeys[taskID].Item1;
             this.startTime = startTime;
             this.endTime = endTime;
@@ -40,6 +42,7 @@ namespace src.CitizenLibrary
                 this.completed = true;
             }
 
+            this.taskLocation = taskLocation;
         }
 
         public CitizenTask(Random random, Citizen citizen, bool favorite)
@@ -60,7 +63,7 @@ namespace src.CitizenLibrary
         {
             if (firstsuccess)
             {
-                if (taskID == 4)
+                if (TaskID == 4)
                 {
                     return 1;
                 }
@@ -78,8 +81,8 @@ namespace src.CitizenLibrary
         private void generateUnhappyTask(Random random, Citizen citizen) // This is done technically
         {
             firstsuccess = false;
-            taskID = 4;
-            taskName = taskKeys[taskID].Item1;
+            TaskID = 4;
+            taskName = taskKeys[TaskID].Item1;
             endTime = startTime + random.Next(1, 3);
             endDay = startDay + (endTime / 24);
             taskLocation = citizen.homeLocation;
@@ -94,24 +97,24 @@ namespace src.CitizenLibrary
                 if (random.Next(1, 100) <= 50 || Citizen.town.PolicyImplementation[0]) // PolicyImplementation[1] - All citizens that are infected must self-quarantine
                 {
                     Debug.Log("Citizen contracted COVID and they must self quarantine");
-                    taskID = 5;
-                    taskName = taskKeys[taskID].Item1;
+                    TaskID = 5;
+                    taskName = taskKeys[TaskID].Item1;
                     endTime = startTime + 2;
                     endDay = startDay + random.Next(12, 14);
                     taskLocation = citizen.homeLocation;
                     return;
                 }
             }
-            taskID = random.Next(0, taskKeys.Count-3);
-            if (!taskKeys[taskID].Item2) // Checks if task with specified key is available
+            TaskID = random.Next(0, taskKeys.Count-3);
+            if (!taskKeys[TaskID].Item2) // Checks if task with specified key is available
             {
-                Debug.Log("Citizen tried to " + taskKeys[taskID].Item1 + " but can't. They decided to stay home, feeling upset");
+                Debug.Log("Citizen tried to " + taskKeys[TaskID].Item1 + " but can't. They decided to stay home, feeling upset");
                 generateUnhappyTask(random, citizen);
                 return;
             }
             firstsuccess = true;
-            taskName = taskKeys[taskID].Item1;
-            switch (taskID)
+            taskName = taskKeys[TaskID].Item1;
+            switch (TaskID)
             {
                 case 0: // Citizen Decided to go drinking at the bar/eat out at a restaurant
                     generateRecreationalTask(random, citizen);
@@ -124,11 +127,9 @@ namespace src.CitizenLibrary
                     break;
                 case 3:
                     generateShoppingTask(random, citizen);
-                    endTime = startTime + random.Next(2, 4);
                     break;
                 case 4:
                     generateHomeTask(random, citizen);
-                    endTime = startTime + random.Next(1, 3);
                     break;
                 default:
                     break;
@@ -222,8 +223,8 @@ namespace src.CitizenLibrary
 
         public void generateFavoriteTask(Random random, Citizen citizen)
         {
-            taskID = random.Next(0, taskKeys.Count - 3);
-            switch (taskID)
+            TaskID = random.Next(0, taskKeys.Count - 3);
+            switch (TaskID)
             {
                 case 0:
                     taskLocation = Citizen.town.Recreational[random.Next(Citizen.Town.Recreational.Count - 1)];
@@ -238,18 +239,18 @@ namespace src.CitizenLibrary
                     taskLocation = Citizen.town.Essentials[random.Next(Citizen.Town.Essentials.Count - 1)];
                     break;
                 case 4:
-                    taskLocation = Citizen.town.Residential[random.Next(Citizen.town.Residential.Count - 1)];
+                    taskLocation = Citizen.town.Residential[random.Next(Citizen.Town.Residential.Count - 1)];
                     break;
                 case 5:
                     taskLocation = citizen.homeLocation;
                     break;
                 default:
-                    taskID = 1;
+                    TaskID = 1;
                     taskLocation = citizen.homeLocation;
                     break;
             }
         }
-
+        
         private void admitToHospital(Random random, Citizen citizen)
         {
             Collection<Hospital> emergencyRooms = Citizen.Town.Emergency;
@@ -267,22 +268,31 @@ namespace src.CitizenLibrary
             startTime = Citizen.Town.Time;
             startDay = Citizen.Town.Day;
             endTime = startTime;
-            endDay = startDay + endTime / 24 + random.Next(14, 21);
+            endDay = startDay + (endTime / 24) + random.Next(14, 21);
             if (citizen.RiskofDeath > 35)
             {
-                endDay = startDay + endTime / 24 + random.Next(21, 42);
+                endDay = startDay + endTime / 24 + random.Next(14, 42);
             }
             endTime %= 24;
         }
         #endregion
         
         #region Task Update Methods
-        public void update(Random random, Citizen citizen, Town town) // This method isn't called when the citizen is hospitalized.
+        public void Update(Random random, Citizen citizen, Town town) // This method isn't called when the citizen is hospitalized.
         {
-            if (endTime >= town.Time && endDay >= town.Day)
+            if (town.Time >= endTime && town.Day >= endDay)
             {
+                Debug.Log(citizen.ID + " has completed their task");
                 completed = true;
-                taskLocation.exitBuilding(citizen);
+                if (TaskID == 7)
+                {
+                    ((Hospital)taskLocation).checkOutPatient(citizen);
+                }
+                else
+                {
+                    Debug.Log(citizen.ID + " has left the building");
+                    taskLocation.exitBuilding(citizen);
+                }
             }
             else if (citizen.Hospitalized)
             {
@@ -299,11 +309,7 @@ namespace src.CitizenLibrary
             get => completed;
         }
 
-        public string TaskName
-        {
-            get => taskName;
-            
-        }
+        public string TaskName => taskName;
 
         public int EndTime => endTime;
 
@@ -321,7 +327,7 @@ namespace src.CitizenLibrary
             }
 
             CitizenTask t = (CitizenTask) obj;
-            return taskID.Equals(t.taskID) && taskLocation.Equals(t.taskLocation);
+            return TaskID.Equals(t.TaskID) && taskLocation.Equals(t.taskLocation);
         }
 
         #endregion
