@@ -6,6 +6,7 @@ using System.Diagnostics;
 using UnityEngine;
 using System.Globalization;
 using System.Threading;
+using src.SaveLoadLibrary;
 using Debug = UnityEngine.Debug;
 using Random = System.Random;
 using src.UILibrary;
@@ -15,7 +16,7 @@ namespace src.CitizenLibrary
     public class CitizenWorkerThread
     {
         public static Collection<Citizen> citizens = new Collection<Citizen>();
-        private int lo, hi, numRebels, numInfected, time;
+        private int lo, hi, numRebels, numInfected, numDead, time;
         private bool happinessUpdated;
         private double averageHappiness;
         private Stopwatch updateTick;
@@ -38,7 +39,7 @@ namespace src.CitizenLibrary
 
         #region Update Methods
 
-        public void update()
+        public void Update()
         {
             while (!Town.townReady)
             {
@@ -51,19 +52,18 @@ namespace src.CitizenLibrary
                 {
                     for (int i = lo; i < hi; i++)
                     {
-                        while (PauseMenu.GameIsPaused)
+                        while (Game.gamePaused)
                         {
-                            if (PauseMenu.GameQuit) // Game Quit somewhere dude
+                            if (Game.gameQuit) // Game Quit somewhere dude
                             {
-                                break;
+                                return;
                             }
 
                         }
 
-                        if (PauseMenu.GameQuit)
+                        if (Game.gameQuit)
                         {
-                            Thread.Sleep(new Random().Next(500, 3000));
-                            break;
+                            return;
                         }
 
                         if (!citizens[i].Dead)
@@ -99,6 +99,10 @@ namespace src.CitizenLibrary
 
         #endregion
 
+        #region Save State
+
+        #endregion
+        
         #region Getters and Setters
 
         public double AverageHappiness()

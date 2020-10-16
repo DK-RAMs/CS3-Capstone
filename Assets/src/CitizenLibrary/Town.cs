@@ -35,7 +35,7 @@ namespace src.CitizenLibrary
         private Dictionary<int, bool> policyImplementation;
         private bool[] policyImplemented;
         private HashSet<Policy> allPolicies, availablePolicies;
-        private CitizenWorkerThread[] workerThreads;
+        private CitizenWorkerThread[] citizenThreads;
         public static Thread[] Threads;
 
         private double baseDetalHappiness,
@@ -45,7 +45,7 @@ namespace src.CitizenLibrary
             averageHappiness,
             averageHealth;
 
-        private double money, deltaMoney, favoriteModifier;
+        private double money, favoriteModifier;
         private Collection<Policy> policies;
         private Stopwatch timer;
         public static volatile bool townReady;
@@ -85,7 +85,6 @@ namespace src.CitizenLibrary
             money = 250;
             totalInfected = 0;
             favoriteModifier = 1.2;
-            deltaMoney = 1;
             averageHappiness = 0;
         }
 
@@ -128,20 +127,19 @@ namespace src.CitizenLibrary
             initializeCitizens(GameVersion.Debug);
             day = 1;
 
-            workerThreads = new CitizenWorkerThread[4];
+            citizenThreads = new CitizenWorkerThread[4];
             Threads = new Thread[4];
-            int divider = CitizenWorkerThread.citizens.Count / 4; 
-            /*
+            int divider = CitizenWorkerThread.citizens.Count / 4;
             for (int i = 0; i < 4; i++) // Multithreaded implementation. Just be sure to comment out the Start() method to test it. But also note that the threads don't terminate unless the unity environment itself is terminated, or the player actively quits the game.
             {
-                workerThreads[i] = new CitizenWorkerThread(divider * i, divider * (i + 1), false);
+                citizenThreads[i] = new CitizenWorkerThread(divider * i, divider * (i + 1), false);
+                Debug.Log(divider*i + " " + divider*(i+1));
                 Debug.Log("Creating Citizen Thread " + i);
-                Threads[i] = new Thread(new ThreadStart(workerThreads[i].update));
+                Threads[i] = new Thread(citizenThreads[i].Update);
                 //Threads[i].Start(); 
             }
-
+            
             // Need to add multithreading for buildings
-            */
             timer.Start();
             Building.buildingTimer.Start();
             
@@ -160,7 +158,7 @@ namespace src.CitizenLibrary
 
                 timer.Start();
             }
-            /*
+            
             if (Building.buildingTimer.ElapsedMilliseconds >= Building.buildingUpdateTimer ) // Every 30 minutes, a spread check is made bu buildings
             {
                 Building.buildingTimer.Restart();
@@ -182,7 +180,7 @@ namespace src.CitizenLibrary
                     h.Update();
                 }
                 Debug.Log("Updating of buildings complete");
-            }*/
+            }
             
             if (timer.ElapsedMilliseconds < updateTickRate) return;
             timer.Restart();
@@ -190,23 +188,18 @@ namespace src.CitizenLibrary
             incrementTime();
             double happinessavg = 0;
             Debug.Log("Updating citizens...");
-            for (int i = 0; i < NUM_TESTCITIZENS; i++) // CitizenWorkerThread has a static collection of Citizens. This is a single threaded implementation
-            {
-                CitizenWorkerThread.citizens[i].Update();
-                happinessavg += CitizenWorkerThread.citizens[i].Happiness;
-            }
             happinessavg /= CitizenWorkerThread.citizens.Count;
-            /*
-                int totalRebels = 0;
-                for (int i = 0; i < 4; i++)
-                {
-                    happinessavg += workerThreads[i].AverageHappiness();
-                    totalRebels += workerThreads[i].NumRebels;
-                    totalInfected += workerThreads[i].NumInfected;
-                }
+            int totalRebels = 0;
+            totalInfected = 0;
+            
+            for (int i = 0; i < 4; i++)
+            {
+                happinessavg += citizenThreads[i].AverageHappiness();
+                totalRebels += citizenThreads[i].NumRebels;
+                totalInfected += citizenThreads[i].NumInfected;
+            }
 
-                happinessavg /= 4;
-                */
+            happinessavg /= 4;
             Debug.Log("Updating of game state & citizens complete! The process took " + timer.ElapsedMilliseconds);
         }
 
@@ -267,10 +260,10 @@ namespace src.CitizenLibrary
                 case GameVersion.Debug:
                     Random r = new Random();
                         
-                    Building b1 = new Building("firstRes", 0, 35, 5000, 0, 3);
-                    Hospital h1 = new Hospital("firstHos", 0, 35, 5000, 0, 30, false);
-                    Supermarket s1 = new Supermarket("firstSupwe", 0, 35, 5000, 0, 20);
-                    Building b2 = new Building("firstRec", 0, 35, 5000, 0, 0);
+                    Building b1 = new Building("firstRes", 0, 35, 5000, 3);
+                    Hospital h1 = new Hospital("firstHos", 35, 5000, 0, 30, false);
+                    Supermarket s1 = new Supermarket("firstSupwe", 35, 5000, 0, 20);
+                    Building b2 = new Building("firstRec", 35, 35, 5000, 0);
                     residential.Add(b1);
                     emergency.Add(h1);
                     essentials.Add(s1);
@@ -281,23 +274,23 @@ namespace src.CitizenLibrary
                         string buildingID = "building" + 0;
                         if (buildingGenerator == 0)
                         {
-                            Building b = new Building(buildingID, 2, 5, 5000, 0, 0);
+                            Building b = new Building(buildingID, 35, 5000, 0, 0);
                             recreational.Add(b);
                             
                         }
                         else if (buildingGenerator == 1)
                         {
-                            Supermarket s = new Supermarket(buildingID, 2, 5, 5000, 0, 20);
+                            Supermarket s = new Supermarket(buildingID, 35, 5000, 0, 20);
                             essentials.Add(s);
                         }
                         else if (buildingGenerator == 2)
                         {
-                            Hospital h = new Hospital(buildingID, 2, 5, 5000, 0, 30, false);
+                            Hospital h = new Hospital(buildingID, 35, 5000, 0, 30, false);
                             emergency.Add(h);
                         }
                         else if (buildingGenerator == 3)
                         {
-                            Building b = new Building(buildingID, 2, 5, 200, 0, 3);
+                            Building b = new Building(buildingID, 0, 200, 0, 3);
                             residential.Add(b);
                         }
                     }
@@ -322,8 +315,19 @@ namespace src.CitizenLibrary
             }
         }
 
-        public void applyDecisionEvent(int deltaHappiness, int deltaHealth, int deltaMoney)
+        public void applyEvent(int deltaHappiness, int deltaHealth, int deltaMoney, int eventID)
         {
+            if (eventID == 69) // This is an event that occurs only when shit gets real in the game
+            {
+                resetTown();
+                return;
+            }
+            if (deltaHappiness > 0)
+            {
+                new Thread(() => applyHappiness(deltaHappiness))
+                    .Start(); // Instantiate a thread that applies the deltaHappiness to all the citizens
+            }
+
             for (int i = 0; i < CitizenWorkerThread.citizens.Count; i++)
             {
                 CitizenWorkerThread.citizens[i].applyHappiness(deltaHappiness);
@@ -333,22 +337,18 @@ namespace src.CitizenLibrary
             for (int i = 0; i < numAffected; i++)
             {
                 int citizenPos = r.Next(CitizenWorkerThread.citizens.Count - 1);
-                CitizenWorkerThread.citizens[i].rollHealthEvent(deltaHealth);
+                CitizenWorkerThread.citizens[citizenPos].rollHealthEvent(deltaHealth);
                 
             }
             money += deltaMoney;
         }
         
-        public void applyQuizEvent(double deltaHappiness, double deltaHealth, double deltaMoney)
-        {
-            
-        }
 
-        public void applyStateEvent(double deltaHappiness, double deltaHealth, double deltaMoney, int id)
+        private void applyHappiness(int deltaHappiness)
         {
-            if (id == 69)
+            for (int i = 0; i < CitizenWorkerThread.citizens.Count; i++)
             {
-                resetTown();
+                CitizenWorkerThread.citizens[i].applyHappiness(deltaHappiness);
             }
         }
 
@@ -383,7 +383,6 @@ namespace src.CitizenLibrary
 
         public double Money => money;
 
-        public double DeltaMoney => deltaMoney;
 
         public double FavoriteModifier => favoriteModifier;
 

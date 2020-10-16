@@ -22,10 +22,8 @@ namespace src.CitizenLibrary {
         private double happiness, riskofDeath, deltaHappiness;
         private bool rebel, hospitalized, dead, infected, wearingMask;
 
-        public Building workLocation;
-        public Building homeLocation;
+        public Building workLocation, homeLocation;
         
-        public enum Occupation { Unemployed = 0, Student = 1, Employed = 2, Retired = 3 };
         public enum HealthRisk { Diabetic, Respiratory, Cardial, Old };
 
 
@@ -35,7 +33,6 @@ namespace src.CitizenLibrary {
 
         private CitizenTask favoriteTask;
 
-        private Occupation citizenOccupation = Occupation.Employed;
         private CitizenTask currentTask;
         private Collection<HealthRisk> healthRisks;
 
@@ -307,11 +304,6 @@ namespace src.CitizenLibrary {
             get => town;
         }
         
-        public Occupation CitizenOccupation
-        {
-            get => citizenOccupation;
-        }
-
         public bool Infected
         {
             get

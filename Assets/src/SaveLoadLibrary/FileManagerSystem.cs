@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using System.Collections.ObjectModel;
@@ -42,7 +43,7 @@ namespace src.SaveLoadLibrary
                 for (int i = 0; i < citizenFiles.Length; i++)
                 {
                     BinaryFormatter bf = new BinaryFormatter();
-                    string filename = citizenDir;
+                    string filename = citizenFiles[i];
                     FileStream stream = new FileStream(filename, FileMode.Open);
                     CitizenData C = bf.Deserialize(stream) as CitizenData;
                     Citizen citizen = new Citizen(C);
@@ -60,6 +61,30 @@ namespace src.SaveLoadLibrary
         public static void SaveCitizens(Town town, Collection<Citizen> citizens)
         {
             
+        }
+
+        public static HashSet<Building> LoadBuildings(Town town)
+        {
+            string buildingDir = Application.persistentDataPath + "/" + town.ID + "/buildingData/";
+            if (Directory.Exists(buildingDir))
+            {
+                string[] buildingFiles = Directory.GetFiles("buildingDir");
+                HashSet<Building> buildings = new HashSet<Building>();
+                for (int i = 0; i < buildingFiles.Length; i++)
+                {
+                    BinaryFormatter bf = new BinaryFormatter();
+                    string fileName = buildingFiles[i];
+                    FileStream stream = new FileStream(fileName, FileMode.Open);
+                    BuildingData b = bf.Deserialize(stream) as BuildingData;
+                    Building building = new Building(b);
+                    stream.Close();
+                    
+                }
+
+                return buildings;
+            }
+
+            return null;
         }
         
     }

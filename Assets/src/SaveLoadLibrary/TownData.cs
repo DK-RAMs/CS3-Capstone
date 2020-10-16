@@ -7,7 +7,7 @@ namespace src.SaveLoadLibrary // Work on this
     {
         private string id, mayor;
         private int day, time, totalInfected;
-        private double money, deltaMoney, baseDeltaHappiness, favoriteMaidifier;
+        private double money, baseDeltaHappiness, favoriteMaidifier;
         private long elapsedTime;
         private bool[] policyImplementations;
         private string[] buildingIDs;
@@ -19,7 +19,6 @@ namespace src.SaveLoadLibrary // Work on this
             time = t.Time;
             totalInfected = t.TotalInfected;
             money = t.Money;
-            deltaMoney = t.DeltaMoney;
             favoriteMaidifier = t.FavoriteModifier;
             baseDeltaHappiness = t.BaseDetalHappiness;
             elapsedTime = t.Timer.ElapsedMilliseconds;
@@ -51,7 +50,6 @@ namespace src.SaveLoadLibrary // Work on this
         public int TotalInfected => totalInfected;
 
         public double Money => money;
-        public double DeltaMoney => deltaMoney;
 
         public double BaseDeltaHappiness => baseDeltaHappiness;
 

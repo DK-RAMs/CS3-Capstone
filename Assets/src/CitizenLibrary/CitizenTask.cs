@@ -13,7 +13,6 @@ namespace src.CitizenLibrary
     {
         string taskName;
         private static double MAXBASEHAPPINESSGAIN = 2;
-        private double happinessModifier;
         public int TaskID { get; private set; }
         public static Dictionary<int, (string, bool)> taskKeys = new Dictionary<int, (string, bool)>(); // 2nd Key in dictionary is the availability of the task
         bool completed;
@@ -108,7 +107,6 @@ namespace src.CitizenLibrary
             TaskID = random.Next(0, taskKeys.Count-3);
             if (!taskKeys[TaskID].Item2) // Checks if task with specified key is available
             {
-                Debug.Log("Citizen tried to " + taskKeys[TaskID].Item1 + " but can't. They decided to stay home, feeling upset");
                 generateUnhappyTask(random, citizen);
                 return;
             }
@@ -189,7 +187,6 @@ namespace src.CitizenLibrary
                 taskLocation = citizen.workLocation;
                 return;
             }
-            Debug.Log("Citizen was not able to go to work. They stayed home feeling upset");
             generateUnhappyTask(random, citizen);
         }
 
@@ -282,15 +279,13 @@ namespace src.CitizenLibrary
         {
             if (town.Time >= endTime && town.Day >= endDay)
             {
-                Debug.Log(citizen.ID + " has completed their task");
                 completed = true;
-                if (TaskID == 7)
+                if (TaskID == 6)
                 {
                     ((Hospital)taskLocation).checkOutPatient(citizen);
                 }
                 else
                 {
-                    Debug.Log(citizen.ID + " has left the building");
                     taskLocation.exitBuilding(citizen);
                 }
             }
@@ -311,9 +306,15 @@ namespace src.CitizenLibrary
 
         public string TaskName => taskName;
 
+        public int StartTime => startTime;
+
+        public int StartDay => startDay;
+
         public int EndTime => endTime;
 
         public int EndDay => endDay;
+
+        public bool FirstSuccess => firstsuccess;
 
         #endregion
         

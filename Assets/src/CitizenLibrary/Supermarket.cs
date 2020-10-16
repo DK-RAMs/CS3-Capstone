@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
+using src.SaveLoadLibrary;
 using Unity.Collections;
 
 namespace src.CitizenLibrary
@@ -11,11 +12,31 @@ namespace src.CitizenLibrary
         private int maxQueueSize; 
         private HashSet<Citizen> queueOutside; // Use different dataStructure here
         private SemaphoreSlim queueSemaphore;
-        public Supermarket(string id, double happinessContribution, double exposureFactor, int maxOccupants, int numOccupants, int maxQueueSize) : base(id, happinessContribution, exposureFactor, maxOccupants, numOccupants, 1)
+        public Supermarket(string id, double exposureFactor, int maxOccupants, int numOccupants, int maxQueueSize) : base(id, exposureFactor, maxOccupants, numOccupants, 1)
         {
             queueOutside = new HashSet<Citizen>();
             this.maxQueueSize = maxQueueSize;
             queueSemaphore = new SemaphoreSlim(1);
+        }
+
+        public Supermarket(BuildingData b) : base(b)
+        {
+            if (b is SupermarketData s)
+            {
+                maxQueueSize = s.MaxQueueSize;
+                for (int i = 0; i < s.CitizensInQueue.Length; i++)
+                {
+                    for (int j = 0; j < CitizenWorkerThread.citizens.Count; j++)
+                    {
+                        if (CitizenWorkerThread.citizens[j].ID.Equals(id)) // We do it like this because we want to get the actual reference to the citizen and not a value that equates to the citizen
+                        {
+                            enterBuilding(CitizenWorkerThread.citizens[j]); // We have the citizens that are waiting outside do this. That way we both add and initialize presence
+                            break;
+                        }
+                    }
+                }
+                // Need to figure out how we're gonna convert 
+            }
         }
 
         public override bool enterBuilding(Citizen citizen)

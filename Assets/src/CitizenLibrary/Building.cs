@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+using src.SaveLoadLibrary;
 using UnityEditor;
 using Debug = UnityEngine.Debug;
 using Random = System.Random;
@@ -16,7 +17,7 @@ namespace src.CitizenLibrary
         protected int numWithNoMask, numInfected;
         protected Collection<Upgrade> availableUpgrades;
         protected Collection<Upgrade> buildingUpgrades;
-        protected double happinessContribution, exposureFactor;
+        protected double exposureFactor;
         protected int maxOccupants, numOccupants;
         protected SemaphoreSlim entranceLock, occupantAccessLock;
         protected bool open, containsInfected;
@@ -35,10 +36,9 @@ namespace src.CitizenLibrary
         private BuildingType buildingType;
 
         #region Constructors
-        public Building(string id, double happinessContribution, double exposureFactor, int maxOccupants, int numOccupants, int buildingType)
+        public Building(string id, double exposureFactor, int maxOccupants, int numOccupants, int buildingType)
         {
             this.id = id;
-            this.happinessContribution = happinessContribution;
             this.exposureFactor = exposureFactor;
             this.maxOccupants = maxOccupants;
             this.numOccupants = numOccupants;
@@ -48,6 +48,11 @@ namespace src.CitizenLibrary
             occupants = new HashSet<Citizen>();
             random = new Random();
             numInfected = 0;
+        }
+
+        public Building(BuildingData b)
+        {
+            
         }
         
         #endregion
@@ -92,6 +97,16 @@ namespace src.CitizenLibrary
         {
             get => buildingType;
         }
+
+        public HashSet<Citizen> Occupants => occupants;
+
+        public Collection<Upgrade> AvailableUpgrades => availableUpgrades;
+
+        public Collection<Upgrade> BuildingUpgrades => buildingUpgrades;
+
+        public bool Open => open;
+
+        public long ElapsedTime => buildingTimer.ElapsedMilliseconds;
 
         public string ID => id;
         #endregion

@@ -19,7 +19,7 @@ namespace src.NewspaperLibrary
 
         public void applyDecision(int i, Town town)
         {
-            town.applyDecisionEvent(deltaHappiness[i], deltaHealth[i], deltaMoney[i]);
+            town.applyEvent(deltaHappiness[i], deltaHealth[i], deltaMoney[i], 1);
         }
     }
 }
