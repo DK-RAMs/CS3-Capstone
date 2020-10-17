@@ -19,19 +19,11 @@ namespace src.CitizenLibrary {
 
         string id, name;
         int age, startWork, endWork;
-<<<<<<< HEAD
-        private double happiness, riskofDeath, deltaHappiness;
-=======
         private double happiness, riskofDeath;
->>>>>>> DK-Branch
         private bool rebel, hospitalized, dead, infected, wearingMask;
 
         public Building workLocation, homeLocation;
         
-<<<<<<< HEAD
-        public enum Occupation { Unemployed = 0, Student = 1, Employed = 2, Retired = 3 };
-=======
->>>>>>> DK-Branch
         public enum HealthRisk { Diabetic, Respiratory, Cardial, Old };
 
 
@@ -41,10 +33,6 @@ namespace src.CitizenLibrary {
 
         private CitizenTask favoriteTask;
 
-<<<<<<< HEAD
-        private Occupation citizenOccupation = Occupation.Employed;
-=======
->>>>>>> DK-Branch
         private CitizenTask currentTask;
         private Collection<HealthRisk> healthRisks;
 
@@ -53,10 +41,6 @@ namespace src.CitizenLibrary {
         public static readonly string IDPREFIX = "citizen";
         public static int citizenNum = 0;
 
-<<<<<<< HEAD
-        public static Town town;
-=======
->>>>>>> DK-Branch
 
         #region Constructors
         
@@ -78,24 +62,15 @@ namespace src.CitizenLibrary {
 
         public Citizen(CitizenData c)
         {
-<<<<<<< HEAD
-            
-            happiness = 50;
-            name = "Mark";
-=======
 
             happiness = 50;
             name = c.Name;
->>>>>>> DK-Branch
             age = random.Next(18, 45);
             
         }
         public Citizen()
         {
             id = IDPREFIX + citizenNum;
-<<<<<<< HEAD
-            name = "Mark";
-=======
             citizenNum++;
             int nameSelection = random.Next(1);
             if (nameSelection > 0)
@@ -106,7 +81,6 @@ namespace src.CitizenLibrary {
             {
                 name = "John";
             }
->>>>>>> DK-Branch
             age = random.Next(18, 65);
             citizenNum++;
             infected = false;
@@ -115,13 +89,8 @@ namespace src.CitizenLibrary {
             hospitalized = false;
             dead = false;
             wearingMask = false;
-<<<<<<< HEAD
-            homeLocation = town.Recreational[random.Next(town.Recreational.Count-1)];
-            workLocation = town.Buildings.ElementAt(random.Next(town.Buildings.Count - 1));
-=======
             homeLocation = Game.town.Recreational[random.Next(Game.town.Recreational.Count-1)];
             workLocation = Game.town.Buildings.ElementAt(random.Next(Game.town.Buildings.Count - 1));
->>>>>>> DK-Branch
             favoriteTask = new CitizenTask(random, this, true);
         }
         #endregion
@@ -130,19 +99,11 @@ namespace src.CitizenLibrary {
         public void generateCitizenRisk(int diabetic, int respiratory, int cardial, double modifier)
         {
             healthRisks = new Collection<HealthRisk>();
-<<<<<<< HEAD
-            riskofDeath = town.BaseCitisenRisk;
-            if (diabetic == 1)
-            {
-                healthRisks.Add(HealthRisk.Diabetic);
-                riskofDeath += 15*modifier;
-=======
             riskofDeath = Game.town.BaseCitisenRisk*modifier;
             if (diabetic == 1)
             {
                 healthRisks.Add(HealthRisk.Diabetic);
                 riskofDeath += 10*modifier;
->>>>>>> DK-Branch
             }
             if (respiratory == 1)
             {
@@ -152,11 +113,7 @@ namespace src.CitizenLibrary {
             if (cardial == 1)
             {
                 healthRisks.Add(HealthRisk.Cardial);
-<<<<<<< HEAD
-                riskofDeath += 10 * modifier;
-=======
                 riskofDeath += 5 * modifier;
->>>>>>> DK-Branch
             }
 
             if (age > 45)
@@ -178,14 +135,11 @@ namespace src.CitizenLibrary {
             currentTask = new CitizenTask(taskID, startTime, endTime, startDay, endDay, completed, building);
         }
 
-<<<<<<< HEAD
-=======
         private void loadFavoriteTask(int taskID, Building building)
         {
             favoriteTask = new CitizenTask(taskID, 0, 0, 0, 0, 0, building); // Instantiated with Zeros since that data isn't important for loading the citizen's favorite task
         }
 
->>>>>>> DK-Branch
         public void initiateTask()
         {
             currentTask.taskLocation.enterBuilding(this);
@@ -202,15 +156,9 @@ namespace src.CitizenLibrary {
         {
             if (!hospitalized) // Checks if citizen is hospitalized (i.e. in hospital)
             {
-<<<<<<< HEAD
-                if (town.Time == 6)
-                {
-                    if (!rebel && town.PolicyImplementation[1]) // PolicyImplementation[1] - Citizens must wear face masks at all times
-=======
                 if (Game.town.Time == 6)
                 {
                     if (!rebel && Game.town.PolicyImplementation[1]) // PolicyImplementation[1] - Citizens must wear face masks at all times
->>>>>>> DK-Branch
                     {
                         wearingMask = true;
                     }
@@ -226,30 +174,18 @@ namespace src.CitizenLibrary {
                             Debug.Log("Citizen with id" + id + " has collapsed and has been sent to the hospital");
                             hospitalized = true;
                         }
-<<<<<<< HEAD
-                        else if (currentTask.TaskID == 6 && currentTask.EndTime >= Town.Time && currentTask.EndDay >= Town.Day) // Citizen is cured once they managed to get through 15 days of self quarantine
-=======
                         else if (currentTask.TaskID == 6 && currentTask.EndTime >= Game.town.Time && currentTask.EndDay >= Game.town.Day) // Citizen is cured once they managed to get through 15 days of self quarantine
->>>>>>> DK-Branch
                         {
                             infected = false;
                         }
                     }
                 }
                 updateTask(); // Task must update here. The hospitalization roll needs to be committed before update (since citizen is hospitalized IN the method)
-<<<<<<< HEAD
-                if (town.Timer.ElapsedMilliseconds >= Town.UpdateTickRate) // Update tick rate is longer than a second. (Maybe 1 hour in game is 1 second) // This is not required since tasks
-                {
-                    // Unnecessary check here
-                    happiness +=
-                        deltaHappiness; // Adds the total change to the citizen's happiness to citizen's current happiness
-=======
                 if (Game.town.Timer.ElapsedMilliseconds >= Town.UpdateTickRate) // Update tick rate is longer than a second. (Maybe 1 hour in game is 1 second) // This is not required since tasks
                 {
                     // Unnecessary check here
                     happiness +=
                         Game.town.BaseDetalHappiness; // Adds the total change to the citizen's happiness to citizen's current happiness
->>>>>>> DK-Branch
 
                     if (happiness > 100)
                     {
@@ -259,21 +195,12 @@ namespace src.CitizenLibrary {
                     {
                         happiness = 0;
                     }
-<<<<<<< HEAD
-
-                    deltaHappiness = 0; // Resets citizen delta happiness after processing all changes
-=======
->>>>>>> DK-Branch
                     generateRebelFactor();
                 }
             }
             else
             {
-<<<<<<< HEAD
-                if (Town.Time % 12 == 0)
-=======
                 if (Game.town.Time % 12 == 0) // Every 12 hours, a death roll happens, if the citizen gets hit by it, they die
->>>>>>> DK-Branch
                 {
                     int deathRoll = rollDice();
                     if (deathRoll <= riskofDeath)
@@ -282,19 +209,11 @@ namespace src.CitizenLibrary {
                     }
                 }
 
-<<<<<<< HEAD
-                if (Town.Time >= currentTask.EndTime && Town.Day >= currentTask.EndDay)
-                {
-                    infected = false;
-                    hospitalized = false;
-                    riskofDeath--;
-=======
                 if (Game.town.Time >= currentTask.EndTime && Game.town.Day >= currentTask.EndDay) // Citizen managed to recover from the disease
                 {
                     infected = false;
                     hospitalized = false;
                     riskofDeath++;
->>>>>>> DK-Branch
                     rebel = false;
                     happiness = 85;
                 }
@@ -332,11 +251,7 @@ namespace src.CitizenLibrary {
 
         private void updateTask()
         {
-<<<<<<< HEAD
-            currentTask.Update(random, this, town);
-=======
             currentTask.Update(random, this, Game.town);
->>>>>>> DK-Branch
             if (currentTask.Completed)
             {
                 if (currentTask.Equals(favoriteTask))
@@ -395,37 +310,6 @@ namespace src.CitizenLibrary {
         public double RiskofDeath => riskofDeath;
 
         public bool Dead => dead;
-<<<<<<< HEAD
-        public static Town Town
-        {
-            get => town;
-        }
-        
-        public Occupation CitizenOccupation
-        {
-            get => citizenOccupation;
-        }
-
-        public bool Infected => infected;
-
-        public string ID
-        {
-            get
-            {
-                return id;
-            }
-        }
-
-        public bool Rebel
-        {
-            get => rebel;
-        }
-
-        public double Happiness
-        {
-            get => happiness;
-        }
-=======
 
         public bool Infected => infected;
 
@@ -442,7 +326,6 @@ namespace src.CitizenLibrary {
         public CitizenTask CurrentTask => currentTask;
 
         public CitizenTask FavoriteTask => favoriteTask;
->>>>>>> DK-Branch
 
         #endregion
         
