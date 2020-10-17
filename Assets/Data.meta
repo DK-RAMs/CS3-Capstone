@@ -1,5 +1,9 @@
 fileFormatVersion: 2
-guid: d6ec2aea4acb247798894a18e14d5a9b
+<<<<<<< HEAD:Assets/Data.meta
+guid: efcb2a9212cc5234ba0ce167d6786049
+=======
+guid: b7a34d06b9b1193419a4c7dffe030683
+>>>>>>> DK-Branch:Assets/gameData.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

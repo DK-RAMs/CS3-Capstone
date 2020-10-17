@@ -13,7 +13,10 @@ namespace src.CitizenLibrary
     {
         string taskName;
         private static double MAXBASEHAPPINESSGAIN = 2;
+<<<<<<< HEAD
         private double happinessModifier;
+=======
+>>>>>>> DK-Branch
         public int TaskID { get; private set; }
         public static Dictionary<int, (string, bool)> taskKeys = new Dictionary<int, (string, bool)>(); // 2nd Key in dictionary is the availability of the task
         bool completed;
@@ -90,17 +93,29 @@ namespace src.CitizenLibrary
 
         private void generateNewTask(Random random, Citizen citizen)
         {
+<<<<<<< HEAD
             startTime = Citizen.Town.Time;
             startDay = Citizen.Town.Day;
             if (citizen.Infected && !citizen.Rebel) // Checks if an infected citizen is a rebel. If not, they will self quarantine
             {
                 if (random.Next(1, 100) <= 50 || Citizen.town.PolicyImplementation[0]) // PolicyImplementation[1] - All citizens that are infected must self-quarantine
+=======
+            startTime = Game.town.Time;
+            startDay = Game.town.Day;
+            if (citizen.Infected && !citizen.Rebel) // Checks if an infected citizen is a rebel. If not, they will self quarantine
+            {
+                if (random.Next(1, 100) <= 50 || Game.town.PolicyImplementation[0]) // PolicyImplementation[1] - All citizens that are infected must self-quarantine
+>>>>>>> DK-Branch
                 {
                     Debug.Log("Citizen contracted COVID and they must self quarantine");
                     TaskID = 5;
                     taskName = taskKeys[TaskID].Item1;
                     endTime = startTime + 2;
+<<<<<<< HEAD
                     endDay = startDay + random.Next(11, 14);
+=======
+                    endDay = startDay + random.Next(12, 14);
+>>>>>>> DK-Branch
                     taskLocation = citizen.homeLocation;
                     return;
                 }
@@ -153,7 +168,11 @@ namespace src.CitizenLibrary
         
         private void generateRecreationalTask(Random random, Citizen citizen)
         {
+<<<<<<< HEAD
             Collection<Building> spots = Citizen.Town.Recreational;
+=======
+            Collection<Building> spots = Game.town.Recreational;
+>>>>>>> DK-Branch
             int numSpots = spots.Count;
             int startPos = random.Next(0, spots.Count-1);
             
@@ -193,7 +212,11 @@ namespace src.CitizenLibrary
 
         private void generateShoppingTask(Random random, Citizen citizen)
         {
+<<<<<<< HEAD
             Collection<Supermarket> spots = Citizen.Town.Essentials;
+=======
+            Collection<Supermarket> spots = Game.town.Essentials;
+>>>>>>> DK-Branch
             int numSpots = spots.Count;
             int startPos = random.Next(0, spots.Count-1);
             for (int i = 0; i < numSpots; i++)
@@ -225,7 +248,11 @@ namespace src.CitizenLibrary
             switch (TaskID)
             {
                 case 0:
+<<<<<<< HEAD
                     taskLocation = Citizen.town.Recreational[random.Next(Citizen.Town.Recreational.Count - 1)];
+=======
+                    taskLocation = Game.town.Recreational[random.Next(Game.town.Recreational.Count - 1)]; // It's necessary to directly access this value (using a getter will return a value and not the reference to the value)
+>>>>>>> DK-Branch
                     break;
                 case 1:
                     taskLocation = citizen.homeLocation;
@@ -234,10 +261,17 @@ namespace src.CitizenLibrary
                     taskLocation = citizen.workLocation;
                     break;
                 case 3:
+<<<<<<< HEAD
                     taskLocation = Citizen.town.Essentials[random.Next(Citizen.Town.Essentials.Count - 1)];
                     break;
                 case 4:
                     taskLocation = Citizen.town.Residential[random.Next(Citizen.Town.Residential.Count - 1)];
+=======
+                    taskLocation = Game.town.Essentials[random.Next(Game.town.Essentials.Count - 1)];
+                    break;
+                case 4:
+                    taskLocation = Game.town.Residential[random.Next(Game.town.Residential.Count - 1)];
+>>>>>>> DK-Branch
                     break;
                 case 5:
                     taskLocation = citizen.homeLocation;
@@ -251,7 +285,11 @@ namespace src.CitizenLibrary
         
         private void admitToHospital(Random random, Citizen citizen)
         {
+<<<<<<< HEAD
             Collection<Hospital> emergencyRooms = Citizen.Town.Emergency;
+=======
+            Collection<Hospital> emergencyRooms = Game.town.Emergency;
+>>>>>>> DK-Branch
             int spot = random.Next(0, emergencyRooms.Count - 1);
             for (int i = 0; i < emergencyRooms.Count; i++)
             {
@@ -263,6 +301,7 @@ namespace src.CitizenLibrary
                 }
             }
 
+<<<<<<< HEAD
             startTime = Citizen.Town.Time;
             startDay = Citizen.Town.Day;
             endTime = startTime;
@@ -270,6 +309,15 @@ namespace src.CitizenLibrary
             if (citizen.RiskofDeath > 35)
             {
                 endDay = startDay + endTime / 24 + random.Next(6, 10);
+=======
+            startTime = Game.town.Time;
+            startDay = Game.town.Day;
+            endTime = startTime;
+            endDay = startDay + (endTime / 24) + random.Next(14, 21);
+            if (citizen.RiskofDeath > 35)
+            {
+                endDay = startDay + endTime / 24 + random.Next(14, 42);
+>>>>>>> DK-Branch
             }
             endTime %= 24;
         }
@@ -281,7 +329,11 @@ namespace src.CitizenLibrary
             if (town.Time >= endTime && town.Day >= endDay)
             {
                 completed = true;
+<<<<<<< HEAD
                 if (TaskID == 7)
+=======
+                if (TaskID == 6)
+>>>>>>> DK-Branch
                 {
                     ((Hospital)taskLocation).checkOutPatient(citizen);
                 }
@@ -307,10 +359,22 @@ namespace src.CitizenLibrary
 
         public string TaskName => taskName;
 
+<<<<<<< HEAD
+=======
+        public int StartTime => startTime;
+
+        public int StartDay => startDay;
+
+>>>>>>> DK-Branch
         public int EndTime => endTime;
 
         public int EndDay => endDay;
 
+<<<<<<< HEAD
+=======
+        public bool FirstSuccess => firstsuccess;
+
+>>>>>>> DK-Branch
         #endregion
         
         #region Property Methods
