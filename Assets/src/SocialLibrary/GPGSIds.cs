@@ -24,7 +24,10 @@
 
 public static class GPGSIds
 {
+        public const string achievement_tough_times = "CgkIjaKm86wcEAIQBA"; // <GPGSID>
+        public const string achievement_ease_of_access = "CgkIjaKm86wcEAIQAw"; // <GPGSID>
         public const string leaderboard_top_achievers = "CgkIjaKm86wcEAIQAQ"; // <GPGSID>
+        public const string achievement_hello_world = "CgkIjaKm86wcEAIQAg"; // <GPGSID>
 
 }
 

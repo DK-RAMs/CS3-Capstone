@@ -35,24 +35,28 @@ namespace src.UILibrary
         public void policy1()
         {
             policy.text = "Business as almost usual";
+            // most normal activity can remuse, with precautions and health guidelines followed at all times. Population prepared for an increase in alert levels if necessary.
         }
 
-        public void policy2()
+        public void policy2() // level 2
         {
             policy.text = "60% freedom";
+            // physical distancing and restrictions on leisure and social activities to prevent a resurgence of the virus.
         }
 
-        public void policy3()
+        public void policy3() // level 3
         {
             policy.text = "40% freedom";
+            // restrictions on many activities, including at workplaces and socially, to address a high risk of transmission.
         }
 
-        public void policy4()
+        public void policy4() // level 4
         {
             policy.text = "20% freedom";
+            // extreme precautions to limit community transmissions and outbreaks, while allowing some activity to resume.
         }
 
-        public void policy5()
+        public void policy5() // level 5
         {
             policy.text = "Community Policies\n" +
                           "1.all non - essential business closed\n" +
@@ -60,6 +64,7 @@ namespace src.UILibrary
                           "\nIndividual Policies\n" +
                           "1.mask wearing required at all times in public\n" +
                           "2. no gatherings of any sort allowed";
+            // drastic measures to contain the spread of the virus and save lives.
         }
 
         //display the various stats of the town to the player
