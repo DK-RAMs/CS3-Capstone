@@ -2,31 +2,31 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace src.UILibrary
+public class UpgradeUI : MonoBehaviour
 {
-    public class UpgradeUI : MonoBehaviour
+    public static bool bought = false;
+    public static int cost = 300000;
+    // Start is called before the first frame update
+    void Start()
     {
+        
+    }
 
-        public int cost = 300000;
+    // Update is called once per frame
+    void Update()
+    {
+        if (bought == true)
+		{
+            //playerUI.money -= cost;
+            bought = false;
+		}
+    }
 
-        // Start is called before the first frame update
-        void Start()
+    public void buy()
+    {
+        if (cost <= playerUI.money)
         {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
-
-        public void buy()
-        {
-            if (cost <= playerUI.money)
-            {
-                playerUI.money -= cost;
-            }
+            bought = true;
         }
     }
 }
