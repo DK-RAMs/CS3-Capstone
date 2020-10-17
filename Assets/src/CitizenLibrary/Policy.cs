@@ -1,44 +1,15 @@
+using UnityEngine;
+
 namespace src.CitizenLibrary
 {
-    public class Policy
+    public class Policy : ScriptableObject // Still need to do (making these scriptable makes it easier to make more of them
     {
-        private int policyID;
-        private string policyDescription;
-        private double deltaHappiness, deltaHealth, exposureRiskAdjustment;
+        public int policyID;
+        public string policyDescription;
+        public double deltaHappiness, exposureRiskAdjustment;
+        public enum PolicyType {Individual, Community}
 
-        public Policy(int policyID, string policyDescription, double deltaHappiness, double deltaHealth,
-            double exposureRiskAdjustment)
-        {
-            this.policyID = policyID;
-            this.policyDescription = policyDescription;
-            this.deltaHappiness = deltaHappiness;
-            this.deltaHealth = deltaHealth;
-            this.exposureRiskAdjustment = exposureRiskAdjustment;
-        }
+        public PolicyType policyType;
 
-        public int PolicyId
-        {
-            get => policyID;
-        }
-
-        public string PolicyDescription
-        {
-            get => policyDescription;
-        }
-
-        public double DeltaHappiness
-        {
-            get => deltaHappiness;
-        }
-
-        public double DeltaHealth
-        {
-            get => deltaHealth;
-        }
-
-        public double ExposureRiskAdjustment
-        {
-            get => exposureRiskAdjustment;
-        }
     }
 }

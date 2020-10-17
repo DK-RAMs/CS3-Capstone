@@ -14,7 +14,7 @@ using Debug = UnityEngine.Debug;
 using Random = System.Random;
 
 namespace src.CitizenLibrary {
-    public class Citizen
+    public class Citizen // Still need to finish
     {
 
         string id, name;
@@ -66,6 +66,8 @@ namespace src.CitizenLibrary {
             happiness = 50;
             name = c.Name;
             age = random.Next(18, 45);
+            
+            loadFavoriteTask(c.CurrentTaskId, Game.town.Buildings.ElementAt(0)); // Need to figure out how we're gonna pull out the building here
             
         }
         public Citizen()
@@ -145,10 +147,6 @@ namespace src.CitizenLibrary {
             currentTask.taskLocation.enterBuilding(this);
         }
 
-        public static void initializeRandomizer()
-        {
-            random = new Random();
-        }
         #endregion
 
         #region Citizen Updating Methods

@@ -7,7 +7,7 @@ using System.IO;
 
  namespace src.NewspaperLibrary
  {
-     public class Newspaper : MonoBehaviour
+     public class Newspaper : MonoBehaviour // Still need to do
      {
          // The script will be linked to the newspaper. When a new article is selected, 
          public static Text content; // list of strings to store all the different articles, so only have to read file once at start of game seeing as article content and size would only change with an update on our side, and not mid game - Z

@@ -11,7 +11,7 @@ using Random = System.Random;
 
 namespace src.CitizenLibrary
 {
-    public class Building
+    public class Building // Need to polish up
     {
         protected HashSet<Citizen> occupants; // Usually, the number of occupants will be initialized to zero
         protected string id;

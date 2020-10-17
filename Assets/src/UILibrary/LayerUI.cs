@@ -2,28 +2,31 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LayerUI : MonoBehaviour
+namespace src.UILibrary
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        BuildingUI.isCovered = true;
-    }
-
-    public void isAbove()
+	public class LayerUI : MonoBehaviour
 	{
-        BuildingUI.isCovered = true;
+		// Start is called before the first frame update
+		void Start()
+		{
 
-	}
+		}
 
-    public void isBelow()
-	{
-        BuildingUI.isCovered = false;
+		// Update is called once per frame
+		void Update()
+		{
+			BuildingUI.isCovered = true;
+		}
+
+		public void isAbove()
+		{
+			BuildingUI.isCovered = true;
+
+		}
+
+		public void isBelow()
+		{
+			BuildingUI.isCovered = false;
+		}
 	}
 }

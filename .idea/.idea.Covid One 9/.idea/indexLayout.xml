@@ -3,6 +3,9 @@
   <component name="ContentModelUserStore">
     <attachedFolders />
     <explicitIncludes>
+      <Path>Library/PackageCache/com.google.external-dependency-manager@1.2.160</Path>
+      <Path>Library/PackageCache/com.google.firebase.analytics@6.16.0</Path>
+      <Path>Library/PackageCache/com.google.firebase.app@6.16.0</Path>
       <Path>Library/PackageCache/com.unity.collab-proxy@1.2.16</Path>
       <Path>Library/PackageCache/com.unity.ext.nunit@1.0.0</Path>
       <Path>Library/PackageCache/com.unity.ide.rider@1.1.4</Path>
@@ -10,12 +13,14 @@
       <Path>Library/PackageCache/com.unity.test-framework@1.1.16</Path>
       <Path>Library/PackageCache/com.unity.textmeshpro@2.1.1</Path>
       <Path>Library/PackageCache/com.unity.timeline@1.2.15</Path>
+      <Path>Library/PackageCache/com.unity.timeline@1.2.16</Path>
       <Path>Packages</Path>
       <Path>ProjectSettings</Path>
     </explicitIncludes>
     <explicitExcludes>
       <Path>.git</Path>
       <Path>.idea</Path>
+      <Path>.vscode</Path>
       <Path>Library</Path>
       <Path>Logs</Path>
       <Path>Scenes</Path>

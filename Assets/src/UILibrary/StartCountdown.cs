@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StartCountdown : MonoBehaviour
+namespace src.UILibrary
 {
-    public void triggerCountdown()
+	public class StartCountdown : MonoBehaviour
 	{
-		Countdown.start = 1;
+		public void triggerCountdown()
+		{
+			Countdown.start = 1;
+		}
 	}
 }

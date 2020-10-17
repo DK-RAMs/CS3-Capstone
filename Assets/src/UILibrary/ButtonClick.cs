@@ -4,16 +4,21 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class ButtonClick : MonoBehaviour
+namespace src.UILibrary
 {
+    public class ButtonClick : MonoBehaviour
+    {
 
-    public void OpenNoticeboard() {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-    }
+        public void OpenNoticeboard()
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        }
 
-    public void OpenNews() {
+        public void OpenNews()
+        {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 2);
         }
 
 
+    }
 }

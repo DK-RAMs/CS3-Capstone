@@ -5,7 +5,7 @@ using UnityEngine;
 namespace src.SaveLoadLibrary
 {
     [System.Serializable]
-    public class SupermarketData : BuildingData
+    public class SupermarketData : BuildingData 
     {
         private string[] citizensInQueue;
         private int maxQueueSize;

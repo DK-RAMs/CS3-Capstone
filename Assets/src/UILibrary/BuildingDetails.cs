@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Building Description", menuName = "Building Details")]
-public class BuildingDetails : ScriptableObject
+namespace src.UILibrary
 {
-	public new string name;
-	public string status;
-	public Sprite artwork;
-	public int occupancy;
+	[CreateAssetMenu(fileName = "New Building Description", menuName = "Building Details")]
+	public class BuildingDetails : ScriptableObject
+	{
+		public new string name;
+		public string status;
+		public Sprite artwork;
+		public int occupancy;
+	}
 }
