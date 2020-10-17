@@ -1,57 +1,63 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using UnityEngine;
 
-namespace src.UILibrary
+public class PanZoom : MonoBehaviour
 {
-    public class PanZoom : MonoBehaviour
+
+    Vector3 touchStart;
+    public float zoomOutMin = 50;
+    public float zoomOutMax = 120;
+
+    //public Vector2 panLimit;
+
+    // Start is called before the first frame update
+    void Start()
     {
-        private Vector3 touchStart;
-        public float zoomOutMax = 120;
-        public float zoomOutMin = 50;
+        
+    }
 
-        //public Vector2 panLimit;
+    // Update is called once per frame
+    void Update()
+    {
 
-        // Start is called before the first frame update
-        private void Start()
+        if (!Navigation.isClicked) // enter if no button is clicked
         {
-        }
-
-        // Update is called once per frame
-        private void Update()
-        {
-            if (!Navigation.isClicked) // enter if no button is clicked
+            if (Input.GetMouseButtonDown(0))
             {
-                if (Input.GetMouseButtonDown(0)) touchStart = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-                if (Input.touchCount == 2)
-                {
-                    var touchZero = Input.GetTouch(0);
-                    var touchOne = Input.GetTouch(1);
-
-                    var touchZeroPrevPos = touchZero.position - touchZero.deltaPosition;
-                    var touchOnePrevPos = touchOne.position - touchOne.deltaPosition;
-
-                    var prevMagnitude = (touchZeroPrevPos - touchOnePrevPos).magnitude;
-                    var currentMagnitude = (touchZero.position - touchOne.position).magnitude;
-
-                    var difference = currentMagnitude - prevMagnitude;
-
-                    zoom(difference * 0.2f);
-                }
-
-                else if (Input.GetMouseButton(0))
-                {
-                    var direction = touchStart - Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                    Camera.main.transform.position += direction;
-                }
-
-                zoom(Input.GetAxis("Mouse ScrollWheel") * 10f);
+                touchStart = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             }
-        }
 
-        private void zoom(float increment)
-        {
-            Camera.main.orthographicSize =
-                Mathf.Clamp(Camera.main.orthographicSize - increment, zoomOutMin, zoomOutMax);
+            /*if (Input.touchCount == 2)
+            {
+                Touch touchZero = Input.GetTouch(0);
+                Touch touchOne = Input.GetTouch(1);
+
+                Vector2 touchZeroPrevPos = touchZero.position - touchZero.deltaPosition;
+                Vector2 touchOnePrevPos = touchOne.position - touchOne.deltaPosition;
+
+                float prevMagnitude = (touchZeroPrevPos - touchOnePrevPos).magnitude;
+                float currentMagnitude = (touchZero.position - touchOne.position).magnitude;
+
+                float difference = currentMagnitude - prevMagnitude;
+
+                zoom(difference * 0.2f);
+            }
+            */
+
+            if (Input.GetMouseButton(0))
+            {
+                Vector3 direction = (touchStart - Camera.main.ScreenToWorldPoint(Input.mousePosition));
+                Camera.main.transform.position += direction;
+            }
+            zoom(Input.GetAxis("Mouse ScrollWheel") * 10f);
+
         }
     }
+
+    void zoom(float increment)
+	{
+        Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize - increment, zoomOutMin, zoomOutMax);
+	}
 }
