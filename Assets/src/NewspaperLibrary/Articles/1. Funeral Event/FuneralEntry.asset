@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee6c552c47794fa8b52db3c25869abef, type: 3}
+  m_Name: FuneralEntry
+  m_EditorClassIdentifier: 
+  id: 1
+  content: A family sent a letter to the office asking if they could hold a public
+    funeral for one of their loved ones that were los due to the disease. Staff warns
+    you that allowing them to host a public funeral could cause more harm than good,
+    potentially causing Covid to spread more rampantly in the city.
+  newspaperEvent: {fileID: 11400000, guid: d99bfebc9410b514b9b22311f70d7730, type: 2}
