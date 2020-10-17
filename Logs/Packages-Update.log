@@ -1,9 +1,5 @@
 
-<<<<<<< HEAD
 === Thu Oct 15 17:54:13 2020
-=======
-=== Sun Sep 27 15:04:27 2020
->>>>>>> DK-Branch
 
 Packages were changed.
 Update Mode: resetToDefaultDependencies
@@ -45,9 +41,5 @@ The following packages were added:
   com.unity.modules.xr@1.0.0
   com.unity.test-framework@1.1.16
   com.unity.textmeshpro@2.1.1
-<<<<<<< HEAD
   com.unity.timeline@1.2.16
-=======
-  com.unity.timeline@1.2.15
->>>>>>> DK-Branch
   com.unity.ugui@1.0.0
