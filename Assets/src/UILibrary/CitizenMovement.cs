@@ -6,7 +6,7 @@ namespace src.UILibrary
 {
 	public class CitizenMovement : MonoBehaviour
 	{
-
+		public static bool CitizenMovementReady;
 		public float moveSpeed; // speed at which citizens move
 		private Rigidbody2D mybody; // represents the citizen
 		public bool isWalking; // checks if citizen is currently walking
@@ -27,6 +27,7 @@ namespace src.UILibrary
 
 			chooseTime(); // selects citizen walk time and wait time
 			chooseDirection(); // selects walk direction
+			CitizenMovementReady = true;
 		}
 
 		// Update is called once per frame

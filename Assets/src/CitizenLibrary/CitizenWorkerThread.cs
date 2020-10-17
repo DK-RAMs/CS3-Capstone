@@ -46,12 +46,9 @@ namespace src.CitizenLibrary
                     {
                         while (Game.GAMEPAUSED)
                         {
+                            Debug.Log("Game is paused");
                             if (Game.GAMEQUIT) // Game Quit somewhere dude
                             {
-                                while (!Game.GAMECLOSED)
-                                {
-                                    
-                                }
                                 return;
                             }
 

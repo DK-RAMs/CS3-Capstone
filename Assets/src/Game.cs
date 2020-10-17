@@ -1,21 +1,28 @@
 using System;
+using System.Diagnostics;
+using System.Threading;
 using src.CitizenLibrary;
 using src.SaveLoadLibrary;
 using src.NewspaperLibrary;
 using src.AchievementsLibrary;
+using src.UILibrary;
 using UnityEngine;
 //using UnityEngine.iOS;
+using UnityEngine.iOS;
+using Debug = UnityEngine.Debug;
 
 namespace src
 {
-    public class Game : MonoBehaviour
+    public class Game : MonoBehaviour // Game script is currently linked to trees
     {
         public static Town town;
         public static bool GAMEQUIT = false, GAMEPAUSED = false, GAMESTART = false, GAMECLOSED;
-        public static bool ISNEWGAME = false, TOWNREADY = false;
+        public static bool ISNEWGAME = true, TOWNREADY = false;
         public static int BASE_CITIZEN_RISK_FACTOR = 25;
         public static int BASE_CITIZEN_MORTALITY_RATE = 5;
+        public static int BASE_BUILDING_EXPOSURE_FACTOR = 35;
         public static double GAME_MODIFIER = 1;
+        public static long UPDATETICKRATE = 2500;
         
         public enum GameVersion
         {
@@ -29,31 +36,29 @@ namespace src
         public void Start()
         {
             checkGameRules();
-            if (BASE_CITIZEN_RISK_FACTOR > 100)
-            {
-                BASE_CITIZEN_RISK_FACTOR = 100;
-            }
             
             TOWNREADY = false;
             loadCitizenTasks();
             string townID = "mainTown";
             town = FileManagerSystem.LoadTown(townID);
             if (town == null || ISNEWGAME)
-            {
+            { 
                 Debug.Log("Save file does not exist. Generating new save files...");
+            
                 town = new Town(townID); // If the save file doesn't exist, a new Town is constructed
             }
             
             town.Start(Version, numCitizenThreads); // Town generation happens here (Stuff like loading town's 
             TOWNREADY = true;
-            waitRestofInitialization();
             GAMESTART = true;
-            startWatches();
+            Building.buildingTimer = Stopwatch.StartNew();
+            Debug.Log(Building.buildingTimer.IsRunning);
         }
 
         public void Update()
         {
             town.Update();
+            //Debug.Log(Town.timer.ElapsedMilliseconds);
         }
         
         #region Event Methods
@@ -65,13 +70,16 @@ namespace src
         public void OnApplicationQuit()
         {
             GAMEQUIT = true;
+            Debug.Log("yes");
+            //FileManagerSystem.SaveCitizens(town, CitizenWorkerThread.citizens);
+            //FileManagerSystem.SaveTown(town);
+            GAMECLOSED = true;
             for (int i = 0; i < Town.Threads.Length; i++)
             {
+                Debug.Log("Closing thread " + i);
                 Town.Threads[i].Join();
             }
-            FileManagerSystem.SaveCitizens(town, CitizenWorkerThread.citizens);
-            FileManagerSystem.SaveTown(town);
-            GAMECLOSED = true;
+            Debug.Log("Yes, the game closed");
         }
         
         #endregion
@@ -88,6 +96,17 @@ namespace src
                 
             }
         }
+        /***
+         * 
+         */
+        public static void waitStart()
+        {
+            while (!GAMESTART)
+            {
+                
+            }
+        }
+        
         /**
          * Loads data regarding the different tasks that citizens can do
          */
@@ -127,12 +146,20 @@ namespace src
                 Debug.Log("Come on! Where's the danger in doing that?");
                 BASE_CITIZEN_MORTALITY_RATE = 0;
             }
+            Debug.Log("Initializing game with:\nBase Exposure Factor = " + BASE_CITIZEN_RISK_FACTOR + "\nBase mortality rate = " + BASE_CITIZEN_MORTALITY_RATE);
         }
 
-        private static void startWatches()
+        public static void startWatches()
         {
-            town.Timer.Start();
-            Building.buildingTimer.Start();
+            Thread.Sleep(10);
+            if (town.Timer.ElapsedMilliseconds > 0)
+            {
+                town.Timer.Restart();
+                Building.buildingTimer.Restart();
+            }
+            else
+            {
+            }
         }
 
         private static void waitRestofInitialization()
@@ -140,7 +167,7 @@ namespace src
             while (true)
             {
                 // Check to see if every script finished all the procedures that needed to be undertaken on Start() [i.e. wait for every script to load before executing]
-                if (true) // Wait for other scripts to finish loading
+                if (CitizenMovement.CitizenMovementReady) // Wait for other scripts to finish loading
                 {
                     break;
                 }

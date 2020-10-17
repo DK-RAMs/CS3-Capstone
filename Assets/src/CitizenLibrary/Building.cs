@@ -63,12 +63,15 @@ namespace src.CitizenLibrary
             {
                 occupantAccessLock.Wait();
                 int spreadDisease = random.Next(0, 100);
-                if (spreadDisease <= exposureFactor) // If spread disease
+                if (spreadDisease <= exposureFactor) // If spread check succeeds, a new citizen is infected
                 {
-                    numInfected++;
                     Debug.Log("Managed to infect someone");
                     int infect = random.Next(occupants.Count-1);
-                    occupants.ElementAt(infect).rollHealthEvent(100);
+                    if (!occupants.ElementAt(infect).Infected)
+                    {
+                        numInfected++;
+                        occupants.ElementAt(infect).rollHealthEvent(100);
+                    }
                 }
                 occupantAccessLock.Release();
             }
@@ -94,10 +97,7 @@ namespace src.CitizenLibrary
             }
         }
 
-        public BuildingType getBuildingType
-        {
-            get => buildingType;
-        }
+        public BuildingType getBuildingType => buildingType;
 
         public HashSet<Citizen> Occupants => occupants;
 

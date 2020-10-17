@@ -94,6 +94,7 @@ namespace src.CitizenLibrary {
             homeLocation = Game.town.Recreational[random.Next(Game.town.Recreational.Count-1)];
             workLocation = Game.town.Buildings.ElementAt(random.Next(Game.town.Buildings.Count - 1));
             favoriteTask = new CitizenTask(random, this, true);
+            currentTask = new CitizenTask(random, this, false);
         }
         #endregion
 
@@ -156,7 +157,7 @@ namespace src.CitizenLibrary {
             {
                 if (Game.town.Time == 6)
                 {
-                    if (!rebel && Game.town.PolicyImplementation[1]) // PolicyImplementation[1] - Citizens must wear face masks at all times
+                    if (!rebel && Game.town.policyImplemented[1]) // PolicyImplementation[1] - Citizens must wear face masks at all times
                     {
                         wearingMask = true;
                     }
@@ -179,7 +180,7 @@ namespace src.CitizenLibrary {
                     }
                 }
                 updateTask(); // Task must update here. The hospitalization roll needs to be committed before update (since citizen is hospitalized IN the method)
-                if (Game.town.Timer.ElapsedMilliseconds >= Town.UpdateTickRate) // Update tick rate is longer than a second. (Maybe 1 hour in game is 1 second) // This is not required since tasks
+                if (Game.town.Timer.ElapsedMilliseconds >= Game.UPDATETICKRATE) // Update tick rate is longer than a second. (Maybe 1 hour in game is 1 second) // This is not required since tasks
                 {
                     // Unnecessary check here
                     happiness +=

@@ -15,26 +15,23 @@ using UnityEditor;
 
 namespace src.CitizenLibrary
 {
-    public class Town 
+    public class Town  // Still need to work on this
     {
         #region Class Properties
         public static int townNum = 1;
         private string id, mayor;
         private volatile int day, time, totalInfected, nextNewsEvent;
-        private static int CITIZEN_START_COUNT = 800, CITIZEN_START_COUNT_DEBUG = 1200;
+        private static int CITIZEN_START_COUNT = 20, CITIZEN_START_COUNT_DEBUG = 20;
 
         public static volatile bool happinessUpdated;
-
-        private static long
-            updateTickRate,
-            dayLength; // For now, the length of a day will be 1 minute (60 seconds). The updateTickRate will be
+// For now, the length of a day will be 1 minute (60 seconds). The updateTickRate will be
 
         private HashSet<Building> buildings;
         private Collection<Building> recreational, residential;
         private Collection<Supermarket> essentials;
         private Collection<Hospital> emergency;
         private Dictionary<int, bool> policyImplementation;
-        private bool[] policyImplemented;
+        public bool[] policyImplemented;
         private HashSet<Policy> allPolicies, availablePolicies;
         private CitizenWorkerThread[] citizenThreads;
         public static Thread[] Threads;
@@ -48,7 +45,7 @@ namespace src.CitizenLibrary
 
         private double money, favoriteModifier;
         private Collection<Policy> policies;
-        private Stopwatch timer;
+        public static Stopwatch timer = new Stopwatch();
         public static volatile bool townReady;
         private int numCitizens;
         // public static Newspaper newspaper;
@@ -63,19 +60,15 @@ namespace src.CitizenLibrary
             this.mayor = mayor;
             this.day = day;
             this.time = time;
-            Town.dayLength = dayLength;
-            Town.updateTickRate = updateTickRate;
             this.baseDetalHappiness = baseDetalHappiness;
             this.baseCitisenRisk = baseCitisenRisk;
             this.baseMortalityRate = baseMortalityRate;
-            this.baseRecoveryRate = baseRecoveryRate;
             policyImplementation = new Dictionary<int, bool>();
             buildings = new HashSet<Building>();
             recreational = new Collection<Building>();
             essentials = new Collection<Supermarket>();
             emergency = new Collection<Hospital>();
             residential = new Collection<Building>();
-            timer = new Stopwatch();
             townNum++;
             money = 250;
             totalInfected = 0;
@@ -102,10 +95,23 @@ namespace src.CitizenLibrary
             townNum++;
             this.mayor = mayor;
             baseDetalHappiness = 1;
-            
+            baseCitisenRisk = Game.BASE_CITIZEN_RISK_FACTOR;
+            baseMortalityRate = Game.BASE_CITIZEN_MORTALITY_RATE;
+            policyImplementation = new Dictionary<int, bool>();
+            policyImplemented = new bool[5];
+            buildings = new HashSet<Building>();
+            recreational = new Collection<Building>();
+            essentials = new Collection<Supermarket>();
+            emergency = new Collection<Hospital>();
+            residential = new Collection<Building>();
+            timer = new Stopwatch();
+            money = 63000;
+            totalInfected = 0;
+            favoriteModifier = 1.2;
+            averageHappiness = 50;
         }
 
-        public Town(TownData T)
+        public Town(TownData T) 
         {
             id = T.ID;
             mayor = T.Mayor;
@@ -123,7 +129,6 @@ namespace src.CitizenLibrary
         public void Start(Game.GameVersion version, int numCitizenThreads)
         {
             Debug.Log("Initializing town...");
-            timer.Reset();
             loadBuildings(version);
             initializeCitizens(version);
             day = 1;
@@ -150,11 +155,12 @@ namespace src.CitizenLibrary
                 Debug.Log(divider*i + " " + divider*(i+1));
                 Debug.Log("Creating Citizen Thread " + i);
                 Threads[i] = new Thread(citizenThreads[i].Update);
-                //Threads[i].Start(); 
+                Threads[i].Start(); 
             }
             
             // Need to add multithreading for buildings
             townReady = true;
+            timer.Start();
         }
 
         public void Update()
@@ -164,21 +170,15 @@ namespace src.CitizenLibrary
                 timer.Stop();
                 while (Game.GAMEPAUSED)
                 {
-                    
+                    Debug.Log("Game paused");
                 }
 
                 timer.Start();
             }
-            /*
             if (Building.buildingTimer.ElapsedMilliseconds >= Building.buildingUpdateTimer ) // Every 30 minutes, a spread check is made bu buildings
             {
                 Building.buildingTimer.Restart();
                 foreach (Building b in recreational)
-                {
-                    b.Update();
-                }
-
-                foreach (Building b in residential)
                 {
                     b.Update();
                 }
@@ -191,9 +191,9 @@ namespace src.CitizenLibrary
                     h.Update();
                 }
                 Debug.Log("Updating of buildings complete");
-            }*/
+            }
             
-            if (timer.ElapsedMilliseconds < updateTickRate) return;
+            if (timer.ElapsedMilliseconds < Game.UPDATETICKRATE) return;
             timer.Restart();
             Debug.Log("Incrementing Time...");
             incrementTime();
@@ -202,14 +202,14 @@ namespace src.CitizenLibrary
             int totalRebels = 0;
             totalInfected = 0;
             
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < citizenThreads.Length; i++)
             {
                 happinessavg += citizenThreads[i].AverageHappiness();
                 totalRebels += citizenThreads[i].NumRebels;
                 totalInfected += citizenThreads[i].NumInfected;
             }
 
-            happinessavg /= 4;
+            happinessavg /= (double)citizenThreads.Length;
             averageHappiness = happinessavg;
             Debug.Log("Updating of game state & citizens complete! The process took " + timer.ElapsedMilliseconds);
         }
@@ -293,7 +293,43 @@ namespace src.CitizenLibrary
                     // Code that will load previous buildings in
                     break;
                 case Game.GameVersion.ReleaseNew:
-                    // Code that will generate the buildings that exist in the instance of the game
+                    int numRecreational = 8;
+                    int numShops = 17;
+                    int numHospitals = 4;
+                    int numResidentials = 9;
+
+                    string id;
+                    for (int i = 0; i < numRecreational; i++)
+                    {
+                        id = "recreational" + i;
+                        Building b = new Building(id, Game.BASE_BUILDING_EXPOSURE_FACTOR+5, 5000, 0, 0);
+                        recreational.Add(b);
+                        buildings.Add(b);
+                    }
+
+                    for (int i = 0; i < numShops; i++)
+                    {
+                        id = "shop" + i;
+                        Supermarket s = new Supermarket(id, Game.BASE_BUILDING_EXPOSURE_FACTOR, 100, 0, 20);
+                        essentials.Add(s);
+                        buildings.Add(s);
+                    }
+
+                    for (int i = 0; i < numHospitals; i++)
+                    {
+                        id = "hospital" + i;
+                        Hospital h = new Hospital(id, Game.BASE_BUILDING_EXPOSURE_FACTOR - 10, 5000, 0, 20, false);
+                        emergency.Add(h);
+                        buildings.Add(h);
+                    }
+
+                    for (int i = 0; i < numResidentials; i++)
+                    {
+                        id = "residential" + i;
+                        Building b = new Building(id, 0, 5000, 0, 3);
+                        residential.Add(b);
+                        buildings.Add(b);
+                    }
                     break;
                 case Game.GameVersion.Debug:
                     Random r = new Random();
@@ -363,8 +399,15 @@ namespace src.CitizenLibrary
             }
             if (deltaHappiness > 0)
             {
-                new Thread(() => applyHappiness(deltaHappiness))
-                    .Start(); // Instantiate a thread that applies the deltaHappiness to all the citizens (Should not get in the way of game performance in theory
+                try
+                {
+                    new Thread(() => applyHappiness(deltaHappiness))
+                        .Start(); // Instantiate a thread that applies the deltaHappiness to all the citizens (Should not get in the way of game performance in theory
+                }
+                catch (Exception e)
+                {
+                    Debug.Log(e.Message);
+                }
             }
             Random r = new Random();
             int numAffected = r.Next(15, 25);
@@ -420,10 +463,6 @@ namespace src.CitizenLibrary
 
         public double FavoriteModifier => favoriteModifier;
 
-        public static long UpdateTickRate
-        {
-            get => updateTickRate;
-        }
 
         public Stopwatch Timer => timer;
 

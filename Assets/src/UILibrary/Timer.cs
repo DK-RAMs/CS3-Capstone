@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using src;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,17 +11,16 @@ public class Timer : MonoBehaviour
     public TextMeshProUGUI dayBox;
     private float startTime;
     private int day;
-    public bool paused = false;
     void Start()
     {
         startTime = Time.time;
-        day = 1;
+        day = Game.town.Day;
     }
 
     void Update() {
-        if (paused)
+        while (Game.GAMEPAUSED)
 		{
-            return;
+            
 		}
 
         float t = Time.time - startTime;
@@ -36,7 +36,16 @@ public class Timer : MonoBehaviour
             day += ((int)t / 300);
         }
 
-        seconds = seconds.Remove(2);
+        if (Game.town.Time < 10)
+        {
+            textBox.text = "0" + Game.town.Time + ":00";
+        }
+        else
+        {
+            textBox.text = Game.town.Time + ":00";
+        }
+        
+        /*
         if (seconds.Contains(","))
 		{
             textBox.text = minutes + ":" + seconds.Remove(1);
@@ -44,9 +53,9 @@ public class Timer : MonoBehaviour
 		else
 		{
             textBox.text = minutes + ":" + seconds;
-        }
+        }*/
        
-        dayBox.text = "Day " + day;
+        dayBox.text = "Day " + Game.town.Day;
         
     }
 }
