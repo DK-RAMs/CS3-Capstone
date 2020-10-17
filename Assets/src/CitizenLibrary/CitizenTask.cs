@@ -89,11 +89,11 @@ namespace src.CitizenLibrary
 
         private void generateNewTask(Random random, Citizen citizen)
         {
-            startTime = Citizen.Town.Time;
-            startDay = Citizen.Town.Day;
+            startTime = Game.town.Time;
+            startDay = Game.town.Day;
             if (citizen.Infected && !citizen.Rebel) // Checks if an infected citizen is a rebel. If not, they will self quarantine
             {
-                if (random.Next(1, 100) <= 50 || Citizen.town.PolicyImplementation[0]) // PolicyImplementation[1] - All citizens that are infected must self-quarantine
+                if (random.Next(1, 100) <= 50 || Game.town.PolicyImplementation[0]) // PolicyImplementation[1] - All citizens that are infected must self-quarantine
                 {
                     Debug.Log("Citizen contracted COVID and they must self quarantine");
                     TaskID = 5;
@@ -152,7 +152,7 @@ namespace src.CitizenLibrary
         
         private void generateRecreationalTask(Random random, Citizen citizen)
         {
-            Collection<Building> spots = Citizen.Town.Recreational;
+            Collection<Building> spots = Game.town.Recreational;
             int numSpots = spots.Count;
             int startPos = random.Next(0, spots.Count-1);
             
@@ -192,7 +192,7 @@ namespace src.CitizenLibrary
 
         private void generateShoppingTask(Random random, Citizen citizen)
         {
-            Collection<Supermarket> spots = Citizen.Town.Essentials;
+            Collection<Supermarket> spots = Game.town.Essentials;
             int numSpots = spots.Count;
             int startPos = random.Next(0, spots.Count-1);
             for (int i = 0; i < numSpots; i++)
@@ -224,7 +224,7 @@ namespace src.CitizenLibrary
             switch (TaskID)
             {
                 case 0:
-                    taskLocation = Citizen.town.Recreational[random.Next(Citizen.Town.Recreational.Count - 1)];
+                    taskLocation = Game.town.Recreational[random.Next(Game.town.Recreational.Count - 1)]; // It's necessary to directly access this value (using a getter will return a value and not the reference to the value)
                     break;
                 case 1:
                     taskLocation = citizen.homeLocation;
@@ -233,10 +233,10 @@ namespace src.CitizenLibrary
                     taskLocation = citizen.workLocation;
                     break;
                 case 3:
-                    taskLocation = Citizen.town.Essentials[random.Next(Citizen.Town.Essentials.Count - 1)];
+                    taskLocation = Game.town.Essentials[random.Next(Game.town.Essentials.Count - 1)];
                     break;
                 case 4:
-                    taskLocation = Citizen.town.Residential[random.Next(Citizen.Town.Residential.Count - 1)];
+                    taskLocation = Game.town.Residential[random.Next(Game.town.Residential.Count - 1)];
                     break;
                 case 5:
                     taskLocation = citizen.homeLocation;
@@ -250,7 +250,7 @@ namespace src.CitizenLibrary
         
         private void admitToHospital(Random random, Citizen citizen)
         {
-            Collection<Hospital> emergencyRooms = Citizen.Town.Emergency;
+            Collection<Hospital> emergencyRooms = Game.town.Emergency;
             int spot = random.Next(0, emergencyRooms.Count - 1);
             for (int i = 0; i < emergencyRooms.Count; i++)
             {
@@ -262,8 +262,8 @@ namespace src.CitizenLibrary
                 }
             }
 
-            startTime = Citizen.Town.Time;
-            startDay = Citizen.Town.Day;
+            startTime = Game.town.Time;
+            startDay = Game.town.Day;
             endTime = startTime;
             endDay = startDay + (endTime / 24) + random.Next(14, 21);
             if (citizen.RiskofDeath > 35)

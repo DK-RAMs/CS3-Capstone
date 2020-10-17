@@ -1,21 +1,41 @@
-﻿﻿using System.Collections;
+﻿﻿using System;
+ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+ using UnityEngine.UI;
 
  namespace src.NewspaperLibrary
  {
      public class Newspaper : MonoBehaviour
      {
-         public static GameObject content; // list of strings to store all the different articles, so only have to read file once at start of game seeing as article content and size would only change with an update on our side, and not mid game - Z
-
+         // The script will be linked to the newspaper. When a new article is selected, 
+         public static Text content; // list of strings to store all the different articles, so only have to read file once at start of game seeing as article content and size would only change with an update on our side, and not mid game - Z
+         public static bool newspaperReady = false;
          private static NewspaperEntry newspaperEvent;
-         
-         public Newspaper() // default constructor - Z
-         {
+         private static int pos;
+
+         public static NewspaperEntry[] events;
+
+         public void Start()
+         { 
+             while (!Game.TOWNREADY)
+             {
+                 
+             }
              
+             if (Game.ISNEWGAME)
+             {
+                 newspaperEvent = events[0];
+             }
+             else
+             {
+                 
+             }
          }
-         
+
+
+
          /*
          public void readArticles()
          {
@@ -57,7 +77,8 @@ using System.IO;
          
          public static void triggerNewspaperEvent(int id)
          {
-             
+             pos = id;
+             newspaperEvent = events[id];
          }
 
          // need to add some form of question mechanism, can code it easily enough, just not sure how to design it - Z

@@ -16,13 +16,13 @@ namespace src.SaveLoadLibrary
             availableUpgradeIDs = new string[b.AvailableUpgrades.Count];
             for (int i = 0; i < b.AvailableUpgrades.Count; i++)
             {
-                availableUpgradeIDs[i] = b.AvailableUpgrades[i].UpgradeID;
+                availableUpgradeIDs[i] = b.AvailableUpgrades[i].upgradeID;
             }
 
             buildingUpgradeIDs = new string[b.BuildingUpgrades.Count];
             for (int i = 0; i < b.BuildingUpgrades.Count; i++)
             {
-                buildingUpgradeIDs[i] = b.BuildingUpgrades[i].UpgradeID;
+                buildingUpgradeIDs[i] = b.BuildingUpgrades[i].upgradeID;
             }
 
             open = b.Open;

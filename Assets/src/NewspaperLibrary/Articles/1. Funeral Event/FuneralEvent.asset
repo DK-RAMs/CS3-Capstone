@@ -21,8 +21,8 @@ MonoBehaviour:
   - '"The funeral can be arranged, but we have to ensure that people are being kept
     safe most importantly and hosting a public funeral is not the way to do it \n(+6
     happiness, -R50000 and citizens run a very low chance in contracting the disease)"'
-  - '"No funeral shall be held. It''s important that our citizens are kept safe more
-    than anything. (-15 happiness)"'
+  - '"It''s too risky to hold a funeral right now. It''s important that our citizens are kept safe more
+    than anything.\n(-15 happiness)"'
   deltaHappiness: 1400000006000000f1ffffff
   deltaHealth: 3c0000000f00000000000000
   deltaMoney: 00000000b03cffff00000000

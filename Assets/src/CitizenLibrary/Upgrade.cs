@@ -1,13 +1,14 @@
 using System;
+using UnityEngine;
 
 namespace src.CitizenLibrary
 {
-    public class Upgrade
+    public class Upgrade : ScriptableObject
     {
-        private string upgradeID;
-        private string description;
-        private double riskFactorAdjustment, deltaHappiness;
-        private long cost;
+        public string upgradeID;
+        public string description;
+        public double riskFactorAdjustment, deltaHappiness;
+        public long cost;
 
         public Upgrade(string upgradeID, string description, double riskFactorAdjustment, double deltaHappiness, long cost)
         {
@@ -18,17 +19,5 @@ namespace src.CitizenLibrary
             this.cost = cost;
         }
         
-        #region getters & setters
-
-        public string UpgradeID => upgradeID;
-        public string Description => description;
-
-        public double RiskFactorAdjustment => riskFactorAdjustment;
-
-        public double DeltaHappiness => deltaHappiness;
-
-        public long Cost => cost;
-
-        #endregion
     }
 }

@@ -11,7 +11,8 @@ namespace src.NewspaperLibrary
         {
             this.mainText = mainText;
         }
-
+        
+        
         public string MainText => mainText;
     }
 }

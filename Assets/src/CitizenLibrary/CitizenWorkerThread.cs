@@ -19,8 +19,6 @@ namespace src.CitizenLibrary
         private int lo, hi, numRebels, numInfected, numDead, time;
         private bool happinessUpdated;
         private double averageHappiness;
-        private Stopwatch updateTick;
-        private static Town town;
 
         public CitizenWorkerThread(int lo, int hi, bool happinessUpdated)
         {
@@ -31,37 +29,35 @@ namespace src.CitizenLibrary
             numInfected = 0;
         }
 
-        public static Town Town
-        {
-            get => town;
-            set { town = value; }
-        }
-
         #region Update Methods
 
         public void Update()
         {
-            while (!Town.townReady)
+            while (!Game.GAMESTART)
             {
-
+                
             }
-
+            Debug.Log("Citizen thread managing citizens " + lo + " to " + hi + " have begun executing their tasks");
             while (true)
             {
-                if (time != town.Time)
+                if (time != Game.town.Time)
                 {
                     for (int i = lo; i < hi; i++)
                     {
-                        while (Game.gamePaused)
+                        while (Game.GAMEPAUSED)
                         {
-                            if (Game.gameQuit) // Game Quit somewhere dude
+                            if (Game.GAMEQUIT) // Game Quit somewhere dude
                             {
+                                while (!Game.GAMECLOSED)
+                                {
+                                    
+                                }
                                 return;
                             }
 
                         }
 
-                        if (Game.gameQuit)
+                        if (Game.GAMEQUIT)
                         {
                             return;
                         }
@@ -71,7 +67,7 @@ namespace src.CitizenLibrary
                             citizens[i].Update();
                         }
 
-                        if (Citizen.town.Time == 0 && !happinessUpdated)
+                        if (Game.town.Time == 0 && !happinessUpdated)
                         {
                             averageHappiness = 0;
                             happinessUpdated = true;
@@ -86,14 +82,14 @@ namespace src.CitizenLibrary
                             Interlocked.Exchange(ref this.averageHappiness, averageHappiness /= (hi - lo));
                         }
 
-                        if (Citizen.town.Time == 1 && happinessUpdated)
+                        if (Game.town.Time == 1 && happinessUpdated)
                         {
                             Debug.Log("Happiness updated");
                             happinessUpdated = false;
                         }
                     }
                 }
-                time = Town.Time;
+                time = Game.town.Time;
             }
         }
 

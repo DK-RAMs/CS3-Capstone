@@ -38,12 +38,17 @@ namespace src.SaveLoadLibrary
             string citizenDir = Application.persistentDataPath + "/" + town.ID + "/citizenData/";
             if (Directory.Exists(citizenDir))
             {
-                string[] citizenFiles = Directory.GetFiles(citizenDir);
+                string[] citizenFolders = Directory.GetFileSystemEntries(citizenDir); // 
                 Collection<Citizen> citizens = new Collection<Citizen>();
-                for (int i = 0; i < citizenFiles.Length; i++)
+                for (int i = 0; i < citizenFolders.Length; i++)
                 {
+                    string citizenFolder = citizenFolders[i];
+                    if (Directory.Exists(citizenFolders[i]))
+                    {
+                        
+                    }
                     BinaryFormatter bf = new BinaryFormatter();
-                    string filename = citizenFiles[i];
+                    string filename = citizenFolders[i];
                     FileStream stream = new FileStream(filename, FileMode.Open);
                     CitizenData C = bf.Deserialize(stream) as CitizenData;
                     Citizen citizen = new Citizen(C);

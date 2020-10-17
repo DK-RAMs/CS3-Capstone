@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace src.NewspaperLibrary
 {
-    public class UpdateNewsText : MonoBehaviour
+    public class UpdateNewsText : MonoBehaviour // This file doesn't have to exist. See the Newspaper.cs file
     {
         Text newsText;
 

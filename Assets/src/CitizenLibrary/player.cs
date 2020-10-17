@@ -18,12 +18,8 @@ namespace src.CitizenLibrary
         // Start is called before the first frame update
         void Start()
         {
-            while (Citizen.town == null)
-            {
-                
-            }
+            Game.waitTownInitialization();
 
-            town = Citizen.town;
             currentHealth = maxHealth;
             healthBar.setMaxHealth(maxHealth);
         }

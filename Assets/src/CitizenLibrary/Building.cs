@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -198,6 +199,27 @@ namespace src.CitizenLibrary
             return true;
         }
 
+        public void applyUpgrade(string upgradeID)
+        {
+            int pos = -1;
+            for (int i = 0; i < availableUpgrades.Count; i++)
+            {
+                if (availableUpgrades[i].upgradeID.Equals(upgradeID))
+                {
+                    pos = i;
+                    buildingUpgrades.Add(availableUpgrades[i]);
+                }
+            }
+
+            if (pos >= 0)
+            {
+                availableUpgrades.RemoveAt(pos);
+            }
+            else
+            {
+                Debug.Log("The upgrade selected can't be applied to this building");
+            }
+        }
 
         #endregion
         

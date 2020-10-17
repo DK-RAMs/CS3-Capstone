@@ -7,7 +7,7 @@ namespace src.NewspaperLibrary
     {
         public string[] answers;
         public int correctAnswer;
-        public double[] deltas;
+        public int[] deltas;
         
         public QuizEvent(string mainText) : base(mainText)
         {

@@ -19,7 +19,7 @@ namespace src.CitizenLibrary {
 
         string id, name;
         int age, startWork, endWork;
-        private double happiness, riskofDeath, deltaHappiness;
+        private double happiness, riskofDeath;
         private bool rebel, hospitalized, dead, infected, wearingMask;
 
         public Building workLocation, homeLocation;
@@ -41,7 +41,6 @@ namespace src.CitizenLibrary {
         public static readonly string IDPREFIX = "citizen";
         public static int citizenNum = 0;
 
-        public static Town town;
 
         #region Constructors
         
@@ -63,16 +62,25 @@ namespace src.CitizenLibrary {
 
         public Citizen(CitizenData c)
         {
-            
+
             happiness = 50;
-            name = "Mark";
+            name = c.Name;
             age = random.Next(18, 45);
             
         }
         public Citizen()
         {
             id = IDPREFIX + citizenNum;
-            name = "Mark";
+            citizenNum++;
+            int nameSelection = random.Next(1);
+            if (nameSelection > 0)
+            {
+                name = "Jane";
+            }
+            else
+            {
+                name = "John";
+            }
             age = random.Next(18, 65);
             citizenNum++;
             infected = false;
@@ -81,8 +89,8 @@ namespace src.CitizenLibrary {
             hospitalized = false;
             dead = false;
             wearingMask = false;
-            homeLocation = town.Recreational[random.Next(town.Recreational.Count-1)];
-            workLocation = town.Buildings.ElementAt(random.Next(town.Buildings.Count - 1));
+            homeLocation = Game.town.Recreational[random.Next(Game.town.Recreational.Count-1)];
+            workLocation = Game.town.Buildings.ElementAt(random.Next(Game.town.Buildings.Count - 1));
             favoriteTask = new CitizenTask(random, this, true);
         }
         #endregion
@@ -91,7 +99,7 @@ namespace src.CitizenLibrary {
         public void generateCitizenRisk(int diabetic, int respiratory, int cardial, double modifier)
         {
             healthRisks = new Collection<HealthRisk>();
-            riskofDeath = town.BaseCitisenRisk;
+            riskofDeath = Game.town.BaseCitisenRisk*modifier;
             if (diabetic == 1)
             {
                 healthRisks.Add(HealthRisk.Diabetic);
@@ -127,6 +135,11 @@ namespace src.CitizenLibrary {
             currentTask = new CitizenTask(taskID, startTime, endTime, startDay, endDay, completed, building);
         }
 
+        private void loadFavoriteTask(int taskID, Building building)
+        {
+            favoriteTask = new CitizenTask(taskID, 0, 0, 0, 0, 0, building); // Instantiated with Zeros since that data isn't important for loading the citizen's favorite task
+        }
+
         public void initiateTask()
         {
             currentTask.taskLocation.enterBuilding(this);
@@ -143,9 +156,9 @@ namespace src.CitizenLibrary {
         {
             if (!hospitalized) // Checks if citizen is hospitalized (i.e. in hospital)
             {
-                if (town.Time == 6)
+                if (Game.town.Time == 6)
                 {
-                    if (!rebel && town.PolicyImplementation[1]) // PolicyImplementation[1] - Citizens must wear face masks at all times
+                    if (!rebel && Game.town.PolicyImplementation[1]) // PolicyImplementation[1] - Citizens must wear face masks at all times
                     {
                         wearingMask = true;
                     }
@@ -161,18 +174,18 @@ namespace src.CitizenLibrary {
                             Debug.Log("Citizen with id" + id + " has collapsed and has been sent to the hospital");
                             hospitalized = true;
                         }
-                        else if (currentTask.TaskID == 6 && currentTask.EndTime >= Town.Time && currentTask.EndDay >= Town.Day) // Citizen is cured once they managed to get through 15 days of self quarantine
+                        else if (currentTask.TaskID == 6 && currentTask.EndTime >= Game.town.Time && currentTask.EndDay >= Game.town.Day) // Citizen is cured once they managed to get through 15 days of self quarantine
                         {
                             infected = false;
                         }
                     }
                 }
                 updateTask(); // Task must update here. The hospitalization roll needs to be committed before update (since citizen is hospitalized IN the method)
-                if (town.Timer.ElapsedMilliseconds >= Town.UpdateTickRate) // Update tick rate is longer than a second. (Maybe 1 hour in game is 1 second) // This is not required since tasks
+                if (Game.town.Timer.ElapsedMilliseconds >= Town.UpdateTickRate) // Update tick rate is longer than a second. (Maybe 1 hour in game is 1 second) // This is not required since tasks
                 {
                     // Unnecessary check here
                     happiness +=
-                        deltaHappiness; // Adds the total change to the citizen's happiness to citizen's current happiness
+                        Game.town.BaseDetalHappiness; // Adds the total change to the citizen's happiness to citizen's current happiness
 
                     if (happiness > 100)
                     {
@@ -182,14 +195,12 @@ namespace src.CitizenLibrary {
                     {
                         happiness = 0;
                     }
-
-                    deltaHappiness = 0; // Resets citizen delta happiness after processing all changes
                     generateRebelFactor();
                 }
             }
             else
             {
-                if (Town.Time % 12 == 0)
+                if (Game.town.Time % 12 == 0) // Every 12 hours, a death roll happens, if the citizen gets hit by it, they die
                 {
                     int deathRoll = rollDice();
                     if (deathRoll <= riskofDeath)
@@ -198,11 +209,11 @@ namespace src.CitizenLibrary {
                     }
                 }
 
-                if (Town.Time >= currentTask.EndTime && Town.Day >= currentTask.EndDay)
+                if (Game.town.Time >= currentTask.EndTime && Game.town.Day >= currentTask.EndDay) // Citizen managed to recover from the disease
                 {
                     infected = false;
                     hospitalized = false;
-                    riskofDeath--;
+                    riskofDeath++;
                     rebel = false;
                     happiness = 85;
                 }
@@ -240,7 +251,7 @@ namespace src.CitizenLibrary {
 
         private void updateTask()
         {
-            currentTask.Update(random, this, town);
+            currentTask.Update(random, this, Game.town);
             if (currentTask.Completed)
             {
                 if (currentTask.Equals(favoriteTask))
@@ -299,40 +310,22 @@ namespace src.CitizenLibrary {
         public double RiskofDeath => riskofDeath;
 
         public bool Dead => dead;
-        public static Town Town
-        {
-            get => town;
-        }
-        
-        public bool Infected
-        {
-            get
-            {
-                return infected;
-            }
-            set
-            {
-                infected = value;
-            }
-        }
 
-        public string ID
-        {
-            get
-            {
-                return id;
-            }
-        }
+        public bool Infected => infected;
 
-        public bool Rebel
-        {
-            get => rebel;
-        }
+        public string ID => id;
 
-        public double Happiness
-        {
-            get => happiness;
-        }
+        public string Name => name;
+
+        public bool Rebel => rebel;
+
+        public double Happiness => happiness;
+
+        public int Age => age;
+
+        public CitizenTask CurrentTask => currentTask;
+
+        public CitizenTask FavoriteTask => favoriteTask;
 
         #endregion
         
