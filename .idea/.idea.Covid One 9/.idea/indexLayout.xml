@@ -19,6 +19,7 @@
       <Path>Library</Path>
       <Path>Logs</Path>
       <Path>Scenes</Path>
+      <Path>Temp</Path>
       <Path>Zevi-Branch-Capstone.app</Path>
       <Path>obj</Path>
     </explicitExcludes>
