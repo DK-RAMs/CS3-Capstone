@@ -8,7 +8,7 @@ using src.AchievementsLibrary;
 using src.UILibrary;
 using UnityEngine;
 //using UnityEngine.iOS;
-using UnityEngine.iOS;
+//using UnityEngine.iOS;
 using Debug = UnityEngine.Debug;
 
 namespace src
