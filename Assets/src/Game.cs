@@ -4,7 +4,7 @@ using src.SaveLoadLibrary;
 using src.NewspaperLibrary;
 using src.AchievementsLibrary;
 using UnityEngine;
-using UnityEngine.iOS;
+//using UnityEngine.iOS;
 
 namespace src
 {
