@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 ﻿using TMPro;
 using UnityEngine;
 
@@ -44,3 +45,48 @@ namespace src.UILibrary
         }
     }
 }
+=======
+﻿using System.Collections;
+using System.Collections.Generic;
+using src;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class Timer : MonoBehaviour
+{
+    public TextMeshProUGUI textBox;
+    public TextMeshProUGUI dayBox;
+    private int time;
+    private int day;
+    void Start()
+    {
+        time = Game.town.Time;
+        day = Game.town.Day;
+    }
+
+    void Update() {
+        while (Game.GAMEPAUSED)
+		{
+            
+		}
+
+        if (time != Game.town.Time)
+        {
+            if (Game.town.Time < 10)
+            {
+                textBox.text = "0" + Game.town.Time + ":00";
+            }
+            else
+            {
+                textBox.text = Game.town.Time + ":00";
+            }
+        }
+
+        if (day != Game.town.Day)
+        {
+            dayBox.text = "Day " + Game.town.Day;
+        }
+    }
+}
+>>>>>>> Stashed changes
