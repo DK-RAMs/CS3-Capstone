@@ -248,6 +248,10 @@ namespace src.CitizenLibrary
                 }
                 happinessavg += CitizenWorkerThread.citizens[i].Happiness;
             }
+
+            totalInfected = numInfected;
+            this.totalRebels = totalRebels;
+            totalDead = numDead;
             happinessavg /= (double)citizenWorkerThreads.Length;
             averageHappiness = happinessavg;
         }
