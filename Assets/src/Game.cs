@@ -19,8 +19,8 @@ namespace src
         public static bool GAMEQUIT = false, GAMEPAUSED = false, GAMESTART = false, GAMECLOSED;
         public static bool ISNEWGAME = true, TOWNREADY = false;
         public static int BASE_CITIZEN_RISK_FACTOR = 25;
-        public static int BASE_CITIZEN_MORTALITY_RATE = 5;
-        public static int BASE_BUILDING_EXPOSURE_FACTOR = 35;
+        public static int BASE_CITIZEN_MORTALITY_RATE = 2;
+        public static int BASE_BUILDING_EXPOSURE_FACTOR = 50;
         public static double GAME_MODIFIER = 1;
         public static long UPDATETICKRATE = 2500;
         public static long PLAYER_SCORE;
@@ -33,7 +33,7 @@ namespace src
         }
 
         private static GameVersion Version = GameVersion.ReleaseNew;
-        private static int numCitizenThreads = 4;
+        private static int numCitizenThreads = 2;
 
         public void Start()
         {
@@ -55,7 +55,7 @@ namespace src
             GAMESTART = true;
             town.Start(Version, numCitizenThreads);
             Building.buildingTimer.Start();
-            //town.startCitizenThreads();
+            town.startCitizenThreads();
         }
 
         public void Update()
@@ -75,6 +75,7 @@ namespace src
         {
             GAMEPAUSED = true;
             Debug.Log("yes");
+            RunSaveProtocol();
             //FileManagerSystem.SaveCitizens(town, CitizenWorkerThread.citizens);
             //FileManagerSystem.SaveTown(town);
             GAMEQUIT = true;
@@ -98,13 +99,13 @@ namespace src
         private static void
             loadCitizenTasks() // For now, task keys and descriptions are hard-coded, will need to figure out how to load .asset files and stuff
         {
-            CitizenTask.taskKeys.Add(0, ("Go have some fun!", true));
-            CitizenTask.taskKeys.Add(1, ("Sleep", true));
-            CitizenTask.taskKeys.Add(2, ("Work", true));
-            CitizenTask.taskKeys.Add(3, ("go shopping", true));
-            CitizenTask.taskKeys.Add(4, ("Visit friend", true));
-            CitizenTask.taskKeys.Add(5, ("Self Quarantine", true));
-            CitizenTask.taskKeys.Add(6, ("Recover in hospital", true));
+            CitizenTask.taskKeys[0] = ("Go have some fun!", true);
+            CitizenTask.taskKeys[1] = ("Sleep", true);
+            CitizenTask.taskKeys[2] = ("Work", true);
+            CitizenTask.taskKeys[3] = ("go shopping", true);
+            CitizenTask.taskKeys[4] = ("Visit friend", true);
+            CitizenTask.taskKeys[5] = ("Self Quarantine", true);
+            CitizenTask.taskKeys[6] = ("Recover in hospital", true);
         }
 
         /**
@@ -148,7 +149,7 @@ namespace src
             {
                 Town.citizenThreads[i].Join();
             }
-
+            
             for (int i = 0; i < Town.buildingThreads.Length; i++) // Closing building update threads
             {
                 Town.buildingThreads[i].Join();

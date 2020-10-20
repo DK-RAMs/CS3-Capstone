@@ -51,6 +51,7 @@ namespace src.CitizenLibrary
             occupants.Add(citizen);
             occupantAccessLock.Release();
             entranceLock.Release();
+            numOccupants++;
             return true;
         }
         
@@ -94,6 +95,7 @@ namespace src.CitizenLibrary
             // All locks are released once all operations are completed.
             entranceLock.Release(); 
             queueSemaphore.Release();
+            numOccupants--;
             return false;
         }
 

@@ -20,7 +20,7 @@ namespace src.CitizenLibrary
         private static int HEALTH_EVENT_LOW = 10, HEALTH_EVENT_HIGH = 45;
         private string id, mayor;
         private volatile int day, time, totalInfected, nextNewsEvent, totalDead, totalRebels;
-        private static int CITIZEN_START_COUNT = 2000, CITIZEN_START_COUNT_DEBUG = 2000;
+        private static int CITIZEN_START_COUNT = 1000, CITIZEN_START_COUNT_DEBUG = 1000;
 
         public static volatile bool happinessUpdated;
 // For now, the length of a day will be 1 minute (60 seconds). The updateTickRate will be
@@ -223,72 +223,27 @@ namespace src.CitizenLibrary
                 {
                     emergency[i].Update();
                 }
-                /*
-                Building.buildingTimer.Restart();
-                for (int i = 0; i < buildingThreads.Length; i++)
-                {
-                    buildingThreads[i].Start();
-                }
-
-                for (int i = 0; i < buildingThreads.Length; i++)
-                {
-                    buildingThreads[i].Join();
-                }*/
             }
             
             if (timer.ElapsedMilliseconds < Game.UPDATETICKRATE) return;
             timer.Restart();
             incrementTime();
-            updateCitizensSequentially();
-            /*
+            
             double happinessavg = 0;
             int totalRebels = 0;
             int numInfected = 0;
             int numDead = 0;
             
-            /*
+        
             for (int i = 0; i < citizenWorkerThreads.Length; i++)
             {
                 happinessavg += citizenWorkerThreads[i].AverageHappiness();
                 totalRebels += citizenWorkerThreads[i].NumRebels;
                 numInfected += citizenWorkerThreads[i].NumInfected;
                 totalRebels += citizenWorkerThreads[i].NumRebels;
-            }*/
-            /*
-            happinessavg /= (double)citizenWorkerThreads.Length;
-            averageHappiness = happinessavg;*/
-        }
-
-        private void updateCitizensSequentially()
-        {
-            int totalRebels = 0;
-            int totalInfected = 0;
-            int totalDead = 0;
-            double happiness = 0;
-            for (int i = 0; i < CitizenWorkerThread.citizens.Count; i++)
-            {
-                CitizenWorkerThread.citizens[i].Update();
-                if (CitizenWorkerThread.citizens[i].Dead)
-                {
-                    totalDead++;
-                }
-
-                if (CitizenWorkerThread.citizens[i].Infected)
-                {
-                    totalInfected++;
-                }
-
-                if (CitizenWorkerThread.citizens[i].Rebel)
-                {
-                    totalRebels++;
-                }
-
-                happiness += CitizenWorkerThread.citizens[i].Happiness;
             }
-            this.totalInfected = totalInfected;
-            this.totalDead = totalDead;
-            this.totalDead = totalDead;
-            this.averageHappiness = happiness / (CitizenCount - totalDead);
+            happinessavg /= (double)citizenWorkerThreads.Length;
+            averageHappiness = happinessavg;
         }
 
         private void initializeBuildingThreads()
@@ -431,11 +386,13 @@ namespace src.CitizenLibrary
                     }
                     s.Stop();
                     break;
+                
+                // Case where we're loading an old save
                 case Game.GameVersion.ReleaseLoad:
                     Collection<Citizen> citizens = FileManagerSystem.LoadCitizens(this);
                     if (citizens == null)
                     {
-                        Debug.Log("This game is trash. A town manager without any citilians? HAH! Get me out");
+                        Debug.Log("This game is trash. A town manager without any civilians? HAH! Get me out");
                         Application.Quit();
                         return;
                     }
@@ -445,6 +402,8 @@ namespace src.CitizenLibrary
                         CitizenWorkerThread.citizens[i].initiateTask();
                     }
                     break;
+                
+                // Case where we're creating a new save
                 case Game.GameVersion.ReleaseNew:
                     for (int i = 0; i < CITIZEN_START_COUNT; i++)
                     {
@@ -458,14 +417,6 @@ namespace src.CitizenLibrary
                         CitizenWorkerThread.citizens[i].initiateTask();
                     }
                     break;
-            }
-        }
-
-        public void loadPreviousState()
-        { // This isn't that important. Need to figure out how I'm going to implement newspaper mechanic
-            foreach (Citizen c in CitizenWorkerThread.citizens)
-            {
-                
             }
         }
 
@@ -657,13 +608,6 @@ namespace src.CitizenLibrary
         
         #region Policy Methods
 
-        public void addGamePolicies(int numPolicies)
-        {
-            for (int i = 0; i < numPolicies; i++)
-            {
-                policyImplementation.Add(i, false);
-            }
-        }
         
         #endregion
 
@@ -692,37 +636,6 @@ namespace src.CitizenLibrary
         public double BaseCitisenRisk => baseCitisenRisk;
 
         public double AverageHappiness => averageHappiness;
-
-        public void updateDeltaHappiness(double factor)
-        {
-            baseDetalHappiness += factor;
-        }
-        
-        private Collection<Building> getBuildings()
-        {
-            Collection<Building> buildings = new Collection<Building>();
-            foreach (Hospital h in emergency)
-            {
-                buildings.Add(h);
-            }
-
-            foreach (Supermarket s in essentials)
-            {
-                buildings.Add(s);
-            }
-
-            foreach (Building b in recreational)
-            {
-                buildings.Add(b);
-            }
-
-            foreach (Building b in residential)
-            {
-                buildings.Add(b);
-            }
-
-            return buildings;
-        }
 
         public Dictionary<int, bool> PolicyImplementation
         {

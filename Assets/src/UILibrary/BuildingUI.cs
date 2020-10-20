@@ -63,8 +63,8 @@ public class BuildingUI : MonoBehaviour
 	{
 		if (isClosed != true)
 		{
-			buildingPanel.SetActive(true);
 			preventStack();
+			buildingPanel.SetActive(true);
 		}
 	}
 
@@ -80,9 +80,24 @@ public class BuildingUI : MonoBehaviour
 	// prevents building details from stacking on top of each other
 	private void preventStack()
 	{
-		other1.SetActive(false);
-		other2.SetActive(false);
-		other3.SetActive(false);
-		other4.SetActive(false);
+		if (other1)
+		{
+			other1.SetActive(false);
+		}
+
+		if (other2)
+		{
+			other2.SetActive(false);
+		}
+
+		if (other3)
+		{
+			other3.SetActive(false);
+		}
+
+		if (other4)
+		{
+			other4.SetActive(false);
+		}
 	}
 }

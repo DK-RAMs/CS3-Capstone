@@ -15,17 +15,16 @@ namespace src.CitizenLibrary
     {
         protected HashSet<Citizen> occupants; // Usually, the number of occupants will be initialized to zero
         protected string id;
-        protected int numWithNoMask, numInfected;
+        protected int numWithNoMask, numInfected, maxOccupants, numOccupants;
         protected Collection<Upgrade> availableUpgrades;
         protected Collection<Upgrade> buildingUpgrades;
         public static Collection<Upgrade> upgrades = new Collection<Upgrade>();
         protected double exposureFactor;
-        protected int maxOccupants, numOccupants;
         protected SemaphoreSlim entranceLock, occupantAccessLock;
         protected bool open, containsInfected;
         protected static Random random = new Random();
         public static Stopwatch buildingTimer = new Stopwatch();
-        public static int buildingUpdateTimer = 2500 / 4;
+        public static long buildingUpdateTimer = Game.UPDATETICKRATE / 4;
 
         public enum BuildingType
         {
@@ -107,9 +106,9 @@ namespace src.CitizenLibrary
         #region Building Update Methods
         public void Update()
         {
+            Debug.Log("Updating " +ID);
             if (containsInfected)
             {
-                Debug.LogError("Spread check at " + id);
                 occupantAccessLock.Wait();
                 int spreadDisease = random.Next(0, 100);
                 if (spreadDisease <= exposureFactor) // If spread check succeeds, a new citizen is infected
@@ -168,6 +167,7 @@ namespace src.CitizenLibrary
                 occupantAccessLock.Wait();
                 occupants.Add(citizen);
                 occupantAccessLock.Release();
+                numOccupants++;
                 if (citizen.Infected)
                 {
                     Debug.Log("Building contains infected individual");
@@ -175,7 +175,21 @@ namespace src.CitizenLibrary
                     containsInfected = true;
                 }
             }
-            if (open)
+            else if (buildingType == BuildingType.Residential)
+            {
+                occupantAccessLock.Wait();
+                occupants.Add(citizen);
+                occupantAccessLock.Release();
+                numOccupants++;
+                if (citizen.Infected)
+                {
+                    Debug.Log("Building contains infected individual");
+                    numInfected++;
+                    containsInfected = true;
+                    exposureFactor += 5;
+                }
+            }
+            else if (open) // Building being entered isn't a residence
             {
                 entranceLock.Wait(); // Lock acquired to 
                 if (numOccupants < maxOccupants) // Checks if the citizen can actually enter the building
@@ -183,6 +197,7 @@ namespace src.CitizenLibrary
                     occupantAccessLock.Wait();
                     occupants.Add(citizen);
                     occupantAccessLock.Release();
+                    numOccupants++;
                     if (!citizen.WearingMask)
                     {
                         numWithNoMask++;
@@ -204,6 +219,7 @@ namespace src.CitizenLibrary
                     occupantAccessLock.Wait();
                     occupants.Add(citizen);
                     occupantAccessLock.Release();
+                    numOccupants++;
                     exposureFactor += 1;
                     if (!citizen.WearingMask)
                     {

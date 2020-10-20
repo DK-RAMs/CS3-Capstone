@@ -14,20 +14,18 @@ namespace src.CitizenLibrary
         string taskName;
         private static double MAXBASEHAPPINESSGAIN = 2;
         public int TaskID { get; private set; }
-        public static Dictionary<int, (string, bool)> taskKeys = new Dictionary<int, (string, bool)>(); // 2nd Key in dictionary is the availability of the task
+        //public static Dictionary<int, (string, bool)> taskKeys = new Dictionary<int, (string, bool)>(); // 2nd Key in dictionary is the availability of the task
+        public static (string, bool)[] taskKeys = new (string, bool)[7];
         bool completed;
         private bool firstsuccess;
         int startTime, endTime, startDay, endDay;
         public Building taskLocation;
+        public Building.BuildingType taskBuildingType;
+        public int taskLocPos;
         
         #region Constructors
         public CitizenTask(int taskID, int startTime, int endTime, int startDay, int endDay, int completed, Building taskLocation)
         {
-            (string, bool) task;
-            if (!taskKeys.TryGetValue(taskID, out task))
-            {
-                Console.WriteLine("ERROR! Task #" + taskID + " is not defined");
-            }
             this.startDay = startDay;
             this.endDay = endDay;
             taskName = taskKeys[taskID].Item1;
@@ -95,16 +93,30 @@ namespace src.CitizenLibrary
             {
                 if ((random.Next(1, 100) <= 35 && Game.town.Day > 5 ) || (Game.town.policyImplemented[0] && Game.town.Day > 5)) // PolicyImplementation[1] - All citizens that are infected must self-quarantine
                 {
-                    Debug.Log(citizen.ID+ " contracted COVID and they must self quarantine");
+                    Debug.Log(citizen.ID+ " contracted COVID and they decided self quarantine");
                     TaskID = 5;
                     taskName = taskKeys[TaskID].Item1;
                     endTime = startTime;
                     endDay = startDay + random.Next(5, 7);
                     taskLocation = citizen.homeLocation;
-                    return;
+                    for (int i = 0; i < Game.town.residential.Count; i++)
+                    {
+                        if (taskLocation.Equals(Game.town.residential[i]))
+                        {
+                            Game.town.residential[i].enterBuilding(citizen); // Done like this to get the citizen to enter the reference to the building
+                            return;
+                        }
+                    }
+                    Debug.LogError("Something wrong happened while getting citizen to enter building.");
                 }
             }
-            TaskID = random.Next(0, taskKeys.Count-3);
+
+            if (citizen.Hospitalized)
+            {
+                admitToHospital(random, citizen);
+                return;
+            }
+            TaskID = random.Next(taskKeys.Length-3);
             if (!taskKeys[TaskID].Item2) // Checks if task with specified key is available
             {
                 generateUnhappyTask(random, citizen);
@@ -135,18 +147,12 @@ namespace src.CitizenLibrary
 
             if (citizen.Infected)
             {
-                Debug.LogError(citizen.ID + " decided to " + taskKeys[TaskID].Item1);
+                Debug.LogError(citizen.ID + " decided to " + taskKeys[TaskID].Item1 + ". Expected end time: " + endTime + ". Expected end day: " + endDay);
             }
             else
             {
                 Debug.Log(citizen.ID + " decided to " + taskKeys[TaskID].Item1);
             }
-            
-            int numDays = endTime / 24;
-            
-            endTime %= 24;
-
-            endDay = startDay + numDays;
 
             completed = false;
             
@@ -156,8 +162,24 @@ namespace src.CitizenLibrary
         #region Task Generators
         private void generateSleepTask(Random random, Citizen citizen)
         {
+            if (citizen.Infected)
+            {
+                Debug.LogError("Citizen Generated sleep task");
+            }
             endTime = startTime + random.Next(6, 8);
+            endDay = startDay + endTime / 24;
+            endTime %= 24;
             taskLocation = citizen.homeLocation;
+            for (int i = 0; i < Game.town.residential.Count; i++)
+            {
+                if (taskLocation.Equals(Game.town.residential[i]))
+                {
+                    Game.town.residential[i].enterBuilding(citizen); // Done like this to get the citizen to enter the reference to the building
+                    return;
+                }
+            }
+            Debug.LogError("Something wrong happened while getting citizen to enter building.");
+            Application.Quit();
         }
         
         private void generateRecreationalTask(Random random, Citizen citizen)
@@ -190,6 +212,15 @@ namespace src.CitizenLibrary
             {
                 citizen.homeLocation.enterBuilding(citizen);
                 taskLocation = citizen.homeLocation;
+                for (int i = 0; i < Game.town.residential.Count; i++)
+                {
+                    if (taskLocation.Equals(Game.town.residential[i]))
+                    {
+                        Game.town.residential[i].enterBuilding(citizen); // Done like this to get the citizen to enter the reference to the building
+                        return;
+                    }
+                }
+                Debug.LogError("Something wrong happened while getting citizen to enter building.");
                 return;
             }
             if (citizen.workLocation.enterBuilding(citizen))
@@ -214,6 +245,8 @@ namespace src.CitizenLibrary
                     endTime = startTime + random.Next(2, 4);
                     endDay = startDay + endTime / 24;
                     endTime %= 24;
+                    taskLocPos = pos;
+                    taskBuildingType = Building.BuildingType.Essential;
                     return;
                 }
             }
@@ -226,11 +259,12 @@ namespace src.CitizenLibrary
             endDay = startDay + endTime / 24;
             endTime %= 24;
             taskLocation = citizen.homeLocation;
+            taskLocation.enterBuilding(citizen);
         }
 
         public void generateFavoriteTask(Random random, Citizen citizen)
         {
-            TaskID = random.Next(0, taskKeys.Count - 3);
+            TaskID = random.Next(0, 6-1);
             switch (TaskID)
             {
                 case 0:
@@ -276,20 +310,76 @@ namespace src.CitizenLibrary
             startTime = Game.town.Time;
             startDay = Game.town.Day;
             endTime = startTime;
-            endDay = startDay + (endTime / 24) + random.Next(14, 21);
+            endDay = startDay + (endTime / 24) + random.Next(5, 7);
             if (citizen.RiskofDeath > 35)
             {
-                endDay = startDay + endTime / 24 + random.Next(14, 42);
+                endDay = startDay + endTime / 24 + random.Next(6, 10);
             }
             endTime %= 24;
+            
+            Debug.LogError("Citizen ");
+        }
+
+        private void loadOutofBuilding(Citizen c)
+        {
+            switch (taskLocation.getBuildingType)
+            {
+                case Building.BuildingType.Emergency:
+                    if (taskLocation is Hospital h)
+                    {
+                        for (int i = 0; i < Game.town.emergency.Count; i++)
+                        {
+                            if (h.Equals(Game.town.emergency[i]))
+                            {
+                                firstsuccess = Game.town.emergency[i].exitBuilding(c);
+                            }
+                        }
+                    }
+                    break;
+                case Building.BuildingType.Essential:
+                    if (taskLocation is Supermarket s)
+                    {
+                        for (int i = 0; i < Game.town.essentials.Count; i++)
+                        {
+                            if (s.Equals(Game.town.essentials[i]))
+                            {
+                                firstsuccess = Game.town.essentials[i].exitBuilding(c);
+                            }
+                        }
+                    }
+                    break;
+                case Building.BuildingType.Recreational:
+                    for (int i = 0; i < Game.town.recreational.Count; i++)
+                    {
+                        if (taskLocation.Equals(Game.town.recreational[i]))
+                        {
+                            firstsuccess = Game.town.recreational[i].exitBuilding(c);
+                        }
+                    }
+                    break;
+                case Building.BuildingType.Residential:
+                    for (int i = 0; i < Game.town.residential.Count; i++)
+                    {
+                        if (taskLocation.Equals(Game.town.residential[i]))
+                        {
+                            firstsuccess = Game.town.residential[i].exitBuilding(c);
+                        }
+                    }
+                    break;
+            }
         }
         #endregion
         
         #region Task Update Methods
-        public void Update(Random random, Citizen citizen, Town town) // This method isn't called when the citizen is hospitalized.
+        public void Update(Random random, Citizen citizen) // This method isn't called when the citizen is hospitalized.
         {
-            if (town.Time >= endTime && town.Day >= endDay)
+            if (Game.town.Time >= endTime && Game.town.Day >= endDay)
             {
+                if (citizen.Infected)
+                {
+                    Debug.LogError(citizen.ID + " has completed their task.");
+                }
+
                 completed = true;
                 if (TaskID == 6)
                 {
@@ -297,7 +387,7 @@ namespace src.CitizenLibrary
                 }
                 else
                 {
-                    taskLocation.exitBuilding(citizen);
+                    loadOutofBuilding(citizen);
                 }
             }
             else if (citizen.Hospitalized)

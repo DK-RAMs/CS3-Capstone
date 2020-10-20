@@ -1,20 +1,11 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Timers;
-using System.IO;
-using System.Linq;
-using System.Linq.Expressions;
-using UnityEngine;
-using System.Threading.Tasks;
 using src.SaveLoadLibrary;
 using Debug = UnityEngine.Debug;
 using Random = System.Random;
 
 namespace src.CitizenLibrary {
-    public class Citizen // Still need to finish
+    public class Citizen
     {
 
         string id, name;
@@ -193,23 +184,23 @@ namespace src.CitizenLibrary {
             if (diabetic == 1)
             {
                 healthRisks.Add(HealthRisk.Diabetic);
-                riskofDeath += 10*modifier;
+                riskofDeath += 1*modifier;
             }
             if (respiratory == 1)
             {
                 healthRisks.Add(HealthRisk.Respiratory);
-                riskofDeath += 15*modifier;
+                riskofDeath += 1*modifier;
             }
             if (cardial == 1)
             {
                 healthRisks.Add(HealthRisk.Cardial);
-                riskofDeath += 5 * modifier;
+                riskofDeath += 1 * modifier;
             }
 
             if (age > 45)
             {
                 healthRisks.Add(HealthRisk.Old);
-                riskofDeath += 10 * modifier;
+                riskofDeath += 1 * modifier;
             }
         }
         
@@ -303,6 +294,17 @@ namespace src.CitizenLibrary {
 
             public void initiateTask()
             {
+                switch (currentTask.taskBuildingType)
+                {
+                    case Building.BuildingType.Emergency:
+                        break;
+                    case Building.BuildingType.Essential:
+                        break;
+                    case Building.BuildingType.Recreational:
+                        break;
+                    case Building.BuildingType.Residential:
+                        break;
+                }
                 currentTask.taskLocation.enterBuilding(this);
             }
 
@@ -313,7 +315,7 @@ namespace src.CitizenLibrary {
             {
                 if (!hospitalized) // Checks if citizen is hospitalized (i.e. in hospital)
                 {
-                    if (Game.town.Time % 6 == 0) // Ecery day at 6am, 
+                    if (Game.town.Time % 6 == 0) // Every day at 6am
                     {
                         if (!rebel && Game.town.policyImplemented[1]) // PolicyImplementation[1] - Citizens must wear face masks at all times
                         {
@@ -323,12 +325,12 @@ namespace src.CitizenLibrary {
                         {
                             wearingMask = false;
                         }
-                        if (infected)
+                        if (infected && Game.town.Day > 3)
                         {
                             int hospitalizeRoll = rollDice();
-                            if (hospitalizeRoll <= (riskofDeath+15))
+                            if (hospitalizeRoll <= (riskofDeath))
                             {
-                                Debug.Log("Citizen with id" + id + " has collapsed and has been sent to the hospital");
+                                Debug.LogError("Citizen with id" + id + " has collapsed and has been sent to the hospital");
                                 hospitalized = true;
                             }
                             else if (currentTask.TaskID == 5 && currentTask.EndTime >= Game.town.Time && currentTask.EndDay >= Game.town.Day) // Citizen is cured once they managed to get through 15 days of self quarantine
@@ -336,6 +338,11 @@ namespace src.CitizenLibrary {
                                 infected = false;
                             }
                         }
+                    }
+
+                    if (Game.town.Time % 6 == 1)
+                    {
+                        
                     }
                     
                     updateTask(); // Task must update here. The hospitalization roll needs to be committed before update (since citizen is hospitalized IN the method)
@@ -361,9 +368,10 @@ namespace src.CitizenLibrary {
                     if (Game.town.Time % 12 == 0) // Every 12 hours, a death roll happens, if the citizen gets hit by it, they die
                     {
                         int deathRoll = rollDice();
-                        if (deathRoll <= riskofDeath)
+                        if (deathRoll <= -1)
                         {
                             Game.town.incrementDead();
+                            Debug.LogError("Citizen Died");
                             dead = true;
                         }
                     }
@@ -418,7 +426,7 @@ namespace src.CitizenLibrary {
 
             private void updateTask()
             {
-                currentTask.Update(random, this, Game.town);
+                currentTask.Update(random, this); // Updates citizen's task
                 if (currentTask.Completed)
                 {
                     if (currentTask.Equals(favoriteTask))
@@ -431,7 +439,6 @@ namespace src.CitizenLibrary {
                     }
 
                     currentTask = new CitizenTask(random, this, false); // Generates a new task that isn't a favorite
-                    initiateTask();
                 }
             }
         
