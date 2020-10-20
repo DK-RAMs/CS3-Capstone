@@ -801,8 +801,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 483338021}
+  other1: {fileID: 0}
+  other2: {fileID: 0}
+  other3: {fileID: 0}
+  other4: {fileID: 0}
   isClicked: 0
   isClosed: 0
+  checkIfCovered: 0
 --- !u!61 &26290177
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -6143,8 +6148,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1201453183}
+  other1: {fileID: 0}
+  other2: {fileID: 0}
+  other3: {fileID: 0}
+  other4: {fileID: 0}
   isClicked: 0
   isClosed: 0
+  checkIfCovered: 0
 --- !u!61 &210815926
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -6989,8 +6999,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1890388154}
+  other1: {fileID: 0}
+  other2: {fileID: 0}
+  other3: {fileID: 0}
+  other4: {fileID: 0}
   isClicked: 0
   isClosed: 0
+  checkIfCovered: 0
 --- !u!61 &227771815
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -7345,8 +7360,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 483338021}
+  other1: {fileID: 0}
+  other2: {fileID: 0}
+  other3: {fileID: 0}
+  other4: {fileID: 0}
   isClicked: 0
   isClosed: 0
+  checkIfCovered: 0
 --- !u!61 &241365036
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -7892,8 +7912,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 2124125542}
+  other1: {fileID: 0}
+  other2: {fileID: 0}
+  other3: {fileID: 0}
+  other4: {fileID: 0}
   isClicked: 0
   isClosed: 0
+  checkIfCovered: 0
 --- !u!1 &258902343
 GameObject:
   m_ObjectHideFlags: 0
@@ -8448,8 +8473,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1890388154}
+  other1: {fileID: 0}
+  other2: {fileID: 0}
+  other3: {fileID: 0}
+  other4: {fileID: 0}
   isClicked: 0
   isClosed: 0
+  checkIfCovered: 0
 --- !u!61 &288871748
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -11744,8 +11774,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1890388154}
+  other1: {fileID: 0}
+  other2: {fileID: 0}
+  other3: {fileID: 0}
+  other4: {fileID: 0}
   isClicked: 0
   isClosed: 0
+  checkIfCovered: 0
 --- !u!61 &359297874
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -14236,8 +14271,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 483338021}
+  other1: {fileID: 0}
+  other2: {fileID: 0}
+  other3: {fileID: 0}
+  other4: {fileID: 0}
   isClicked: 0
   isClosed: 0
+  checkIfCovered: 0
 --- !u!61 &433067263
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -15396,6 +15436,7 @@ MonoBehaviour:
   revWaitCounter: 0
   waitTime: 5
   waitCounter: 0
+  money: 0
   healthBar: {fileID: 1313175272}
   revenue: {fileID: 1400210980}
   confirmed: {fileID: 567398322}
@@ -15579,8 +15620,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1201453183}
+  other1: {fileID: 0}
+  other2: {fileID: 0}
+  other3: {fileID: 0}
+  other4: {fileID: 0}
   isClicked: 0
   isClosed: 0
+  checkIfCovered: 0
 --- !u!61 &461331518
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -17659,8 +17705,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1890388154}
+  other1: {fileID: 0}
+  other2: {fileID: 0}
+  other3: {fileID: 0}
+  other4: {fileID: 0}
   isClicked: 0
   isClosed: 0
+  checkIfCovered: 0
 --- !u!61 &502265111
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -19071,8 +19122,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1300626529}
+  other1: {fileID: 0}
+  other2: {fileID: 0}
+  other3: {fileID: 0}
+  other4: {fileID: 0}
   isClicked: 0
   isClosed: 0
+  checkIfCovered: 0
 --- !u!61 &554689631
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -20207,8 +20263,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 483338021}
+  other1: {fileID: 0}
+  other2: {fileID: 0}
+  other3: {fileID: 0}
+  other4: {fileID: 0}
   isClicked: 0
   isClosed: 0
+  checkIfCovered: 0
 --- !u!61 &581600929
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -20606,8 +20667,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1890388154}
+  other1: {fileID: 0}
+  other2: {fileID: 0}
+  other3: {fileID: 0}
+  other4: {fileID: 0}
   isClicked: 0
   isClosed: 0
+  checkIfCovered: 0
 --- !u!61 &595009591
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -20780,8 +20846,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1890388154}
+  other1: {fileID: 0}
+  other2: {fileID: 0}
+  other3: {fileID: 0}
+  other4: {fileID: 0}
   isClicked: 0
   isClosed: 0
+  checkIfCovered: 0
 --- !u!61 &596503769
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -23483,8 +23554,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1300626529}
+  other1: {fileID: 0}
+  other2: {fileID: 0}
+  other3: {fileID: 0}
+  other4: {fileID: 0}
   isClicked: 0
   isClosed: 0
+  checkIfCovered: 0
 --- !u!61 &702275444
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -24574,8 +24650,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 483338021}
+  other1: {fileID: 0}
+  other2: {fileID: 0}
+  other3: {fileID: 0}
+  other4: {fileID: 0}
   isClicked: 0
   isClosed: 0
+  checkIfCovered: 0
 --- !u!61 &775186348
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -27623,8 +27704,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1201453183}
+  other1: {fileID: 0}
+  other2: {fileID: 0}
+  other3: {fileID: 0}
+  other4: {fileID: 0}
   isClicked: 0
   isClosed: 0
+  checkIfCovered: 0
 --- !u!61 &872317063
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -31969,8 +32055,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1201453183}
+  other1: {fileID: 0}
+  other2: {fileID: 0}
+  other3: {fileID: 0}
+  other4: {fileID: 0}
   isClicked: 0
   isClosed: 0
+  checkIfCovered: 0
 --- !u!61 &996463813
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -32462,8 +32553,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 483338021}
+  other1: {fileID: 0}
+  other2: {fileID: 0}
+  other3: {fileID: 0}
+  other4: {fileID: 0}
   isClicked: 0
   isClosed: 0
+  checkIfCovered: 0
 --- !u!61 &1016067923
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -33240,8 +33336,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1201453183}
+  other1: {fileID: 0}
+  other2: {fileID: 0}
+  other3: {fileID: 0}
+  other4: {fileID: 0}
   isClicked: 0
   isClosed: 0
+  checkIfCovered: 0
 --- !u!61 &1036465605
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -34248,8 +34349,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1890388154}
+  other1: {fileID: 0}
+  other2: {fileID: 0}
+  other3: {fileID: 0}
+  other4: {fileID: 0}
   isClicked: 0
   isClosed: 0
+  checkIfCovered: 0
 --- !u!61 &1065096295
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -38228,8 +38334,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1890388154}
+  other1: {fileID: 0}
+  other2: {fileID: 0}
+  other3: {fileID: 0}
+  other4: {fileID: 0}
   isClicked: 0
   isClosed: 0
+  checkIfCovered: 0
 --- !u!61 &1185390757
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -38402,8 +38513,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1890388154}
+  other1: {fileID: 0}
+  other2: {fileID: 0}
+  other3: {fileID: 0}
+  other4: {fileID: 0}
   isClicked: 0
   isClosed: 0
+  checkIfCovered: 0
 --- !u!61 &1189821846
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -39653,8 +39769,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1890388154}
+  other1: {fileID: 0}
+  other2: {fileID: 0}
+  other3: {fileID: 0}
+  other4: {fileID: 0}
   isClicked: 0
   isClosed: 0
+  checkIfCovered: 0
 --- !u!61 &1234771255
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -39939,8 +40060,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1300626529}
+  other1: {fileID: 0}
+  other2: {fileID: 0}
+  other3: {fileID: 0}
+  other4: {fileID: 0}
   isClicked: 0
   isClosed: 0
+  checkIfCovered: 0
 --- !u!61 &1247710112
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -41333,8 +41459,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 2124125542}
+  other1: {fileID: 0}
+  other2: {fileID: 0}
+  other3: {fileID: 0}
+  other4: {fileID: 0}
   isClicked: 0
   isClosed: 0
+  checkIfCovered: 0
 --- !u!61 &1306810772
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -42921,8 +43052,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 483338021}
+  other1: {fileID: 0}
+  other2: {fileID: 0}
+  other3: {fileID: 0}
+  other4: {fileID: 0}
   isClicked: 0
   isClosed: 0
+  checkIfCovered: 0
 --- !u!61 &1346588858
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -44253,8 +44389,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1890388154}
+  other1: {fileID: 0}
+  other2: {fileID: 0}
+  other3: {fileID: 0}
+  other4: {fileID: 0}
   isClicked: 0
   isClosed: 0
+  checkIfCovered: 0
 --- !u!61 &1380982412
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -44977,8 +45118,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1890388154}
+  other1: {fileID: 0}
+  other2: {fileID: 0}
+  other3: {fileID: 0}
+  other4: {fileID: 0}
   isClicked: 0
   isClosed: 0
+  checkIfCovered: 0
 --- !u!61 &1400159773
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -45527,8 +45673,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1890388154}
+  other1: {fileID: 0}
+  other2: {fileID: 0}
+  other3: {fileID: 0}
+  other4: {fileID: 0}
   isClicked: 0
   isClosed: 0
+  checkIfCovered: 0
 --- !u!61 &1403667868
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -52041,8 +52192,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1890388154}
+  other1: {fileID: 0}
+  other2: {fileID: 0}
+  other3: {fileID: 0}
+  other4: {fileID: 0}
   isClicked: 0
   isClosed: 0
+  checkIfCovered: 0
 --- !u!61 &1563576521
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -54450,8 +54606,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1890388154}
+  other1: {fileID: 0}
+  other2: {fileID: 0}
+  other3: {fileID: 0}
+  other4: {fileID: 0}
   isClicked: 0
   isClosed: 0
+  checkIfCovered: 0
 --- !u!61 &1625771755
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -56236,8 +56397,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1201453183}
+  other1: {fileID: 0}
+  other2: {fileID: 0}
+  other3: {fileID: 0}
+  other4: {fileID: 0}
   isClicked: 0
   isClosed: 0
+  checkIfCovered: 0
 --- !u!61 &1679901853
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -57417,8 +57583,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 483338021}
+  other1: {fileID: 0}
+  other2: {fileID: 0}
+  other3: {fileID: 0}
+  other4: {fileID: 0}
   isClicked: 0
   isClosed: 0
+  checkIfCovered: 0
 --- !u!61 &1719991166
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -57701,6 +57872,7 @@ GameObject:
   - component: {fileID: 1736945660}
   - component: {fileID: 1736945659}
   - component: {fileID: 1736945658}
+  - component: {fileID: 1736945661}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -57756,6 +57928,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1736945661
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1736945657}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b44ac338f714152b62c669b3f4a41ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1740837730
 GameObject:
   m_ObjectHideFlags: 0
@@ -58744,7 +58928,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   textBox: {fileID: 1103507691}
   dayBox: {fileID: 202965792}
-  paused: 0
 --- !u!1 &1774238241
 GameObject:
   m_ObjectHideFlags: 0
@@ -63804,8 +63987,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 483338021}
+  other1: {fileID: 0}
+  other2: {fileID: 0}
+  other3: {fileID: 0}
+  other4: {fileID: 0}
   isClicked: 0
   isClosed: 0
+  checkIfCovered: 0
 --- !u!61 &1944559357
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -64579,8 +64767,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1300626529}
+  other1: {fileID: 0}
+  other2: {fileID: 0}
+  other3: {fileID: 0}
+  other4: {fileID: 0}
   isClicked: 0
   isClosed: 0
+  checkIfCovered: 0
 --- !u!1 &1964665789
 GameObject:
   m_ObjectHideFlags: 0
@@ -68872,8 +69065,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1890388154}
+  other1: {fileID: 0}
+  other2: {fileID: 0}
+  other3: {fileID: 0}
+  other4: {fileID: 0}
   isClicked: 0
   isClosed: 0
+  checkIfCovered: 0
 --- !u!61 &2079145572
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -69973,8 +70171,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1201453183}
+  other1: {fileID: 0}
+  other2: {fileID: 0}
+  other3: {fileID: 0}
+  other4: {fileID: 0}
   isClicked: 0
   isClosed: 0
+  checkIfCovered: 0
 --- !u!61 &2104541409
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -70969,8 +71172,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1890388154}
+  other1: {fileID: 0}
+  other2: {fileID: 0}
+  other3: {fileID: 0}
+  other4: {fileID: 0}
   isClicked: 0
   isClosed: 0
+  checkIfCovered: 0
 --- !u!61 &2140882679
 BoxCollider2D:
   m_ObjectHideFlags: 0
