@@ -106,7 +106,6 @@ namespace src.CitizenLibrary
         #region Building Update Methods
         public void Update()
         {
-            Debug.Log("Updating " +ID);
             if (containsInfected)
             {
                 occupantAccessLock.Wait();
@@ -170,7 +169,6 @@ namespace src.CitizenLibrary
                 numOccupants++;
                 if (citizen.Infected)
                 {
-                    Debug.Log("Building contains infected individual");
                     numInfected++;
                     containsInfected = true;
                 }
@@ -183,7 +181,6 @@ namespace src.CitizenLibrary
                 numOccupants++;
                 if (citizen.Infected)
                 {
-                    Debug.Log("Building contains infected individual");
                     numInfected++;
                     containsInfected = true;
                     exposureFactor += 5;
@@ -209,7 +206,6 @@ namespace src.CitizenLibrary
                 }
                 if (citizen.Infected)
                 {
-                    Debug.Log("Building contains infected individual");
                     numInfected++;
                     containsInfected = true;
                 }
@@ -250,7 +246,6 @@ namespace src.CitizenLibrary
             if (citizen.Infected)
             {
                 numInfected--;
-                Debug.Log("Infected citizen left the building");
                 if (numInfected <= 0)
                 {
                     containsInfected = false;
@@ -281,7 +276,6 @@ namespace src.CitizenLibrary
             }
             else
             {
-                Debug.Log("The upgrade selected can't be applied to this building");
             }
         }
 

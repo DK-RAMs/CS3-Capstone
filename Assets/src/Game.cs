@@ -55,7 +55,7 @@ namespace src
             GAMESTART = true;
             town.Start(Version, numCitizenThreads);
             Building.buildingTimer.Start();
-            town.startCitizenThreads();
+            //town.startCitizenThreads();
         }
 
         public void Update()

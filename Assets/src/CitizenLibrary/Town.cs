@@ -140,10 +140,8 @@ namespace src.CitizenLibrary
         #region Game State Methods
         public void Start(Game.GameVersion version, int numCitizenThreads)
         {
-            Debug.Log("Initializing town...");
             loadBuildings(version);
             initializeCitizens(version);
-            initializeBuildingThreads(); // Initializes building threads
             day = 1;
             CreateCitizenThreads(numCitizenThreads);
             
@@ -161,12 +159,10 @@ namespace src.CitizenLibrary
         {
             if (CITIZEN_START_COUNT % numCitizenThreads != 0)
             {
-                Debug.Log("An odd number of threads have been selected. Finding best minimal number of threads to generate... (Note that more than 1 thread is generated)");
                 for (int i = 1; i < CITIZEN_START_COUNT + 1; i++)
                 {
-                    if (CITIZEN_START_COUNT % i == 0 && i > 1)
+                    if (CITIZEN_START_COUNT % i == 0)
                     {
-                        Debug.Log("Ideal number of Threads found. Total citizen threads: " + i);
                         numCitizenThreads = i;
                         break;
                     }
@@ -233,14 +229,24 @@ namespace src.CitizenLibrary
             int totalRebels = 0;
             int numInfected = 0;
             int numDead = 0;
-            
-        
-            for (int i = 0; i < citizenWorkerThreads.Length; i++)
+            for (int i = 0; i < CitizenWorkerThread.citizens.Count; i++)
             {
-                happinessavg += citizenWorkerThreads[i].AverageHappiness();
-                totalRebels += citizenWorkerThreads[i].NumRebels;
-                numInfected += citizenWorkerThreads[i].NumInfected;
-                totalRebels += citizenWorkerThreads[i].NumRebels;
+                CitizenWorkerThread.citizens[i].Update();
+                if (CitizenWorkerThread.citizens[i].Rebel)
+                {
+                    totalRebels++;
+                }
+
+                if (CitizenWorkerThread.citizens[i].Infected)
+                {
+                    numInfected++;
+                }
+
+                if (CitizenWorkerThread.citizens[i].Dead)
+                {
+                    numDead++;
+                }
+                happinessavg += CitizenWorkerThread.citizens[i].Happiness;
             }
             happinessavg /= (double)citizenWorkerThreads.Length;
             averageHappiness = happinessavg;
@@ -410,8 +416,12 @@ namespace src.CitizenLibrary
                         CitizenWorkerThread.citizens.Add(new Citizen());// Citizen is generated here. Need to figure out how to generate the citizen's tasks though
                     }
                     Random random = new Random();
-                    int infectedNew = random.Next(CitizenCount-1);
-                    CitizenWorkerThread.citizens[infectedNew].rollHealthEvent(100);
+                    for (int i = 0; i < 25; i++)
+                    {
+                        int infectedNew = random.Next(CitizenCount - 1);
+                        CitizenWorkerThread.citizens[infectedNew].rollHealthEvent(100);
+                    }
+
                     for (int i = 0; i < CITIZEN_START_COUNT; i++)
                     {
                         CitizenWorkerThread.citizens[i].initiateTask();

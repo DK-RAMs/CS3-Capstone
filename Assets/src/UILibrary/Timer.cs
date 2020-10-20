@@ -24,17 +24,6 @@ public class Timer : MonoBehaviour
         {
             textBox.text = Game.town.Time + ":00";
         }
-        
-        /*
-        if (seconds.Contains(","))
-		{
-            textBox.text = minutes + ":" + seconds.Remove(1);
-        }
-		else
-		{
-            textBox.text = minutes + ":" + seconds;
-        }*/
-       
         dayBox.text = "Day " + Game.town.Day;
         
     }

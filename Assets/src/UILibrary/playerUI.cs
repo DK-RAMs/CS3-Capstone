@@ -33,8 +33,6 @@ namespace src.UILibrary
             healthBar.setMaxHealth(maxHealth);
             revenue.text = "R " + 0;
             money = 0;
-            waitCounter = waitTime;
-            revWaitCounter = revWait;
             levelIndicator.text = "LEVEL 5";
         }
 
@@ -50,11 +48,6 @@ namespace src.UILibrary
 
             revenue.text = "R" + money;
             
-
-            if (revWaitCounter < 0)
-            {
-                revWaitCounter = revWait;
-            }
         }
 
         //reduce the number of people without the virus

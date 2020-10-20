@@ -330,7 +330,6 @@ namespace src.CitizenLibrary {
                             int hospitalizeRoll = rollDice();
                             if (hospitalizeRoll <= (riskofDeath))
                             {
-                                Debug.LogError("Citizen with id" + id + " has collapsed and has been sent to the hospital");
                                 hospitalized = true;
                             }
                             else if (currentTask.TaskID == 5 && currentTask.EndTime >= Game.town.Time && currentTask.EndDay >= Game.town.Day) // Citizen is cured once they managed to get through 15 days of self quarantine
@@ -456,7 +455,6 @@ namespace src.CitizenLibrary {
                 int infectRoll = rollDice();
                 if (infectRoll <= chance)
                 {
-                    Debug.LogError(ID + " has been infected with the disease");
                     infected = true;
                 }
             }

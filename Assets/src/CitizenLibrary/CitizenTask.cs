@@ -93,7 +93,6 @@ namespace src.CitizenLibrary
             {
                 if ((random.Next(1, 100) <= 35 && Game.town.Day > 5 ) || (Game.town.policyImplemented[0] && Game.town.Day > 5)) // PolicyImplementation[1] - All citizens that are infected must self-quarantine
                 {
-                    Debug.Log(citizen.ID+ " contracted COVID and they decided self quarantine");
                     TaskID = 5;
                     taskName = taskKeys[TaskID].Item1;
                     endTime = startTime;
@@ -107,7 +106,6 @@ namespace src.CitizenLibrary
                             return;
                         }
                     }
-                    Debug.LogError("Something wrong happened while getting citizen to enter building.");
                 }
             }
 
@@ -145,15 +143,6 @@ namespace src.CitizenLibrary
                     break;
             }
 
-            if (citizen.Infected)
-            {
-                Debug.LogError(citizen.ID + " decided to " + taskKeys[TaskID].Item1 + ". Expected end time: " + endTime + ". Expected end day: " + endDay);
-            }
-            else
-            {
-                Debug.Log(citizen.ID + " decided to " + taskKeys[TaskID].Item1);
-            }
-
             completed = false;
             
         }
@@ -162,10 +151,6 @@ namespace src.CitizenLibrary
         #region Task Generators
         private void generateSleepTask(Random random, Citizen citizen)
         {
-            if (citizen.Infected)
-            {
-                Debug.LogError("Citizen Generated sleep task");
-            }
             endTime = startTime + random.Next(6, 8);
             endDay = startDay + endTime / 24;
             endTime %= 24;
@@ -178,7 +163,6 @@ namespace src.CitizenLibrary
                     return;
                 }
             }
-            Debug.LogError("Something wrong happened while getting citizen to enter building.");
             Application.Quit();
         }
         
@@ -220,7 +204,6 @@ namespace src.CitizenLibrary
                         return;
                     }
                 }
-                Debug.LogError("Something wrong happened while getting citizen to enter building.");
                 return;
             }
             if (citizen.workLocation.enterBuilding(citizen))
@@ -290,7 +273,6 @@ namespace src.CitizenLibrary
                     taskLocation = citizen.homeLocation;
                     break;
             }
-            Debug.Log(citizen.ID + "'s favorite task is to " + taskKeys[TaskID].Item1);
         }
         
         private void admitToHospital(Random random, Citizen citizen)
@@ -317,7 +299,6 @@ namespace src.CitizenLibrary
             }
             endTime %= 24;
             
-            Debug.LogError("Citizen ");
         }
 
         private void loadOutofBuilding(Citizen c)
@@ -375,11 +356,6 @@ namespace src.CitizenLibrary
         {
             if (Game.town.Time >= endTime && Game.town.Day >= endDay)
             {
-                if (citizen.Infected)
-                {
-                    Debug.LogError(citizen.ID + " has completed their task.");
-                }
-
                 completed = true;
                 if (TaskID == 6)
                 {
