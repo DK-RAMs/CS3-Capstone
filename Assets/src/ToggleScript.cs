@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 
 
-namespace srd
+namespace src
 {
     public class ToggleScript : MonoBehaviour
     {

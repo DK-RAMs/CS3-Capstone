@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using src.NewspaperLibrary;
 
 namespace src.UILibrary
 {
@@ -18,9 +19,10 @@ namespace src.UILibrary
             newsText = GameObject.Find("Canvas/news")
                 .GetComponent<Text>(); // find the correct component and make it a text component, i think? - Z
             var count = 0; // counter for getting the correct article - Z
+            
             foreach (var i in Newspaper.content)
             {
-                if (count == Newspaper.id)
+                if (count == Newspaper.pos)
                 {
                     newsText.text = i; // set the text equal to this article once count is equal to the id - Z
                     break;
@@ -36,7 +38,7 @@ namespace src.UILibrary
             var count = 0; // counter for getting the correct article - Z
             foreach (var i in Newspaper.content)
             {
-                if (count == Newspaper.id)
+                if (count == Newspaper.pos)
                 {
                     newsText.text = i; // set the text equal to this article once count is equal to the id - Z
                     break;

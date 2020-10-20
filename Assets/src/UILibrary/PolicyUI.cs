@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using src.CitizenLibrary;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -70,8 +71,7 @@ namespace src.UILibrary
         //display the various stats of the town to the player
         public void showstats()
         {
-            stats.text = "Population: " + playerUI.maxHealth + "\nConfirmed cases:" + playerUI.cases + "\nRecovered: " +
-                         playerUI.nowImmune + "\nDead: " + playerUI.dead;
+            stats.text = "Population: " + Town.CitizenCount + "\nConfirmed cases:" + Game.town.TotalInfected + "\nDead: " + Game.town.TotalDead;
         }
 
         //reduce the current level

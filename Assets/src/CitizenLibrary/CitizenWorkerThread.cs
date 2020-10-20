@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿﻿using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
@@ -19,6 +19,7 @@ namespace src.CitizenLibrary
         private int lo, hi, numRebels, numInfected, numDead, time;
         private bool happinessUpdated;
         private double averageHappiness;
+        private SemaphoreSlim CitizenAccessor;
 
         public CitizenWorkerThread(int lo, int hi, bool happinessUpdated)
         {
@@ -42,16 +43,20 @@ namespace src.CitizenLibrary
             {
                 if (time != Game.town.Time)
                 {
+                    Debug.Log("Citizen thread managing citizens " + lo + " to " + hi + " is Updating...");
                     for (int i = lo; i < hi; i++)
                     {
-                        while (Game.GAMEPAUSED)
+                        if (Game.GAMEPAUSED)
                         {
-                            Debug.Log("Game is paused");
-                            if (Game.GAMEQUIT) // Game Quit somewhere dude
+                            Debug.Log("Game is Paused");
+                            while (Game.GAMEPAUSED)
                             {
-                                return;
+                                if (Game.GAMEQUIT) // Game Quit somewhere dude
+                                {
+                                    return;
+                                }
                             }
-
+                            Debug.Log("Game has been resumed");
                         }
 
                         if (Game.GAMEQUIT)
@@ -66,35 +71,36 @@ namespace src.CitizenLibrary
 
                         if (Game.town.Time == 0 && !happinessUpdated)
                         {
+                            double happiness = 0;
                             averageHappiness = 0;
                             happinessUpdated = true;
                             for (int j = lo; j < hi; j++)
                             {
                                 if (!citizens[i].Dead)
                                 {
-                                    averageHappiness += citizens[i].Happiness;
+                                    happiness += citizens[i].Happiness;
                                 }
                             }
 
+                            averageHappiness = happiness;
+
                             Interlocked.Exchange(ref this.averageHappiness, averageHappiness /= (hi - lo));
                         }
-
                         if (Game.town.Time == 1 && happinessUpdated)
                         {
                             Debug.Log("Happiness updated");
                             happinessUpdated = false;
                         }
+                        Debug.Log("Citizen thread managing citizens " + lo + " to " + hi + " has finished updating");
                     }
+                    time = Game.town.Time;
+                    
                 }
-                time = Game.town.Time;
             }
         }
 
         #endregion
 
-        #region Save State
-
-        #endregion
         
         #region Getters and Setters
 

@@ -90,10 +90,7 @@ namespace src.CitizenLibrary
             occupantAccessLock.Release();
             
             queueSemaphore.Wait();
-            if (queueOutside.Contains(citizen)) // Checks if citizen is in the queue
-            {
-                queueOutside.Remove(citizen);
-            }
+            queueOutside.Remove(citizen);// Removes citizen from the queue
             // All locks are released once all operations are completed.
             entranceLock.Release(); 
             queueSemaphore.Release();

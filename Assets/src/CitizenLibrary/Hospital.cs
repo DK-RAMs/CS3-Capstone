@@ -1,4 +1,6 @@
 using System.Collections.ObjectModel;
+using src.SaveLoadLibrary;
+using UnityEngine;
 
 namespace src.CitizenLibrary
 {
@@ -12,6 +14,20 @@ namespace src.CitizenLibrary
             citizensInBed = new Collection<Citizen>();
             this.numBeds = numBeds;
             this.overloaded = overloaded;
+        }
+
+        public Hospital(BuildingData b) : base(b)
+        {
+            if (b is HospitalData h)
+            {
+                numBeds = h.NumBeds;
+                overloaded = h.Overloaded;
+                citizensInBed = new Collection<Citizen>();
+            }
+            else
+            {
+                Debug.Log("ERROR! The program tried to create a hospital using invalid data!");
+            }
         }
 
         public void checkinPatient(Citizen citizen)

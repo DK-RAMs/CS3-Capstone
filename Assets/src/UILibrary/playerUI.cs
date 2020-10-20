@@ -15,9 +15,7 @@ namespace src.UILibrary
         public float revWaitCounter;
         public float waitTime = 5f; // time till infection stats update
         public float waitCounter;
-        public static int cases = 1;
-        public static int money = 500000;
-        public static int nowImmune = 0; // number of recovered people
+        public long money;
         public static int dead = 0;
         public static int score = 0; //player score
 
@@ -33,7 +31,8 @@ namespace src.UILibrary
         {
             currentHealth = maxHealth;
             healthBar.setMaxHealth(maxHealth);
-            revenue.text = "R 500000";
+            revenue.text = "R " + 0;
+            money = 0;
             waitCounter = waitTime;
             revWaitCounter = revWait;
             levelIndicator.text = "LEVEL 5";
@@ -47,41 +46,13 @@ namespace src.UILibrary
             waitCounter -= Time.deltaTime;
             revWaitCounter -= Time.deltaTime;
 
-            //check the implemented policy and its rate of infection
-            if (waitCounter < 0)
-            {
-                switch (PolicyUI.level)
-                {
-                    case 1:
-                        takeDamage(3);
-                        break;
-                    case 2:
-                        takeDamage(2);
-                        break;
-                    case 3:
-                        takeDamage(1);
-                        break;
-                    case 4:
-                        takeDamage(1);
-                        break;
-                    case 5:
-                        takeDamage(1);
-                        break;
-                }
+            money = Game.town.Money;
 
-                waitCounter = waitTime;
-            }
-
-            if (UpgradeUI.bought == true)
-            {
-                money -= UpgradeUI.cost;
-                revenue.text = "R " + (money);
-
-            }
+            revenue.text = "R" + money;
+            
 
             if (revWaitCounter < 0)
             {
-                getMoney();
                 revWaitCounter = revWait;
             }
         }
@@ -91,21 +62,9 @@ namespace src.UILibrary
         {
             currentHealth -= damage;
             healthBar.setHealth(currentHealth);
-            cases += damage;
-            confirmed.text = "Confirmed Cases: " + cases;
+            confirmed.text = "Confirmed Cases: " + Game.town.TotalInfected;
         }
 
         //count the number of people who have recovered from the virus
-        void recoveredCount(int people)
-        {
-            recovered.text = "Recovered: " + people;
-        }
-
-        //increase revenue based on the current policy level
-        void getMoney()
-        {
-            money = money + (100000 / PolicyUI.level);
-            revenue.text = "R " + money;
-        }
     }
 }

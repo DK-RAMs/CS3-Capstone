@@ -10,26 +10,11 @@ namespace src.UILibrary
 
         public static int cost = 300000;
 
-        // Start is called before the first frame update
-        void Start()
-        {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-            if (bought == true)
-            {
-                //playerUI.money -= cost;
-                bought = false;
-            }
-        }
-
         public void buy()
         {
             if (cost <= Game.town.Money)
             {
+                Game.town.processDeltaMoney(cost*-1);
                 bought = true;
             }
         }

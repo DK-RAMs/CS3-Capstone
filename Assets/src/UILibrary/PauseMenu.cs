@@ -7,7 +7,6 @@ namespace src.UILibrary
 {
     public class PauseMenu : MonoBehaviour
     {
-        public static bool GameIsPaused = false; // game is currently not paused
 
         public GameObject pauseMenuUI;
 
@@ -17,7 +16,7 @@ namespace src.UILibrary
             if (Input.GetKeyDown(KeyCode.Escape))
             {
 
-                if (GameIsPaused)
+                if (Game.GAMEPAUSED)
                 {
                     Resume(); // resume while game is not paused
 
@@ -34,7 +33,7 @@ namespace src.UILibrary
         {
             pauseMenuUI.SetActive(true);
             Time.timeScale = 0f;
-            GameIsPaused = true;
+            Game.GAMEPAUSED = true;
             Navigation.isClicked = true;
         }
 
@@ -43,7 +42,7 @@ namespace src.UILibrary
         {
             pauseMenuUI.SetActive(false);
             Time.timeScale = 1f;
-            GameIsPaused = false;
+            Game.GAMEPAUSED = false;
             Navigation.isClicked = false;
         }
 

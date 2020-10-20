@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using src.SaveLoadLibrary;
 using UnityEngine;
 using src.UILibrary;
 
@@ -13,13 +14,10 @@ namespace src.CitizenLibrary
 
         public HealthBar healthBar;
 
-        public Town town;
 
         // Start is called before the first frame update
         void Start()
         {
-            Game.waitTownInitialization();
-
             currentHealth = maxHealth;
             healthBar.setMaxHealth(maxHealth);
         }
@@ -29,7 +27,8 @@ namespace src.CitizenLibrary
         {
             if (Town.happinessUpdated)
             {
-                healthBar.setHealth((int)town.AverageHappiness);
+                int health = (Town.CitizenCount - Game.town.TotalInfected - Game.town.TotalDead)/Town.CitizenCount*100; // Defines the health
+                healthBar.setHealth(health);
             }
         }
         

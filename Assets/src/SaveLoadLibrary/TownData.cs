@@ -7,7 +7,8 @@ namespace src.SaveLoadLibrary // Work on this
     {
         private string id, mayor;
         private int day, time, totalInfected;
-        private double money, baseDeltaHappiness, favoriteMaidifier;
+        private double baseDeltaHappiness, favoriteMaidifier;
+        private long money;
         private long elapsedTime;
         private bool[] policyImplementations;
         private string[] buildingIDs;
@@ -27,14 +28,6 @@ namespace src.SaveLoadLibrary // Work on this
             {
                 policyImplementations[i] = t.PolicyImplementation[i];
             }
-
-            buildingIDs = new string[t.Buildings.Count];
-            int counter = 0;
-            foreach (Building b in t.Buildings)
-            {
-                buildingIDs[counter] = b.ID;
-                counter++;
-            }
         }
         
         #region getters & setters
@@ -49,7 +42,7 @@ namespace src.SaveLoadLibrary // Work on this
 
         public int TotalInfected => totalInfected;
 
-        public double Money => money;
+        public long Money => money;
 
         public double BaseDeltaHappiness => baseDeltaHappiness;
 
@@ -58,8 +51,6 @@ namespace src.SaveLoadLibrary // Work on this
         public long ElapsedTime => elapsedTime;
 
         public bool[] PolicyImplementations => policyImplementations;
-
-        public string[] BuildingIDs => buildingIDs;
         
 
         #endregion

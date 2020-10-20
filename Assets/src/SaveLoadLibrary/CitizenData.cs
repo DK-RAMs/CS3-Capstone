@@ -7,7 +7,7 @@ namespace src.SaveLoadLibrary
     public class CitizenData
     {
         private string id, name, currentTaskLoc, favoriteTaskLoc, homeLocation, workLocation;
-        private int age, endTime, endDay, currentTaskID;
+        private int age, endTime, endDay, currentTaskID, favoriteTaskID;
         private double happiness, riskofDeath;
         private bool rebel, hospitalized, dead, infected, wearingMask, taskCompleted, firstsuccess;
 
@@ -23,6 +23,7 @@ namespace src.SaveLoadLibrary
             endTime = c.CurrentTask.EndTime;
             endDay = c.CurrentTask.EndDay;
             currentTaskID = c.CurrentTask.TaskID;
+            favoriteTaskID = c.FavoriteTask.TaskID;
             happiness = c.Happiness;
             riskofDeath = c.RiskofDeath;
             rebel = c.Rebel;
@@ -45,6 +46,8 @@ namespace src.SaveLoadLibrary
         public string HomeLocation => homeLocation;
 
         public string WorkLocation => workLocation;
+
+        public int FavoriteTaskId => favoriteTaskID;
 
         public int Age => age;
 

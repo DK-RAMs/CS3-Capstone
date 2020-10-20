@@ -9,32 +9,12 @@ public class Timer : MonoBehaviour
 {
     public TextMeshProUGUI textBox;
     public TextMeshProUGUI dayBox;
-    private float startTime;
-    private int day;
-    void Start()
-    {
-        startTime = Time.time;
-        day = Game.town.Day;
-    }
 
     void Update() {
         while (Game.GAMEPAUSED)
 		{
             
 		}
-
-        float t = Time.time - startTime;
-
-        string minutes = ((int)t / 60).ToString();
-        string seconds = (t % 60).ToString("f2");
-        
-
-        int m = (int)t / 60;
-        if (m == 5)
-		{
-            startTime = Time.time;
-            day += ((int)t / 300);
-        }
 
         if (Game.town.Time < 10)
         {

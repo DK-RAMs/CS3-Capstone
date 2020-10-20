@@ -93,13 +93,13 @@ namespace src.CitizenLibrary
             startDay = Game.town.Day;
             if (citizen.Infected && !citizen.Rebel) // Checks if an infected citizen is a rebel. If not, they will self quarantine
             {
-                if (random.Next(1, 100) <= 50 || Game.town.PolicyImplementation[0]) // PolicyImplementation[1] - All citizens that are infected must self-quarantine
+                if ((random.Next(1, 100) <= 35 && Game.town.Day > 5 ) || (Game.town.policyImplemented[0] && Game.town.Day > 5)) // PolicyImplementation[1] - All citizens that are infected must self-quarantine
                 {
-                    Debug.Log("Citizen contracted COVID and they must self quarantine");
+                    Debug.Log(citizen.ID+ " contracted COVID and they must self quarantine");
                     TaskID = 5;
                     taskName = taskKeys[TaskID].Item1;
-                    endTime = startTime + 2;
-                    endDay = startDay + random.Next(12, 14);
+                    endTime = startTime;
+                    endDay = startDay + random.Next(5, 7);
                     taskLocation = citizen.homeLocation;
                     return;
                 }
@@ -133,6 +133,15 @@ namespace src.CitizenLibrary
                     break;
             }
 
+            if (citizen.Infected)
+            {
+                Debug.LogError(citizen.ID + " decided to " + taskKeys[TaskID].Item1);
+            }
+            else
+            {
+                Debug.Log(citizen.ID + " decided to " + taskKeys[TaskID].Item1);
+            }
+            
             int numDays = endTime / 24;
             
             endTime %= 24;
@@ -140,6 +149,7 @@ namespace src.CitizenLibrary
             endDay = startDay + numDays;
 
             completed = false;
+            
         }
         #endregion
         
@@ -246,6 +256,7 @@ namespace src.CitizenLibrary
                     taskLocation = citizen.homeLocation;
                     break;
             }
+            Debug.Log(citizen.ID + "'s favorite task is to " + taskKeys[TaskID].Item1);
         }
         
         private void admitToHospital(Random random, Citizen citizen)

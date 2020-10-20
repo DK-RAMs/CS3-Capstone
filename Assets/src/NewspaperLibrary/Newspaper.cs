@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿using System;
  using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,33 +10,27 @@ using System.IO;
      public class Newspaper : MonoBehaviour // Still need to do
      {
          // The script will be linked to the newspaper. When a new article is selected, 
-         public static Text content; // list of strings to store all the different articles, so only have to read file once at start of game seeing as article content and size would only change with an update on our side, and not mid game - Z
-         public static bool newspaperReady = false;
+         public static List<string> content; // list of strings to store all the different articles, so only have to read file once at start of game seeing as article content and size would only change with an update on our side, and not mid game - Z
          private static NewspaperEntry newspaperEvent;
-         private static int pos;
+         public static int pos;
 
          public static NewspaperEntry[] events;
-
+         
          public void Start()
-         { 
-             while (!Game.TOWNREADY)
-             {
-                 
-             }
-             
+         {
+              
              if (Game.ISNEWGAME)
              {
                  newspaperEvent = events[0];
              }
              else
              {
-                 
              }
          }
 
 
 
-         /*
+         
          public void readArticles()
          {
              // side note, should I make a method writeArticle which adds one to the bottom of the text file so we can just do it from command line? Would that work? - Z
@@ -73,7 +67,7 @@ using System.IO;
              }
 
              //content.ForEach(System.Console.WriteLine); // testing to make sure read them all in. not working. how the fuck do i do this in unity - Z
-         }*/
+         }
          
          public static void triggerNewspaperEvent(int id)
          {

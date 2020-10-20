@@ -18,18 +18,19 @@ namespace src.CitizenLibrary
         protected int numWithNoMask, numInfected;
         protected Collection<Upgrade> availableUpgrades;
         protected Collection<Upgrade> buildingUpgrades;
+        public static Collection<Upgrade> upgrades = new Collection<Upgrade>();
         protected double exposureFactor;
         protected int maxOccupants, numOccupants;
         protected SemaphoreSlim entranceLock, occupantAccessLock;
         protected bool open, containsInfected;
-        protected Random random;
+        protected static Random random = new Random();
         public static Stopwatch buildingTimer = new Stopwatch();
         public static int buildingUpdateTimer = 2500 / 4;
 
         public enum BuildingType
         {
             Recreational = 0, // Each building UI object will have a building
-            Supermarket = 1,
+            Essential = 1,
             Emergency = 2,
             Residential = 3
         };
@@ -47,25 +48,72 @@ namespace src.CitizenLibrary
             entranceLock = new SemaphoreSlim(1);
             occupantAccessLock = new SemaphoreSlim(1);
             occupants = new HashSet<Citizen>();
-            random = new Random();
             numInfected = 0;
         }
 
         public Building(BuildingData b)
         {
+            id = b.ID;
+            maxOccupants = b.MaxOccupants;
+            exposureFactor = b.ExposureFactor;
+            open = b.Open;
+            entranceLock = new SemaphoreSlim(1);
+            occupantAccessLock = new SemaphoreSlim(1);
+            occupants = new HashSet<Citizen>();
+            buildingTimer.Start();
+            while (buildingTimer.ElapsedMilliseconds < b.ElapsedTime)  continue;
+            buildingTimer.Stop();
+            switch (b.BuildingType)
+            {
+                case 0:
+                    buildingType = BuildingType.Recreational;
+                    break;
+                case 1:
+                    buildingType = BuildingType.Essential;
+                    break;
+                case 2:
+                    buildingType = BuildingType.Emergency;
+                    break;
+                case 3:
+                    buildingType = BuildingType.Residential;
+                    break;
+            }
             
+            // Loads building upgrades from some place
+            for (int i = 0; i < b.AvailableUpgradeIDs.Length; i++)
+            {
+                foreach (Upgrade u in upgrades)
+                {
+                    if (u.upgradeID.Equals(b.AvailableUpgradeIDs[i]))
+                    {
+                        availableUpgrades.Add(u);
+                    }
+                }
+            }
+            for (int i = 0; i < b.BuildingUpgradeIDs.Length; i++)
+            {
+                foreach (Upgrade u in upgrades)
+                {
+                    if (u.upgradeID.Equals(b.BuildingUpgradeIDs[i]))
+                    {
+                        buildingUpgrades.Add(u);
+                    }
+                }
+            }
         }
         
         #endregion
+        
+        #region Building Update Methods
         public void Update()
         {
             if (containsInfected)
             {
+                Debug.LogError("Spread check at " + id);
                 occupantAccessLock.Wait();
                 int spreadDisease = random.Next(0, 100);
                 if (spreadDisease <= exposureFactor) // If spread check succeeds, a new citizen is infected
                 {
-                    Debug.Log("Managed to infect someone");
                     int infect = random.Next(occupants.Count-1);
                     if (!occupants.ElementAt(infect).Infected)
                     {
@@ -77,6 +125,8 @@ namespace src.CitizenLibrary
             }
         }
         
+        #endregion
+        
         #region getters & setters
         private void setBuildingType(int buildingType)
         {
@@ -86,7 +136,7 @@ namespace src.CitizenLibrary
                     this.buildingType = BuildingType.Recreational;
                     break;
                 case 1:
-                    this.buildingType = BuildingType.Supermarket;
+                    this.buildingType = BuildingType.Essential;
                     break;
                 case 2:
                     this.buildingType = BuildingType.Emergency;
@@ -106,8 +156,6 @@ namespace src.CitizenLibrary
         public Collection<Upgrade> BuildingUpgrades => buildingUpgrades;
 
         public bool Open => open;
-
-        public long ElapsedTime => buildingTimer.ElapsedMilliseconds;
 
         public string ID => id;
         #endregion

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
@@ -11,11 +12,19 @@ namespace src.SaveLoadLibrary
     {
         public static void SaveTown(Town town)
         {
-            BinaryFormatter formatter = new BinaryFormatter();
-            string loc = Application.persistentDataPath + "/" + town.ID+ "/townData.soe";
-            FileStream stream = new FileStream(loc, FileMode.Create);
-            TownData T = new TownData(town);
-            stream.Close();
+            try
+            {
+                BinaryFormatter formatter = new BinaryFormatter();
+                string loc = Application.persistentDataPath + "/" + town.ID + "/townData.soe";
+                FileStream stream = new FileStream(loc, FileMode.Create);
+                TownData T = new TownData(town);
+                formatter.Serialize(stream, T);
+                stream.Close();
+            }
+            catch (Exception e)
+            {
+                Debug.Log("An error occurred while trying to serialize an object");
+            }
         }
 
         public static Town LoadTown(string townID)
@@ -38,22 +47,20 @@ namespace src.SaveLoadLibrary
             string citizenDir = Application.persistentDataPath + "/" + town.ID + "/citizenData/";
             if (Directory.Exists(citizenDir))
             {
-                string[] citizenFolders = Directory.GetFileSystemEntries(citizenDir); // 
+                string[] citizenFiles = Directory.GetFileSystemEntries(citizenDir); // 
                 Collection<Citizen> citizens = new Collection<Citizen>();
-                for (int i = 0; i < citizenFolders.Length; i++)
+                for (int i = 0; i < citizenFiles.Length; i++)
                 {
-                    string citizenFolder = citizenFolders[i];
-                    if (Directory.Exists(citizenFolders[i]))
+                    if (File.Exists(citizenFiles[i]))
                     {
-                        
+                        BinaryFormatter bf = new BinaryFormatter();
+                        string filename = citizenFiles[i];
+                        FileStream stream = new FileStream(filename, FileMode.Open);
+                        CitizenData C = bf.Deserialize(stream) as CitizenData;
+                        Citizen citizen = new Citizen(C);
+                        citizens.Add(citizen);
+                        stream.Close();
                     }
-                    BinaryFormatter bf = new BinaryFormatter();
-                    string filename = citizenFolders[i];
-                    FileStream stream = new FileStream(filename, FileMode.Open);
-                    CitizenData C = bf.Deserialize(stream) as CitizenData;
-                    Citizen citizen = new Citizen(C);
-                    stream.Close();
-                    citizens.Add(citizen);
                 }
                 return citizens;
             }
@@ -65,9 +72,26 @@ namespace src.SaveLoadLibrary
 
         public static void SaveCitizens(Town town, Collection<Citizen> citizens)
         {
-            
+            string citizenDir = Application.persistentDataPath + "/" + town.ID + "/citizenData/";
+            if (!Directory.Exists(citizenDir))
+            {
+                Directory.CreateDirectory(citizenDir);
+            }
+
+            BinaryFormatter bf = new BinaryFormatter();
         }
 
+        public static void SaveBuildings(Town town)
+        {
+            string buildingDir = Application.persistentDataPath + "/" + town.ID + "/buildingData/";
+            if (!Directory.Exists(buildingDir))
+            {
+                Directory.CreateDirectory(buildingDir);
+            }
+        }
+
+        
+        
         public static HashSet<Building> LoadBuildings(Town town)
         {
             string buildingDir = Application.persistentDataPath + "/" + town.ID + "/buildingData/";
@@ -79,13 +103,33 @@ namespace src.SaveLoadLibrary
                 {
                     BinaryFormatter bf = new BinaryFormatter();
                     string fileName = buildingFiles[i];
-                    FileStream stream = new FileStream(fileName, FileMode.Open);
-                    BuildingData b = bf.Deserialize(stream) as BuildingData;
-                    Building building = new Building(b);
-                    stream.Close();
-                    
+                    if (File.Exists(fileName))
+                    {
+                        FileStream stream = new FileStream(fileName, FileMode.Open);
+                        if (buildingFiles[i].Contains("hospital"))
+                        {
+                            HospitalData h = bf.Deserialize(stream) as HospitalData;
+                            Hospital hospital = new Hospital(h);
+                            Game.town.emergency.Add(hospital);
+                            buildings.Add(Game.town.emergency[Game.town.emergency.Count-1]);
+                        }
+                        else if (buildingFiles[i].Contains("shop"))
+                        {
+                            SupermarketData s = bf.Deserialize(stream) as SupermarketData;
+                            Supermarket supermarket = new Supermarket(s);
+                            Game.town.essentials.Add(supermarket);
+                            buildings.Add(Game.town.emergency[Game.town.essentials.Count-1]);
+                        }
+                        else
+                        {
+                            BuildingData b = bf.Deserialize(stream) as BuildingData;
+                            Building building = new Building(b);
+                            buildings.Add(building);
+                        }
+                        stream.Close();
+                    }
                 }
-
+                
                 return buildings;
             }
 
