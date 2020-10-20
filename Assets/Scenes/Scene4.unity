@@ -637,6 +637,7 @@ GameObject:
   - component: {fileID: 25576444}
   - component: {fileID: 25576446}
   - component: {fileID: 25576445}
+  - component: {fileID: 25576447}
   m_Layer: 5
   m_Name: UpgradeUI
   m_TagString: Untagged
@@ -705,6 +706,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 25576443}
   m_CullTransparentMesh: 0
+--- !u!114 &25576447
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 25576443}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc1b8acea5c90c749a393de86b798739, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &26290173
 GameObject:
   m_ObjectHideFlags: 0
@@ -801,10 +814,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 483338021}
-  other1: {fileID: 0}
-  other2: {fileID: 0}
-  other3: {fileID: 0}
-  other4: {fileID: 0}
+  other1: {fileID: 2124125542}
+  other2: {fileID: 1300626529}
+  other3: {fileID: 1890388154}
+  other4: {fileID: 1201453183}
   isClicked: 0
   isClosed: 0
   checkIfCovered: 0
@@ -4954,6 +4967,7 @@ GameObject:
   - component: {fileID: 191462610}
   - component: {fileID: 191462612}
   - component: {fileID: 191462611}
+  - component: {fileID: 191462613}
   m_Layer: 5
   m_Name: UpgradeUI
   m_TagString: Untagged
@@ -5022,6 +5036,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 191462609}
   m_CullTransparentMesh: 0
+--- !u!114 &191462613
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 191462609}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc1b8acea5c90c749a393de86b798739, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &193541021
 GameObject:
   m_ObjectHideFlags: 0
@@ -6148,10 +6174,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1201453183}
-  other1: {fileID: 0}
-  other2: {fileID: 0}
-  other3: {fileID: 0}
-  other4: {fileID: 0}
+  other1: {fileID: 2124125542}
+  other2: {fileID: 1300626529}
+  other3: {fileID: 1890388154}
+  other4: {fileID: 483338021}
   isClicked: 0
   isClosed: 0
   checkIfCovered: 0
@@ -6592,6 +6618,17 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 457375587}
+        m_MethodName: isBelow
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &216178277
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6999,10 +7036,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1890388154}
-  other1: {fileID: 0}
-  other2: {fileID: 0}
-  other3: {fileID: 0}
-  other4: {fileID: 0}
+  other1: {fileID: 2124125542}
+  other2: {fileID: 1300626529}
+  other3: {fileID: 1201453183}
+  other4: {fileID: 483338021}
   isClicked: 0
   isClosed: 0
   checkIfCovered: 0
@@ -7360,10 +7397,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 483338021}
-  other1: {fileID: 0}
-  other2: {fileID: 0}
-  other3: {fileID: 0}
-  other4: {fileID: 0}
+  other1: {fileID: 2124125542}
+  other2: {fileID: 1300626529}
+  other3: {fileID: 1890388154}
+  other4: {fileID: 1201453183}
   isClicked: 0
   isClosed: 0
   checkIfCovered: 0
@@ -7839,7 +7876,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 254802007}
-  - component: {fileID: 254802008}
   m_Layer: 0
   m_Name: Buildings
   m_TagString: Untagged
@@ -7899,26 +7935,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &254802008
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 254802006}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f3e5348e76a48a34c8fe781cad44afdb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  buildingPanel: {fileID: 2124125542}
-  other1: {fileID: 0}
-  other2: {fileID: 0}
-  other3: {fileID: 0}
-  other4: {fileID: 0}
-  isClicked: 0
-  isClosed: 0
-  checkIfCovered: 0
 --- !u!1 &258902343
 GameObject:
   m_ObjectHideFlags: 0
@@ -8473,10 +8489,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1890388154}
-  other1: {fileID: 0}
-  other2: {fileID: 0}
-  other3: {fileID: 0}
-  other4: {fileID: 0}
+  other1: {fileID: 2124125542}
+  other2: {fileID: 1300626529}
+  other3: {fileID: 1201453183}
+  other4: {fileID: 483338021}
   isClicked: 0
   isClosed: 0
   checkIfCovered: 0
@@ -9768,6 +9784,7 @@ GameObject:
   - component: {fileID: 320263163}
   - component: {fileID: 320263165}
   - component: {fileID: 320263164}
+  - component: {fileID: 320263166}
   m_Layer: 5
   m_Name: UpgradeUI
   m_TagString: Untagged
@@ -9837,6 +9854,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 320263162}
   m_CullTransparentMesh: 0
+--- !u!114 &320263166
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 320263162}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc1b8acea5c90c749a393de86b798739, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &321489952
 GameObject:
   m_ObjectHideFlags: 0
@@ -11560,6 +11589,17 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 457375587}
+        m_MethodName: isBelow
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &351071748
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11774,10 +11814,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1890388154}
-  other1: {fileID: 0}
-  other2: {fileID: 0}
-  other3: {fileID: 0}
-  other4: {fileID: 0}
+  other1: {fileID: 2124125542}
+  other2: {fileID: 1300626529}
+  other3: {fileID: 1201453183}
+  other4: {fileID: 483338021}
   isClicked: 0
   isClosed: 0
   checkIfCovered: 0
@@ -14271,10 +14311,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 483338021}
-  other1: {fileID: 0}
-  other2: {fileID: 0}
-  other3: {fileID: 0}
-  other4: {fileID: 0}
+  other1: {fileID: 2124125542}
+  other2: {fileID: 1300626529}
+  other3: {fileID: 1890388154}
+  other4: {fileID: 1201453183}
   isClicked: 0
   isClosed: 0
   checkIfCovered: 0
@@ -14754,6 +14794,28 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 1571703138}
         m_MethodName: ButtonIsClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 457375587}
+        m_MethodName: isAbove
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 0}
+        m_MethodName: closeStats
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -15269,6 +15331,7 @@ GameObject:
   - component: {fileID: 457375585}
   - component: {fileID: 457375583}
   - component: {fileID: 457375586}
+  - component: {fileID: 457375587}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -15417,6 +15480,10 @@ MonoBehaviour:
   currentLevel: {fileID: 998805248}
   policy: {fileID: 1935420287}
   stats: {fileID: 1960318160}
+  policyTimer: {fileID: 854258475}
+  startTime: 5
+  timer: 0
+  isImplemented: 0
   max: 5
   min: 1
 --- !u!114 &457375586
@@ -15432,17 +15499,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentHealth: 0
+  currentHappy: 0
   revWait: 60
   revWaitCounter: 0
   waitTime: 5
   waitCounter: 0
-  money: 0
+  happinessBar: {fileID: 895254146}
   healthBar: {fileID: 1313175272}
   revenue: {fileID: 1400210980}
   confirmed: {fileID: 567398322}
   recovered: {fileID: 1091256}
   PlayerScore: {fileID: 566922112}
   levelIndicator: {fileID: 1351661659}
+--- !u!114 &457375587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 457375577}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 693584cb6a1358e47aa24e6c711c81c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &457399375
 GameObject:
   m_ObjectHideFlags: 0
@@ -15620,10 +15700,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1201453183}
-  other1: {fileID: 0}
-  other2: {fileID: 0}
-  other3: {fileID: 0}
-  other4: {fileID: 0}
+  other1: {fileID: 2124125542}
+  other2: {fileID: 1300626529}
+  other3: {fileID: 1890388154}
+  other4: {fileID: 483338021}
   isClicked: 0
   isClosed: 0
   checkIfCovered: 0
@@ -17458,6 +17538,7 @@ GameObject:
   - component: {fileID: 500781047}
   - component: {fileID: 500781049}
   - component: {fileID: 500781048}
+  - component: {fileID: 500781050}
   m_Layer: 5
   m_Name: UpgradeUI
   m_TagString: Untagged
@@ -17526,6 +17607,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 500781046}
   m_CullTransparentMesh: 0
+--- !u!114 &500781050
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 500781046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc1b8acea5c90c749a393de86b798739, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &501118094
 GameObject:
   m_ObjectHideFlags: 0
@@ -17705,10 +17798,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1890388154}
-  other1: {fileID: 0}
-  other2: {fileID: 0}
-  other3: {fileID: 0}
-  other4: {fileID: 0}
+  other1: {fileID: 2124125542}
+  other2: {fileID: 1300626529}
+  other3: {fileID: 1201453183}
+  other4: {fileID: 483338021}
   isClicked: 0
   isClosed: 0
   checkIfCovered: 0
@@ -19122,10 +19215,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1300626529}
-  other1: {fileID: 0}
-  other2: {fileID: 0}
-  other3: {fileID: 0}
-  other4: {fileID: 0}
+  other1: {fileID: 2124125542}
+  other2: {fileID: 1890388154}
+  other3: {fileID: 1201453183}
+  other4: {fileID: 483338021}
   isClicked: 0
   isClosed: 0
   checkIfCovered: 0
@@ -20263,10 +20356,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 483338021}
-  other1: {fileID: 0}
-  other2: {fileID: 0}
-  other3: {fileID: 0}
-  other4: {fileID: 0}
+  other1: {fileID: 2124125542}
+  other2: {fileID: 1300626529}
+  other3: {fileID: 1890388154}
+  other4: {fileID: 1201453183}
   isClicked: 0
   isClosed: 0
   checkIfCovered: 0
@@ -20667,10 +20760,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1890388154}
-  other1: {fileID: 0}
-  other2: {fileID: 0}
-  other3: {fileID: 0}
-  other4: {fileID: 0}
+  other1: {fileID: 2124125542}
+  other2: {fileID: 1300626529}
+  other3: {fileID: 1201453183}
+  other4: {fileID: 483338021}
   isClicked: 0
   isClosed: 0
   checkIfCovered: 0
@@ -20846,10 +20939,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1890388154}
-  other1: {fileID: 0}
-  other2: {fileID: 0}
-  other3: {fileID: 0}
-  other4: {fileID: 0}
+  other1: {fileID: 2124125542}
+  other2: {fileID: 1300626529}
+  other3: {fileID: 1201453183}
+  other4: {fileID: 483338021}
   isClicked: 0
   isClosed: 0
   checkIfCovered: 0
@@ -21529,7 +21622,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 616158458}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 320263166}
+        m_MethodName: buy
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &616158458
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23139,7 +23243,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 685267279}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 500781050}
+        m_MethodName: buy
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &685267279
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23339,7 +23454,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 693893679}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 320263166}
+        m_MethodName: buy
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &693893679
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23554,10 +23680,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1300626529}
-  other1: {fileID: 0}
-  other2: {fileID: 0}
-  other3: {fileID: 0}
-  other4: {fileID: 0}
+  other1: {fileID: 2124125542}
+  other2: {fileID: 1890388154}
+  other3: {fileID: 1201453183}
+  other4: {fileID: 483338021}
   isClicked: 0
   isClosed: 0
   checkIfCovered: 0
@@ -23668,6 +23794,100 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1001 &706498694
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4232668013772331972, guid: 5981b15f2c35db840b0a2b004f4e3ee6,
+        type: 3}
+      propertyPath: m_AdditionalShaderChannelsFlag
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 4232668013772331972, guid: 5981b15f2c35db840b0a2b004f4e3ee6,
+        type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6584675587077530436, guid: 5981b15f2c35db840b0a2b004f4e3ee6,
+        type: 3}
+      propertyPath: m_Name
+      value: LevelLoader
+      objectReference: {fileID: 0}
+    - target: {fileID: 6584675587077530436, guid: 5981b15f2c35db840b0a2b004f4e3ee6,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6584675587077530439, guid: 5981b15f2c35db840b0a2b004f4e3ee6,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6584675587077530439, guid: 5981b15f2c35db840b0a2b004f4e3ee6,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6584675587077530439, guid: 5981b15f2c35db840b0a2b004f4e3ee6,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6584675587077530439, guid: 5981b15f2c35db840b0a2b004f4e3ee6,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6584675587077530439, guid: 5981b15f2c35db840b0a2b004f4e3ee6,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6584675587077530439, guid: 5981b15f2c35db840b0a2b004f4e3ee6,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6584675587077530439, guid: 5981b15f2c35db840b0a2b004f4e3ee6,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6584675587077530439, guid: 5981b15f2c35db840b0a2b004f4e3ee6,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6584675587077530439, guid: 5981b15f2c35db840b0a2b004f4e3ee6,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6584675587077530439, guid: 5981b15f2c35db840b0a2b004f4e3ee6,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6584675587077530439, guid: 5981b15f2c35db840b0a2b004f4e3ee6,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8757072683445469887, guid: 5981b15f2c35db840b0a2b004f4e3ee6,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0.000061035
+      objectReference: {fileID: 0}
+    - target: {fileID: 8757072683445469887, guid: 5981b15f2c35db840b0a2b004f4e3ee6,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.0000076294
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 5981b15f2c35db840b0a2b004f4e3ee6, type: 3}
 --- !u!1 &720788460
 GameObject:
   m_ObjectHideFlags: 0
@@ -24650,10 +24870,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 483338021}
-  other1: {fileID: 0}
-  other2: {fileID: 0}
-  other3: {fileID: 0}
-  other4: {fileID: 0}
+  other1: {fileID: 2124125542}
+  other2: {fileID: 1300626529}
+  other3: {fileID: 1890388154}
+  other4: {fileID: 1201453183}
   isClicked: 0
   isClosed: 0
   checkIfCovered: 0
@@ -27704,10 +27924,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1201453183}
-  other1: {fileID: 0}
-  other2: {fileID: 0}
-  other3: {fileID: 0}
-  other4: {fileID: 0}
+  other1: {fileID: 2124125542}
+  other2: {fileID: 1300626529}
+  other3: {fileID: 1890388154}
+  other4: {fileID: 483338021}
   isClicked: 0
   isClosed: 0
   checkIfCovered: 0
@@ -29395,6 +29615,17 @@ MonoBehaviour:
       - m_Target: {fileID: 1047345454}
         m_MethodName: SetActive
         m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 457375585}
+        m_MethodName: PolicyMade
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -31323,6 +31554,17 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 457375585}
+        m_MethodName: PolicyMade
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &986808791
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32055,10 +32297,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1201453183}
-  other1: {fileID: 0}
-  other2: {fileID: 0}
-  other3: {fileID: 0}
-  other4: {fileID: 0}
+  other1: {fileID: 2124125542}
+  other2: {fileID: 1300626529}
+  other3: {fileID: 1890388154}
+  other4: {fileID: 483338021}
   isClicked: 0
   isClosed: 0
   checkIfCovered: 0
@@ -32553,10 +32795,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 483338021}
-  other1: {fileID: 0}
-  other2: {fileID: 0}
-  other3: {fileID: 0}
-  other4: {fileID: 0}
+  other1: {fileID: 2124125542}
+  other2: {fileID: 1300626529}
+  other3: {fileID: 1890388154}
+  other4: {fileID: 1201453183}
   isClicked: 0
   isClosed: 0
   checkIfCovered: 0
@@ -32748,7 +32990,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1024528381}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 191462613}
+        m_MethodName: buy
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1024528381
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -33336,10 +33589,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1201453183}
-  other1: {fileID: 0}
-  other2: {fileID: 0}
-  other3: {fileID: 0}
-  other4: {fileID: 0}
+  other1: {fileID: 2124125542}
+  other2: {fileID: 1300626529}
+  other3: {fileID: 1890388154}
+  other4: {fileID: 483338021}
   isClicked: 0
   isClosed: 0
   checkIfCovered: 0
@@ -34349,10 +34602,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1890388154}
-  other1: {fileID: 0}
-  other2: {fileID: 0}
-  other3: {fileID: 0}
-  other4: {fileID: 0}
+  other1: {fileID: 2124125542}
+  other2: {fileID: 1300626529}
+  other3: {fileID: 1201453183}
+  other4: {fileID: 483338021}
   isClicked: 0
   isClosed: 0
   checkIfCovered: 0
@@ -37236,6 +37489,17 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 457375587}
+        m_MethodName: isBelow
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1137385659
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -38334,10 +38598,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1890388154}
-  other1: {fileID: 0}
-  other2: {fileID: 0}
-  other3: {fileID: 0}
-  other4: {fileID: 0}
+  other1: {fileID: 2124125542}
+  other2: {fileID: 1300626529}
+  other3: {fileID: 1201453183}
+  other4: {fileID: 483338021}
   isClicked: 0
   isClosed: 0
   checkIfCovered: 0
@@ -38513,10 +38777,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1890388154}
-  other1: {fileID: 0}
-  other2: {fileID: 0}
-  other3: {fileID: 0}
-  other4: {fileID: 0}
+  other1: {fileID: 2124125542}
+  other2: {fileID: 1300626529}
+  other3: {fileID: 1201453183}
+  other4: {fileID: 483338021}
   isClicked: 0
   isClosed: 0
   checkIfCovered: 0
@@ -39193,6 +39457,28 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+      - m_Target: {fileID: 457375587}
+        m_MethodName: isAbove
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 0}
+        m_MethodName: closeStats
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!114 &1219732534
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39311,7 +39597,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1220530375}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 500781050}
+        m_MethodName: buy
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1220530375
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39769,10 +40066,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1890388154}
-  other1: {fileID: 0}
-  other2: {fileID: 0}
-  other3: {fileID: 0}
-  other4: {fileID: 0}
+  other1: {fileID: 2124125542}
+  other2: {fileID: 1300626529}
+  other3: {fileID: 1201453183}
+  other4: {fileID: 483338021}
   isClicked: 0
   isClosed: 0
   checkIfCovered: 0
@@ -40060,10 +40357,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1300626529}
-  other1: {fileID: 0}
-  other2: {fileID: 0}
-  other3: {fileID: 0}
-  other4: {fileID: 0}
+  other1: {fileID: 2124125542}
+  other2: {fileID: 1890388154}
+  other3: {fileID: 1201453183}
+  other4: {fileID: 483338021}
   isClicked: 0
   isClosed: 0
   checkIfCovered: 0
@@ -41459,10 +41756,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 2124125542}
-  other1: {fileID: 0}
-  other2: {fileID: 0}
-  other3: {fileID: 0}
-  other4: {fileID: 0}
+  other1: {fileID: 1300626529}
+  other2: {fileID: 1890388154}
+  other3: {fileID: 1201453183}
+  other4: {fileID: 483338021}
   isClicked: 0
   isClosed: 0
   checkIfCovered: 0
@@ -43052,10 +43349,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 483338021}
-  other1: {fileID: 0}
-  other2: {fileID: 0}
-  other3: {fileID: 0}
-  other4: {fileID: 0}
+  other1: {fileID: 2124125542}
+  other2: {fileID: 1300626529}
+  other3: {fileID: 1890388154}
+  other4: {fileID: 1201453183}
   isClicked: 0
   isClosed: 0
   checkIfCovered: 0
@@ -44389,10 +44686,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1890388154}
-  other1: {fileID: 0}
-  other2: {fileID: 0}
-  other3: {fileID: 0}
-  other4: {fileID: 0}
+  other1: {fileID: 2124125542}
+  other2: {fileID: 1300626529}
+  other3: {fileID: 1201453183}
+  other4: {fileID: 483338021}
   isClicked: 0
   isClosed: 0
   checkIfCovered: 0
@@ -45118,10 +45415,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1890388154}
-  other1: {fileID: 0}
-  other2: {fileID: 0}
-  other3: {fileID: 0}
-  other4: {fileID: 0}
+  other1: {fileID: 2124125542}
+  other2: {fileID: 1300626529}
+  other3: {fileID: 1201453183}
+  other4: {fileID: 483338021}
   isClicked: 0
   isClosed: 0
   checkIfCovered: 0
@@ -45673,10 +45970,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1890388154}
-  other1: {fileID: 0}
-  other2: {fileID: 0}
-  other3: {fileID: 0}
-  other4: {fileID: 0}
+  other1: {fileID: 2124125542}
+  other2: {fileID: 1300626529}
+  other3: {fileID: 1201453183}
+  other4: {fileID: 483338021}
   isClicked: 0
   isClosed: 0
   checkIfCovered: 0
@@ -47215,7 +47512,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1435867548}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 320263166}
+        m_MethodName: buy
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1435867548
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -51734,7 +52042,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1550348731}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 191462613}
+        m_MethodName: buy
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1550348731
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -52192,10 +52511,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1890388154}
-  other1: {fileID: 0}
-  other2: {fileID: 0}
-  other3: {fileID: 0}
-  other4: {fileID: 0}
+  other1: {fileID: 2124125542}
+  other2: {fileID: 1300626529}
+  other3: {fileID: 1201453183}
+  other4: {fileID: 483338021}
   isClicked: 0
   isClosed: 0
   checkIfCovered: 0
@@ -53215,6 +53534,28 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 1571703138}
         m_MethodName: ButtonIsClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 457375587}
+        m_MethodName: isAbove
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 0}
+        m_MethodName: closeStats
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -54606,10 +54947,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1890388154}
-  other1: {fileID: 0}
-  other2: {fileID: 0}
-  other3: {fileID: 0}
-  other4: {fileID: 0}
+  other1: {fileID: 2124125542}
+  other2: {fileID: 1300626529}
+  other3: {fileID: 1201453183}
+  other4: {fileID: 483338021}
   isClicked: 0
   isClosed: 0
   checkIfCovered: 0
@@ -56397,10 +56738,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1201453183}
-  other1: {fileID: 0}
-  other2: {fileID: 0}
-  other3: {fileID: 0}
-  other4: {fileID: 0}
+  other1: {fileID: 2124125542}
+  other2: {fileID: 1300626529}
+  other3: {fileID: 1890388154}
+  other4: {fileID: 483338021}
   isClicked: 0
   isClosed: 0
   checkIfCovered: 0
@@ -57583,10 +57924,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 483338021}
-  other1: {fileID: 0}
-  other2: {fileID: 0}
-  other3: {fileID: 0}
-  other4: {fileID: 0}
+  other1: {fileID: 2124125542}
+  other2: {fileID: 1300626529}
+  other3: {fileID: 1890388154}
+  other4: {fileID: 1201453183}
   isClicked: 0
   isClosed: 0
   checkIfCovered: 0
@@ -57872,7 +58213,6 @@ GameObject:
   - component: {fileID: 1736945660}
   - component: {fileID: 1736945659}
   - component: {fileID: 1736945658}
-  - component: {fileID: 1736945661}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -57928,18 +58268,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1736945661
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1736945657}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b44ac338f714152b62c669b3f4a41ba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1740837730
 GameObject:
   m_ObjectHideFlags: 0
@@ -58523,7 +58851,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1762413727}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 25576447}
+        m_MethodName: buy
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1762413727
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -58642,7 +58981,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1767434282}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 25576447}
+        m_MethodName: buy
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1767434282
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -58680,141 +59030,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1767434279}
   m_CullTransparentMesh: 0
---- !u!1001 &1768313684
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 703438577327843477, guid: 5981b15f2c35db840b0a2b004f4e3ee6,
-        type: 3}
-      propertyPath: m_text
-      value: Loading...
-      objectReference: {fileID: 0}
-    - target: {fileID: 1325670137216084557, guid: 5981b15f2c35db840b0a2b004f4e3ee6,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1325670137216084557, guid: 5981b15f2c35db840b0a2b004f4e3ee6,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 1085
-      objectReference: {fileID: 0}
-    - target: {fileID: 1325670137216084557, guid: 5981b15f2c35db840b0a2b004f4e3ee6,
-        type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 705.45264
-      objectReference: {fileID: 0}
-    - target: {fileID: 1325670137216084557, guid: 5981b15f2c35db840b0a2b004f4e3ee6,
-        type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 959.18005
-      objectReference: {fileID: 0}
-    - target: {fileID: 4232668013772331972, guid: 5981b15f2c35db840b0a2b004f4e3ee6,
-        type: 3}
-      propertyPath: m_SortingOrder
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4232668013772331972, guid: 5981b15f2c35db840b0a2b004f4e3ee6,
-        type: 3}
-      propertyPath: m_AdditionalShaderChannelsFlag
-      value: 25
-      objectReference: {fileID: 0}
-    - target: {fileID: 6584675587077530433, guid: 5981b15f2c35db840b0a2b004f4e3ee6,
-        type: 3}
-      propertyPath: transition
-      value: 
-      objectReference: {fileID: 1768313685}
-    - target: {fileID: 6584675587077530436, guid: 5981b15f2c35db840b0a2b004f4e3ee6,
-        type: 3}
-      propertyPath: m_Name
-      value: LevelLoader
-      objectReference: {fileID: 0}
-    - target: {fileID: 6584675587077530436, guid: 5981b15f2c35db840b0a2b004f4e3ee6,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6584675587077530439, guid: 5981b15f2c35db840b0a2b004f4e3ee6,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6584675587077530439, guid: 5981b15f2c35db840b0a2b004f4e3ee6,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6584675587077530439, guid: 5981b15f2c35db840b0a2b004f4e3ee6,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6584675587077530439, guid: 5981b15f2c35db840b0a2b004f4e3ee6,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6584675587077530439, guid: 5981b15f2c35db840b0a2b004f4e3ee6,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6584675587077530439, guid: 5981b15f2c35db840b0a2b004f4e3ee6,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6584675587077530439, guid: 5981b15f2c35db840b0a2b004f4e3ee6,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6584675587077530439, guid: 5981b15f2c35db840b0a2b004f4e3ee6,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6584675587077530439, guid: 5981b15f2c35db840b0a2b004f4e3ee6,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6584675587077530439, guid: 5981b15f2c35db840b0a2b004f4e3ee6,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6584675587077530439, guid: 5981b15f2c35db840b0a2b004f4e3ee6,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6970729833893179868, guid: 5981b15f2c35db840b0a2b004f4e3ee6,
-        type: 3}
-      propertyPath: m_Name
-      value: loading
-      objectReference: {fileID: 0}
-    - target: {fileID: 8757072683445469887, guid: 5981b15f2c35db840b0a2b004f4e3ee6,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -0.000015259
-      objectReference: {fileID: 0}
-    - target: {fileID: 8757072683445469887, guid: 5981b15f2c35db840b0a2b004f4e3ee6,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -0.0000076294
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 5981b15f2c35db840b0a2b004f4e3ee6, type: 3}
---- !u!95 &1768313685 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 6918123818556014583, guid: 5981b15f2c35db840b0a2b004f4e3ee6,
-    type: 3}
-  m_PrefabInstance: {fileID: 1768313684}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1773791033
 GameObject:
   m_ObjectHideFlags: 0
@@ -58928,6 +59143,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   textBox: {fileID: 1103507691}
   dayBox: {fileID: 202965792}
+  paused: 0
 --- !u!1 &1774238241
 GameObject:
   m_ObjectHideFlags: 0
@@ -59738,6 +59954,28 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 1571703138}
         m_MethodName: ButtonIsClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 457375587}
+        m_MethodName: isAbove
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 0}
+        m_MethodName: closeStats
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -63987,10 +64225,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 483338021}
-  other1: {fileID: 0}
-  other2: {fileID: 0}
-  other3: {fileID: 0}
-  other4: {fileID: 0}
+  other1: {fileID: 2124125542}
+  other2: {fileID: 1300626529}
+  other3: {fileID: 1890388154}
+  other4: {fileID: 1201453183}
   isClicked: 0
   isClosed: 0
   checkIfCovered: 0
@@ -64767,10 +65005,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1300626529}
-  other1: {fileID: 0}
-  other2: {fileID: 0}
-  other3: {fileID: 0}
-  other4: {fileID: 0}
+  other1: {fileID: 2124125542}
+  other2: {fileID: 1890388154}
+  other3: {fileID: 1201453183}
+  other4: {fileID: 483338021}
   isClicked: 0
   isClosed: 0
   checkIfCovered: 0
@@ -69065,10 +69303,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1890388154}
-  other1: {fileID: 0}
-  other2: {fileID: 0}
-  other3: {fileID: 0}
-  other4: {fileID: 0}
+  other1: {fileID: 2124125542}
+  other2: {fileID: 1300626529}
+  other3: {fileID: 1201453183}
+  other4: {fileID: 483338021}
   isClicked: 0
   isClosed: 0
   checkIfCovered: 0
@@ -70171,10 +70409,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1201453183}
-  other1: {fileID: 0}
-  other2: {fileID: 0}
-  other3: {fileID: 0}
-  other4: {fileID: 0}
+  other1: {fileID: 2124125542}
+  other2: {fileID: 1300626529}
+  other3: {fileID: 1890388154}
+  other4: {fileID: 483338021}
   isClicked: 0
   isClosed: 0
   checkIfCovered: 0
@@ -71172,10 +71410,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingPanel: {fileID: 1890388154}
-  other1: {fileID: 0}
-  other2: {fileID: 0}
-  other3: {fileID: 0}
-  other4: {fileID: 0}
+  other1: {fileID: 2124125542}
+  other2: {fileID: 1300626529}
+  other3: {fileID: 1201453183}
+  other4: {fileID: 483338021}
   isClicked: 0
   isClosed: 0
   checkIfCovered: 0
